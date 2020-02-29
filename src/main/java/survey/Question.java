@@ -1,8 +1,14 @@
 package survey;
 
 public abstract class Question {
-    private Integer id;
-    private String type;
+    protected Integer id;
+    protected String type;
+    protected String question;
+
+    public Question(String type, String question) {
+        this.type = type;
+        this.question = question;
+    }
 
     public Integer getId() {
         return id;
@@ -18,5 +24,13 @@ public abstract class Question {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
     }
 }
