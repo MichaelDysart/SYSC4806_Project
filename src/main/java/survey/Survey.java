@@ -1,15 +1,32 @@
 package survey;
 
-import java.util.ArrayList;
+import javax.persistence.*;
+import java.util.Collection;
 
+@Entity
 public class Survey {
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
     private Integer id;
-    private ArrayList<Question> questions = new ArrayList<Question>();
 
-    public Survey(){}
+    private String name;
 
-    public Survey(ArrayList<Question> questions){
+    @OneToMany(cascade = CascadeType.ALL)
+    private Collection<Question> questions;
+
+    public Survey(String name){ this.name = name; }
+
+    public Survey(String name, Collection<Question> questions){
+        this.name = name;
         this.questions = questions;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public void setId(Integer id) {
@@ -20,11 +37,11 @@ public class Survey {
         return this.id;
     }
 
-    public void setQuestions(ArrayList<Question> questions) {
+    public void setQuestions(Collection<Question> questions) {
         this.questions = questions;
     }
 
-    public ArrayList<Question> getQuestions() {
+    public Collection<Question> getQuestions() {
         return questions;
     }
 
