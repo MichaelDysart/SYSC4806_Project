@@ -3,10 +3,7 @@ package webApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import survey.Survey;
 
 import java.util.ArrayList;
@@ -23,8 +20,11 @@ public class webController {
     }
 
     @PostMapping("/createSurvey")
-    public String createSurvey() {
-        return "";
+    public String createSurvey(@RequestParam("surveyName") String surveyName, @RequestBody ArrayList<Questions> questions) {
+        Survey survey = new Survey(surveyName);
+        survey.setQuestions(questions);
+        repo.save(survey);
+        return "createSurvey";
     }
 
     @PostMapping("/retrieveSurvey")
@@ -32,7 +32,7 @@ public class webController {
     public String retrieveSurvey(@RequestParam (name="name") String name, Model model) {
          Survey survey = repo.findByName(name);
 
-         model.addAttribute("survey", survey)
+         model.addAttribute("survey", survey);
 
         return "retrieveSurvey";
     }
