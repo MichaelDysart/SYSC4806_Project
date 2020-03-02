@@ -18,6 +18,6 @@ public class webControllerTest {
 
     @Test
     public void testRestApplication() throws Exception {
-        ;
+
     }
 }
