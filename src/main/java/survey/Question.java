@@ -15,6 +15,11 @@ public abstract class Question {
     protected String question;
 
     /*
+     * A default constructor
+     */
+    public Question(){ }
+
+    /*
      * A constructor
      * @param name {String}
      * @param question {String}

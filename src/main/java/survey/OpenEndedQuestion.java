@@ -1,9 +1,23 @@
 package survey;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.ArrayList;
 
+@Entity
 public class OpenEndedQuestion extends Question {
+
     private ArrayList<String> answers = new ArrayList<String>();
+
+    /*
+     * A default constructor
+     * @param question {String}
+     */
+    public OpenEndedQuestion() {
+        super();
+    }
 
     /*
      * A constructor
@@ -32,4 +46,5 @@ public class OpenEndedQuestion extends Question {
     public void addAnswer(String answer) {
         this.answers.add(answer);
     }
+
 }

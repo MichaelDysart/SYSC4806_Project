@@ -15,6 +15,11 @@ public class Survey {
     private Collection<Question> questions;
 
     /*
+     * A default constructor
+     */
+    public Survey(){ }
+
+    /*
      * A constructor
      * @param name {String}
      */
