@@ -1,8 +1,6 @@
 # SYSC4806_Project
 The SYSC4806_Project For Group 2
 
-KANBAN Trello Link -> https://trello.com/b/DzQ61NOv/mini-surveymonkey
-
 # Mini-SurveyMonkey
 
 This project is a mini survey monkey application. It allows users to 
