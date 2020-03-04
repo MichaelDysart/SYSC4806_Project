@@ -1,13 +1,18 @@
 package webApp;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import repository.SurveyRepository;
 import survey.Survey;
+import survey.Question;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 @Controller
 public class webController {
@@ -20,7 +25,7 @@ public class webController {
     }
 
     @PostMapping("/createSurvey")
-    public String createSurvey(@RequestParam("surveyName") String surveyName, @RequestBody ArrayList<Questions> questions) {
+    public String createSurvey(@RequestParam("surveyName") String surveyName, @RequestBody Collection<Question> questions) {
         Survey survey = new Survey(surveyName);
         survey.setQuestions(questions);
         repo.save(survey);
@@ -30,16 +35,20 @@ public class webController {
     @PostMapping("/retrieveSurvey")
     @ResponseBody
     public String retrieveSurvey(@RequestParam (name="name") String name, Model model) {
-         Survey survey = repo.findByName(name);
+         List<Survey> surveys = repo.findByName(name);
 
-         model.addAttribute("survey", survey);
+         model.addAttribute("survey", surveys);
 
         return "retrieveSurvey";
     }
 
     @GetMapping("/getSurveys")
     public String getSurveys(Model model) {
-        ArrayList<Survey> surveys = repo.findAll().collect(Collectors.toList());
+        ArrayList<Survey> surveys = new ArrayList<Survey>();
+        Iterator<Survey> iterate = repo.findAll().iterator();
+        while (iterate.hasNext()) {
+            surveys.add(iterate.next());
+        }
 
         model.addAttribute("surveys", surveys);
         return "getSurvey";

@@ -4,6 +4,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import survey.Question;
 
-@RepositoryRestResource(collectionResourceRel = "question", path = "question")
+@RepositoryRestResource(collectionResourceRel = "survey", path = "survey")
 public interface QuestionRepository extends PagingAndSortingRepository<Question, Long> {
 }
