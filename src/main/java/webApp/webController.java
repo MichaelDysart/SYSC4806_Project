@@ -1,56 +1,62 @@
 package webApp;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import repository.SurveyRepository;
+import survey.OpenEndedQuestion;
 import survey.Survey;
 import survey.Question;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
 @Controller
 public class webController {
     @Autowired
     private SurveyRepository repo;
 
-    @GetMapping("/index")
+    @GetMapping("/")
     public String index(Model model){
-        return "index";
+       return "root";
     }
 
-    @PostMapping("/createSurvey")
-    public String createSurvey(@RequestParam("surveyName") String surveyName, @RequestBody Collection<Question> questions) {
-        Survey survey = new Survey(surveyName);
-        survey.setQuestions(questions);
-        repo.save(survey);
-        return "createSurvey";
-    }
-
-    @PostMapping("/retrieveSurvey")
+    @PostMapping(value = "/createSurvey", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public String retrieveSurvey(@RequestParam (name="name") String name, Model model) {
-         List<Survey> surveys = repo.findByName(name);
+    public Response createSurvey(@RequestBody SurveyMessage surveyMessage) {
+        Survey survey = new Survey(surveyMessage.getName());
+        Collection<Question> questionList = new ArrayList<Question>();
 
-         model.addAttribute("survey", surveys);
-
-        return "retrieveSurvey";
-    }
-
-    @GetMapping("/getSurveys")
-    public String getSurveys(Model model) {
-        ArrayList<Survey> surveys = new ArrayList<Survey>();
-        Iterator<Survey> iterate = repo.findAll().iterator();
-        while (iterate.hasNext()) {
-            surveys.add(iterate.next());
+        for (QuestionMessage question : surveyMessage.getQuestions()) {
+            if (question.getType().equals("openEnded")) {
+                questionList.add(new OpenEndedQuestion(question.getQuestion()));
+            }
         }
 
-        model.addAttribute("surveys", surveys);
-        return "getSurvey";
+        survey.setQuestions(questionList);
+        repo.save(survey);
+        return new Response("ok", "done");
+    }
+
+    @GetMapping(value = "/retrieveSurvey", produces = "application/json")
+    @ResponseBody
+    public SurveyMessage retrieveSurvey(@RequestParam (name="name") String name) {
+
+        Collection<QuestionMessage> questionMessages = new ArrayList<QuestionMessage>();
+
+        Collection<Survey> surveys = repo.findByName(name);
+        if (surveys.size() == 1 ) {
+            surveys.iterator().next().getQuestions();
+
+
+
+            for (Question question : surveys.iterator().next().getQuestions()) {
+                questionMessages.add(new QuestionMessage("openEnded", question.getQuestion()));
+            }
+
+            return new SurveyMessage(name, questionMessages);
+        }
+        return new SurveyMessage("", questionMessages);
     }
 }

@@ -1,4 +1,4 @@
-package repository;
+package webApp;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
