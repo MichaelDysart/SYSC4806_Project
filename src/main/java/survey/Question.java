@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/*
+ * A class to represent all questions
+ */
 @Entity
 public abstract class Question {
 

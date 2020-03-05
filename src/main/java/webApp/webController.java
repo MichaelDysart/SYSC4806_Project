@@ -1,7 +1,6 @@
 package webApp;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +12,9 @@ import survey.Question;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/*
+ * The controller that accepts web requests to update and retrieve surveys
+ */
 @Controller
 public class webController {
     @Autowired
@@ -27,7 +29,7 @@ public class webController {
     @ResponseBody
     public Response createSurvey(@RequestBody SurveyMessage surveyMessage) {
         Survey survey = new Survey(surveyMessage.getName());
-        Collection<Question> questionList = new ArrayList<Question>();
+        Collection<Question> questionList = new ArrayList<>();
 
         for (QuestionMessage question : surveyMessage.getQuestions()) {
             if (question.getType().equals("openEnded")) {
@@ -46,13 +48,10 @@ public class webController {
     @ResponseBody
     public SurveyMessage retrieveSurvey(@RequestParam (name="name") String name) {
 
-        Collection<QuestionMessage> questionMessages = new ArrayList<QuestionMessage>();
+        Collection<QuestionMessage> questionMessages = new ArrayList<>();
 
         Collection<Survey> surveys = repo.findByName(name);
         if (surveys.size() == 1 ) {
-            surveys.iterator().next().getQuestions();
-
-
 
             for (Question question : surveys.iterator().next().getQuestions()) {
                 if(question.getType().equals("openEnded")) {

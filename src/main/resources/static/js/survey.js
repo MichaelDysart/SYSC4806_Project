@@ -1,3 +1,17 @@
+// Test function
+// @TODO remove
+
+var weburl;
+
+/*
+ * Retrieve the current window url as the url to of the server
+ */
+$(document).ready(function () {
+    weburl = window.location.href;
+});
+
+// Test function
+// @TODO remove
 function myFunc1() {
     var survey;
 
@@ -8,7 +22,7 @@ function myFunc1() {
 
     $.ajax({
          method: "POST",
-         url   : "http://localhost:8080/createSurvey",
+         url   : weburl + "createSurvey",
          contentType: "application/json",
          data  : JSON.stringify(survey),
          error: function (xhr, ajaxOptions, thrownError) {
@@ -18,10 +32,12 @@ function myFunc1() {
     }).done(display);
 }
 
+// Test function
+// @TODO remove
 function myFunc2() {
     $.ajax({
              method: "GET",
-             url   : "http://localhost:8080/retrieveSurvey?name=" + $("#surveyName").val(),
+             url   : weburl + "retrieveSurvey?name=" + $("#surveyName").val(),
              error: function (xhr, ajaxOptions, thrownError) {
                      console.log(xhr.status);
                      console.log(thrownError);
@@ -29,15 +45,25 @@ function myFunc2() {
     }).done(display);
 }
 
+// Test function
+// @TODO remove
 function display(data) {
     console.log(data);
 }
 
+/*
+ * Create a div associated for inputting a question
+ * This is used when creating a survey to create each new question
+ * @returns {Object} the new question input
+ */
 function makeQuestionDiv() {
     var type = $("#questionType").val();
 
     var qDiv = $("<div>");
 
+    // Determine the type of question
+    // When a new question input div is create the question type
+    // is stored as the class of the div
     switch (type) {
         case "numberQuestion":
             qDiv.append($("<input type='text' placeholder='question'/> <input type='text' placeholder='min'/> <input type='text' placeholder='max'/>"))
@@ -51,12 +77,14 @@ function makeQuestionDiv() {
             break;
     }
 
+    // Add a button to create a new question div below this question
     var addButton = $("<button>+</button>");
     qDiv.append(addButton);
     addButton.on("click", function(){
         this.after(makeQuestionDiv());
     }.bind(qDiv));
 
+    // Create a button to delete this question
     var delButton = $("<button>-</button>");
     qDiv.append(delButton);
     delButton.on("click", function(){
@@ -66,10 +94,17 @@ function makeQuestionDiv() {
     return qDiv;
 }
 
+/*
+ * The handler to add a new question to the end of the
+ * survey question list
+ */
 function addQuestion() {
     $("#surveyQuestions").append(makeQuestionDiv());
 }
 
+/*
+ * Store a new survey on the server
+ */
 function createSurvey() {
     var survey;
 
@@ -77,9 +112,11 @@ function createSurvey() {
         name : $("#surveyName").val(),
         questions : []
     };
+
     $("#surveyQuestions").children().each( (index, element) => {
         var question = $(element).children().eq(0).val();
 
+        // The class of the element is used to identify the type of question
         if ($(element).hasClass('openEnded')) {
             survey.questions.push({ type: "openEnded", question: question })
         } else if($(element).hasClass('numberQuestion')) {
@@ -93,7 +130,7 @@ function createSurvey() {
 
     $.ajax({
          method: "POST",
-         url   : "http://localhost:8080/createSurvey",
+         url   : weburl + "createSurvey",
          contentType: "application/json",
          data  : JSON.stringify(survey),
          error: function (xhr, ajaxOptions, thrownError) {

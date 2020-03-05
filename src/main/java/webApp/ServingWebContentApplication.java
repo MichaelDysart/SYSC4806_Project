@@ -3,8 +3,10 @@ package webApp;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.ComponentScan;
 
+/*
+ * The main entry point for the system
+ */
 @SpringBootApplication
 @EntityScan(basePackages = {"survey"})
 public class ServingWebContentApplication {
