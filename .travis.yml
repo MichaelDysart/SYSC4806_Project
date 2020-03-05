@@ -3,5 +3,5 @@ jdk:
   - openjdk8
 deploy:
   provider: heroku
-  api-key: cf6700d5-07b7-423a-b283-7e0f0b9cb159
+  api-key: $HEROKU_API_KEY
   app: mysterious-river-05987
