@@ -4,5 +4,5 @@ jdk:
 deploy:
   provider: heroku
   api-key:
-    secure: $HEROKU_API_KEY
+    secure: cf6700d5-07b7-423a-b283-7e0f0b9cb159
   app: mysterious-river-05987
