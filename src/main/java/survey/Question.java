@@ -13,6 +13,8 @@ public abstract class Question {
     protected long id;
     protected String type;
     protected String question;
+    protected String min;
+    protected String max;
 
     /*
      * A default constructor
@@ -24,9 +26,11 @@ public abstract class Question {
      * @param name {String}
      * @param question {String}
      */
-    public Question(String type, String question) {
+    public Question(String type, String question, String min, String max) {
         this.type = type;
         this.question = question;
+        this.max = max;
+        this.min = min;
     }
 
     /*
@@ -76,4 +80,31 @@ public abstract class Question {
     public void setQuestion(String question) {
         this.question = question;
     }
+
+    /**
+     * Get the minimum boundary for a question of type number_question
+     * @return String
+     */
+    public String getMin() {
+        return min;
+    }
+
+    /**
+     * Set the minimum boundary for a question of type number_question
+     * @param min
+     */
+    public void setMin(String min) {
+        this.min = min;
+    }
+
+    /**
+     * Get the maximum boundary for a question of type number_question
+     * @return
+     */
+    public String getMax() { return max; }
+
+    /**
+     * Set the maximum boundary for a question of type number_question
+     */
+    public void setMax() { this.max = max; }
 }
