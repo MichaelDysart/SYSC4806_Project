@@ -5,14 +5,14 @@
     <title>View an address book</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script th:src="@{/js/book.js}"></script>
+    <script src="/js/survey.js"></script>
 </head>
 <body>
 <button onclick="myFunc1()">A</button>
 
 <button onclick="myFunc2()">B</button>
 
-    <div style="width:200px, height:200px, border:solid">
+    <div>
         <button onclick="createSurvey()">Create</button>
         <input type="text" id="surveyName"/>
         <select id="questionType"><option value="openEnded">OpenEnded</option></select>

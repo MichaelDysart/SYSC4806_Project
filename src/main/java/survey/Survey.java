@@ -3,6 +3,9 @@ package survey;
 import javax.persistence.*;
 import java.util.Collection;
 
+/*
+ * A class to store surveys, comprising a list of questions
+ */
 @Entity
 public class Survey {
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -1,3 +1,13 @@
+// Test function
+// @TODO remove
+
+var weburl;
+
+$(document).ready(function () {
+    weburl = window.location.href;
+});
+
+
 function myFunc1() {
     var survey;
 
@@ -8,7 +18,7 @@ function myFunc1() {
 
     $.ajax({
          method: "POST",
-         url   : "http://localhost:8080/createSurvey",
+         url   : weburl + "createSurvey",
          contentType: "application/json",
          data  : JSON.stringify(survey),
          error: function (xhr, ajaxOptions, thrownError) {
@@ -18,10 +28,12 @@ function myFunc1() {
     }).done(display);
 }
 
+// Test function
+// @TODO remove
 function myFunc2() {
     $.ajax({
              method: "GET",
-             url   : "http://localhost:8080/retrieveSurvey?name=" + $("#surveyName").val(),
+             url   : weburl + "retrieveSurvey?name=" + $("#surveyName").val(),
              error: function (xhr, ajaxOptions, thrownError) {
                      console.log(xhr.status);
                      console.log(thrownError);
@@ -84,7 +96,7 @@ function createSurvey() {
 
     $.ajax({
          method: "POST",
-         url   : "http://localhost:8080/createSurvey",
+         url   : weburl + "createSurvey",
          contentType: "application/json",
          data  : JSON.stringify(survey),
          error: function (xhr, ajaxOptions, thrownError) {
