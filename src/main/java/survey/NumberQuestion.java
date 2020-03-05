@@ -19,8 +19,8 @@ public class NumberQuestion extends Question {
      * Constructor with specified question
      * @param question
      */
-    public NumberQuestion(String question) {
-        super("number_question", question);
+    public NumberQuestion(String question, String min, String max) {
+        super("number_question", question, min, max);
     }
 
 }

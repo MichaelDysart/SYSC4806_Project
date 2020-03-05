@@ -26,6 +26,18 @@ public abstract class Question {
      * @param name {String}
      * @param question {String}
      */
+    public Question(String type, String question) {
+        this.type = type;
+        this.question = question;
+    }
+
+    /**
+     * A constructor with boundary parameters
+     * @param type
+     * @param question
+     * @param min
+     * @param max
+     */
     public Question(String type, String question, String min, String max) {
         this.type = type;
         this.question = question;
