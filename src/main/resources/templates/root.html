@@ -2,23 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>View an address book</title>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="/js/survey.js"></script>
+    <title>QuestionQuail</title>
 </head>
 <body>
-<button onclick="myFunc1()">A</button>
-
-<button onclick="myFunc2()">B</button>
-
-    <div>
-        <button onclick="createSurvey()">Create</button>
-        <input type="text" id="surveyName"/>
-        <select id="questionType"><option value="openEnded">OpenEnded</option></select>
-        <button onclick="addQuestion()">+</button>
-        <div id="surveyQuestions"></div>
-    </div>
-
+    <div id="react"></div>
+    <script src="/built/bundle.js"></script>
 </body>
 </html>
