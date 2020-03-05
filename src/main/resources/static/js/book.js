@@ -3,7 +3,7 @@ function myFunc1() {
 
     survey = {
         name : "survey1",
-        questions : [ { type: "openEnded", question: "q1" }, { type: "openEnded", question: "q2" } ]
+        questions : [ { type: "openEnded", question: "q1" }, { type: "openEnded", question: "q2" }, { type: "numberQuestion", question: "q1", min: "0", max: "5" } ]
     };
 
     $.ajax({

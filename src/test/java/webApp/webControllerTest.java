@@ -21,7 +21,7 @@ public class webControllerTest {
 
     @Test
     public void testRestApplication() throws Exception {
-        String surveyString = "{ \"name\" : \"survey1\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"openEnded\", \"question\": \"q1\" }]}";
+        String surveyString = "{ \"name\" : \"survey1\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"openEnded\", \"question\": \"q1\" \"min\": \"0\", \"max\": \"5\" }]}";
 
         this.mockMvc.perform(post("/createSurvey").contentType("application/json")
                 .content(surveyString)).andExpect(status().isOk())
