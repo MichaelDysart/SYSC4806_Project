@@ -13,7 +13,6 @@ public class OpenEndedQuestion extends Question {
 
     /*
      * A default constructor
-     * @param question {String}
      */
     public OpenEndedQuestion() {
         super();
