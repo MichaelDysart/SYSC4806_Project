@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/*
+ * A class to represent all questions
+ */
 @Entity
 public abstract class Question {
 
@@ -13,6 +16,11 @@ public abstract class Question {
     protected long id;
     protected String type;
     protected String question;
+
+    /*
+     * A default constructor
+     */
+    public Question(){ }
 
     /*
      * A constructor

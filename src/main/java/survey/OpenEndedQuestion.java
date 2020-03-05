@@ -1,9 +1,22 @@
 package survey;
 
+import javax.persistence.Entity;
 import java.util.ArrayList;
 
+/*
+ * A class to store open ended questions
+ */
+@Entity
 public class OpenEndedQuestion extends Question {
-    private ArrayList<String> answers = new ArrayList<String>();
+
+    private ArrayList<String> answers = new ArrayList<>();
+
+    /*
+     * A default constructor
+     */
+    public OpenEndedQuestion() {
+        super();
+    }
 
     /*
      * A constructor
@@ -29,7 +42,13 @@ public class OpenEndedQuestion extends Question {
         this.answers = answers;
     }
 
+
+    /*
+     * Adds a new answer
+     * @param answer {String}
+     */
     public void addAnswer(String answer) {
         this.answers.add(answer);
     }
+
 }

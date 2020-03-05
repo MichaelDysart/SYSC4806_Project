@@ -3,6 +3,9 @@ package survey;
 import javax.persistence.*;
 import java.util.Collection;
 
+/*
+ * A class to store surveys, comprising a list of questions
+ */
 @Entity
 public class Survey {
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -13,6 +16,11 @@ public class Survey {
 
     @OneToMany(cascade = CascadeType.ALL)
     private Collection<Question> questions;
+
+    /*
+     * A default constructor
+     */
+    public Survey(){ }
 
     /*
      * A constructor
