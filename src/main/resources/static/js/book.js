@@ -39,12 +39,16 @@ function makeQuestionDiv() {
     var qDiv = $("<div>");
 
     switch (type) {
-    case "openEnded":
-        qDiv.append($("<input type='text'/>"));
-        qDiv.addClass('openEnded');
-        break;
-    default:
-        break;
+        case "numberQuestion":
+            qDiv.append($("<input type='text' placeholder='question'/> <input type='text' placeholder='min'/> <input type='text' placeholder='max'/>"))
+            qDiv.addClass('numberQuestion')
+            break;
+        case "openEnded":
+            qDiv.append($("<input type='text'/>"));
+            qDiv.addClass('openEnded');
+            break;
+        default:
+            break;
     }
 
     var addButton = $("<button>+</button>");
@@ -78,6 +82,11 @@ function createSurvey() {
 
         if ($(element).hasClass('openEnded')) {
             survey.questions.push({ type: "openEnded", question: question })
+        } else if($(element).hasClass('numberQuestion')) {
+            var min = $(element).children().eq(1).val();
+            var max = $(element).children().eq(2).val();
+
+            survey.questions.push( {type: "numberQuestion", question: question, min: min, max: max} )
         }
     });
     console.log(survey);
