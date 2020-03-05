@@ -55,9 +55,10 @@ public class webController {
 
             for (Question question : surveys.iterator().next().getQuestions()) {
                 if(question.getType().equals("openEnded")) {
-                    questionMessages.add(new QuestionMessage("openEnded", question.getQuestion(), "", ""));
+                    questionMessages.add(new QuestionMessage("openEnded", question.getQuestion(), 0, 0));
                 }else if(question.getType().equals("numberQuestion")) {
-                    questionMessages.add(new QuestionMessage("numberQuestion", question.getQuestion(), question.getMin(), question.getMax()));
+                    NumberQuestion numQ = (NumberQuestion)question;
+                    questionMessages.add(new QuestionMessage("numberQuestion", numQ.getQuestion(), numQ.getMin(), numQ.getMax()));
 
                 }
             }
