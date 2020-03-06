@@ -66,7 +66,7 @@ function makeQuestionDiv() {
     // is stored as the class of the div
     switch (type) {
         case "numberQuestion":
-            qDiv.append($("<input type='text' placeholder='question'/> <input type='text' placeholder='min'/> <input type='text' placeholder='max'/>"))
+            qDiv.append($("<input type='text' placeholder='question'/> <input type='number' placeholder='min'/> <input type='number' placeholder='max'/>"))
             qDiv.addClass('numberQuestion')
             break;
         case "openEnded":
@@ -120,8 +120,8 @@ function createSurvey() {
         if ($(element).hasClass('openEnded')) {
             survey.questions.push({ type: "openEnded", question: question })
         } else if($(element).hasClass('numberQuestion')) {
-            var min = $(element).children().eq(1).val();
-            var max = $(element).children().eq(2).val();
+            let min = parseInt($(element).children().eq(1).val());
+            let max = parseInt(element).children().eq(2).val();
 
             survey.questions.push( {type: "numberQuestion", question: question, min: min, max: max} )
         }

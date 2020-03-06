@@ -17,7 +17,6 @@ public abstract class Question {
     protected String type;
     protected String question;
 
-
     /*
      * A default constructor
      */
@@ -83,5 +82,3 @@ public abstract class Question {
     }
 
 }
-
-

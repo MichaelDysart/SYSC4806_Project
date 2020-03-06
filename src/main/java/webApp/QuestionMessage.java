@@ -7,8 +7,8 @@ public class QuestionMessage {
 
     private final String type;
     private final String question;
-    private final String min;
-    private final String max;
+    private final int min;
+    private final int max;
 
     /**
      * An opened ended question message constructor
@@ -27,7 +27,7 @@ public class QuestionMessage {
      * @param min
      * @param max
      */
-    public QuestionMessage(String type, String question, String min, String max) {
+    public QuestionMessage(String type, String question, int min, int max) {
         this.type = type;
         this.question = question;
         this.min = min;
@@ -50,7 +50,7 @@ public class QuestionMessage {
         return question;
     }
 
-    public String getMin() { return min; }
+    public int getMin() { return min; }
 
-    public String getMax() { return max; }
+    public int getMax() { return max; }
 }

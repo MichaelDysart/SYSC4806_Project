@@ -3,6 +3,10 @@ package survey;
 import javax.persistence.Entity;
 import java.util.ArrayList;
 
+/**
+ * Numerical type question
+ */
+
 @Entity
 public class NumberQuestion extends Question {
 
