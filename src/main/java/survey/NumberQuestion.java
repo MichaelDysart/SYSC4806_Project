@@ -46,4 +46,13 @@ public class NumberQuestion extends Question {
     public void setMax(int max) {
         this.max = max;
     }
+
+    /*
+     * Retrieves the answers
+     * @return {ArrayList<String>}
+     */
+    public ArrayList<String> getAnswers() {
+        return answers;
+    }
+
 }
