@@ -25,6 +25,8 @@ const App = () => {
     const [surveyName, setSurveyName] = useState('');
     const [questions, setQuestions] = useState([]);
     const [currentType, setCurrentType] = useState('');
+    const [userSurvey, setUserSurvey] = useState({ questions : [], answers : [] });
+    const [userSurveyName, setUserSurveyName] = useState('');
 
     // useEffect with no dependencies is equal to $(document).ready
     // for the component in context
@@ -150,6 +152,42 @@ const App = () => {
         .catch(display);
     };
 
+    const retrieveSurvey = () => {
+        console.log(`${webUrl}retrieveSurvey?name=${surveyName}`);
+        fetch(`${webUrl}retrieveSurvey?name=${surveyName}`)
+        .then(res => res.json())
+        .then(function (data) {
+            let arr = [];
+            arr = data.questions.map( function (q) {
+                switch(q.type) {
+                    case qType.OPEN_ENDED:
+                        return '';
+                    case qType.NUMERICAL:
+                        return q.min;
+                    default:
+                        return '';
+                }
+            });
+            data.answers = arr;
+            setUserSurvey(data);
+        })
+        .catch(display);
+    };
+
+    const updateAnswer = (i, newObjVal) => {
+        setUserSurvey(
+            {
+                ...userSurvey,
+                answers : userSurvey.answers.map((q, current) => {
+                        if (current === i) {
+                            return newObjVal;
+                        }
+                        return q;
+                    })
+            }
+        );
+    };
+
     return (
         <div className="qq-app">
             <AppBar position="static">
@@ -258,6 +296,67 @@ const App = () => {
                                 return (<div />);
                         };
                     })}
+                </div>
+                <div>
+                    <TextField
+                             className="qq-app mv"
+                             variant="outlined"
+                             label="Survey Name"
+                             size="small"
+                             onChange={e => setUserSurveyName(e.target.value)}
+                    />
+                    <Button className="qq-app m" variant="contained" color="primary" onClick={retrieveSurvey}>Retrieve Survey</Button>
+                    <div>
+                        {userSurvey.questions.map((q, i) => {
+                        switch(q.type) {
+                            case qType.OPEN_ENDED:
+                                return (
+                                    <div className="qq-app mv" key={i}>
+                                        <div>{`Question ${i + 1} - Open Ended`}</div>
+                                        <TextField
+                                            className="qq-app mv"
+                                            value={userSurvey.questions[i].question}
+                                            variant="outlined"
+                                            label="Question"
+                                            size="small"
+                                        />
+                                        <TextField
+                                            className="qq-app mv"
+                                            value={userSurvey.answers[i]}
+                                            variant="outlined"
+                                            label="Answer"
+                                            size="small"
+                                            onChange={e => updateAnswer(i, e.target.value)}
+                                        />
+                                    </div>
+                                );
+                            case qType.NUMERICAL:
+                                return (
+                                    <div className="qq-app mv" key={i}>
+                                        <div>{`Question ${i + 1} - Numerical`}</div>
+                                        <TextField
+                                            className="qq-app mv"
+                                            value={userSurvey.questions[i].question}
+                                            variant="outlined"
+                                            label="Question"
+                                            size="small"
+                                        />
+                                        <TextField
+                                            className="qq-app m qq-app__number_input"
+                                            value={userSurvey.answers[i]}
+                                            variant="outlined"
+                                            label="Answer"
+                                            size="small"
+                                            onChange={e => updateAnswer(i, parseInt(e.target.value) || 0)}
+                                        />
+                                    </div>
+                                );
+                            default:
+                                console.log(`[WARNING] Unknown question type "${q.question}"`)
+                                return (<div />);
+                        };
+                    })}
+                    </div>
                 </div>
             </Card>
         </div>
