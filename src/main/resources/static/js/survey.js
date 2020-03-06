@@ -17,7 +17,7 @@ function myFunc1() {
 
     survey = {
         name : "survey1",
-        questions : [ { type: "openEnded", question: "q1" }, { type: "openEnded", question: "q2" } ]
+        questions : [ { type: "openEnded", question: "q1" }, { type: "openEnded", question: "q2" }, { type: "numberQuestion", question: "q1", min: "0", max: "5" } ]
     };
 
     $.ajax({
@@ -65,12 +65,16 @@ function makeQuestionDiv() {
     // When a new question input div is create the question type
     // is stored as the class of the div
     switch (type) {
-    case "openEnded":
-        qDiv.append($("<input type='text'/>"));
-        qDiv.addClass('openEnded');
-        break;
-    default:
-        break;
+        case "numberQuestion":
+            qDiv.append($("<input type='text' placeholder='question'/> <input type='number' placeholder='min'/> <input type='number' placeholder='max'/>"))
+            qDiv.addClass('numberQuestion')
+            break;
+        case "openEnded":
+            qDiv.append($("<input type='text'/>"));
+            qDiv.addClass('openEnded');
+            break;
+        default:
+            break;
     }
 
     // Add a button to create a new question div below this question
@@ -115,6 +119,11 @@ function createSurvey() {
         // The class of the element is used to identify the type of question
         if ($(element).hasClass('openEnded')) {
             survey.questions.push({ type: "openEnded", question: question })
+        } else if($(element).hasClass('numberQuestion')) {
+            let min = parseInt($(element).children().eq(1).val());
+            let max = parseInt(element).children().eq(2).val();
+
+            survey.questions.push( {type: "numberQuestion", question: question, min: min, max: max} )
         }
     });
     console.log(survey);
