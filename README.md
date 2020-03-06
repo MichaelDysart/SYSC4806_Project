@@ -32,7 +32,9 @@ A surveyor can create a survey with a list of Questions. Questions can be open-e
 
 # Schema and UML
 Schema:
+
 ![Schema](Resources/Schema.png)
 
 UML:
-![UML](Resources/SurveyQuail Model-UML diagram.png)
+
+![UML](Resources/SurveyQuail-Model-UML-diagram.png)
