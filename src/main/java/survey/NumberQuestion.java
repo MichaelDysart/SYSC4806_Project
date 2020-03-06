@@ -11,8 +11,8 @@ import java.util.ArrayList;
 public class NumberQuestion extends Question {
 
     private ArrayList<Integer> answers = new ArrayList<>();
-    protected String min;
-    protected String max;
+    protected int min;
+    protected int max;
 
     /**
      * Default constructor
@@ -23,11 +23,11 @@ public class NumberQuestion extends Question {
 
     /**
      * Constructor with specified question
-     * @param question
+     * @param question the question text
      */
-    public NumberQuestion(String question, String min, String max) {
+    public NumberQuestion(String question, int min, int max) {
 
-        super("number_question", question);
+        super(question);
         this.min = min;
         this.max = max;
 
@@ -37,28 +37,28 @@ public class NumberQuestion extends Question {
      * Get the minimum boundary for a question of type number_question
      * @return String
      */
-    public String getMin() {
+    public int getMin() {
         return min;
     }
 
     /**
      * Set the minimum boundary for a question of type number_question
-     * @param min
+     * @param min the minimum value for the question
      */
-    public void setMin(String min) {
+    public void setMin(int min) {
         this.min = min;
     }
 
     /**
      * Get the maximum boundary for a question of type number_question
-     * @return
+     * @return the maximum value
      */
-    public String getMax() { return max; }
+    public int getMax() { return max; }
 
     /**
      * Set the maximum boundary for a question of type number_question
      */
-    public void setMax() { this.max = max; }
+    public void setMax(int max) { this.max = max; }
 
 
     /**

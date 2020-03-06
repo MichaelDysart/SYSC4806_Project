@@ -51,9 +51,9 @@ public class webController {
         if (surveys.size() == 1 ) {
 
             for (Question question : surveys.iterator().next().getQuestions()) {
-                if(question.instanceOf()) {
-                    questionMessages.add(new QuestionMessage("openEnded", question.getQuestion()));
-                }else if(question.getType().equals("numberQuestion")) {
+                if(question instanceof OpenEndedQuestion) {
+                    questionMessages.add(new QuestionMessage("openEnded", question.getQuestion(), 0, 0));
+                }else if(question instanceof NumberQuestion) {
                     NumberQuestion numQ = (NumberQuestion)question;
                     questionMessages.add(new QuestionMessage("numberQuestion", numQ.getQuestion(), numQ.getMin(), numQ.getMax()));
 

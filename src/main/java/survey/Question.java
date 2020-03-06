@@ -14,7 +14,6 @@ public abstract class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
-    protected String type;
     protected String question;
 
     /*
@@ -28,8 +27,7 @@ public abstract class Question {
      * @param name {String}
      * @param question {String}
      */
-    public Question(String type, String question) {
-        this.type = type;
+    public Question(String question) {
         this.question = question;
     }
 
@@ -47,22 +45,6 @@ public abstract class Question {
      */
     public void setId(long id) {
         this.id = id;
-    }
-
-    /*
-     * Retrieve the type of the question
-     * @returns {String}
-     */
-    public String getType() {
-        return type;
-    }
-
-    /*
-     * Sets the type
-     * @param type {String}
-     */
-    public void setType(String type) {
-        this.type = type;
     }
 
     /*

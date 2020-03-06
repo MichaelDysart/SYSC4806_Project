@@ -23,7 +23,7 @@ public class OpenEndedQuestion extends Question {
      * @param question {String}
      */
     public OpenEndedQuestion(String question) {
-        super("open_ended", question);
+        super(question);
     }
 
     /*
