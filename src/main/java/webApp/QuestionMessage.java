@@ -11,11 +11,11 @@ public class QuestionMessage {
     private final int max;
 
     /**
-     * A constructor containing boundary values
-     * @param type
-     * @param question
-     * @param min
-     * @param max
+     * A numeric based question message constructor with boundaries
+     * @param type  the question type
+     * @param question  the question text
+     * @param min   the minimum value
+     * @param max   the maximum value
      */
     public QuestionMessage(String type, String question, int min, int max) {
         this.type = type;
