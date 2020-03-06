@@ -6,7 +6,7 @@ import java.util.ArrayList;
 @Entity
 public class NumberQuestion extends Question {
 
-    private ArrayList<String> answers = new ArrayList<>();
+    private ArrayList<int> answers = new ArrayList<>();
     protected String min;
     protected String max;
 
@@ -55,6 +55,30 @@ public class NumberQuestion extends Question {
      * Set the maximum boundary for a question of type number_question
      */
     public void setMax() { this.max = max; }
-}
 
+
+    /**
+     * Retrieves the answers
+     * @return {ArrayList<int>}
+     */
+    public ArrayList<int> getAnswers() {
+        return answers;
+    }
+
+    /**
+     * Sets the answers
+     * @param answers {ArrayList<int>}
+     */
+    public void setAnswers(ArrayList<int> answers) {
+        this.answers = answers;
+    }
+
+
+    /**
+     * Adds a new answer
+     * @param answer {int}
+     */
+    public void addAnswer(int answer) {
+        this.answers.add(answer);
+    }
 }
