@@ -153,8 +153,8 @@ const App = () => {
     };
 
     const retrieveSurvey = () => {
-        console.log(`${webUrl}retrieveSurvey?name=${surveyName}`);
-        fetch(`${webUrl}retrieveSurvey?name=${surveyName}`)
+        console.log(`${webUrl}retrieveSurvey?name=${userSurveyName}`);
+        fetch(`${webUrl}retrieveSurvey?name=${userSurveyName}`)
         .then(res => res.json())
         .then(function (data) {
             let arr = [];
