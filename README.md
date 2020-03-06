@@ -1,4 +1,4 @@
-# SYSC4806_Project
+# SYSC4806_Project [![Build Status](https://travis-ci.com/MichaelDysart/SYSC4806_Project.png?branch=master)](https://travis-ci.com/MichaelDysart/SYSC4806_Project)
 The SYSC4806_Project For Group 2
 
 # Mini-SurveyMonkey
