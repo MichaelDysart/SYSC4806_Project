@@ -8,6 +8,7 @@ import survey.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /*
  * The controller that accepts web requests to update and retrieve surveys
@@ -63,5 +64,22 @@ public class webController {
             return new SurveyMessage(name, questionMessages);
         }
         return new SurveyMessage("", questionMessages);
+    }
+
+    @GetMapping(value = "/retrieveSurveyNames", produces = "application/json")
+    @ResponseBody
+    public Response retrieveSurveyNames() {
+        List<String> listOfSurveys = repo.findNames();
+
+        if (listOfSurveys.size() == 0) {
+            return new Response("No surveys exist","Help");
+        }
+
+        StringBuilder surveyString = new StringBuilder("The list of survey(s) are as follows: \n");
+        for(String survey: listOfSurveys) {
+            surveyString.append(survey + "\n");
+        }
+
+        return new Response(surveyString.toString(), "Help");
     }
 }
