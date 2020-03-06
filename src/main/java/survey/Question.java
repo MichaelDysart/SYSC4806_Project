@@ -21,7 +21,8 @@ public abstract class Question {
     /*
      * A default constructor
      */
-    public Question(){ }
+    public Question() {
+    }
 
     /*
      * A constructor
@@ -80,5 +81,7 @@ public abstract class Question {
     public void setQuestion(String question) {
         this.question = question;
     }
+
+}
 
 

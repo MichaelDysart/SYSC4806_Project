@@ -6,7 +6,7 @@ import java.util.ArrayList;
 @Entity
 public class NumberQuestion extends Question {
 
-    private ArrayList<int> answers = new ArrayList<>();
+    private ArrayList<Integer> answers = new ArrayList<>();
     protected String min;
     protected String max;
 
@@ -59,26 +59,26 @@ public class NumberQuestion extends Question {
 
     /**
      * Retrieves the answers
-     * @return {ArrayList<int>}
+     * @return {ArrayList<Integer>}
      */
-    public ArrayList<int> getAnswers() {
+    public ArrayList<Integer> getAnswers() {
         return answers;
     }
 
     /**
      * Sets the answers
-     * @param answers {ArrayList<int>}
+     * @param answers {ArrayList<Integer>}
      */
-    public void setAnswers(ArrayList<int> answers) {
+    public void setAnswers(ArrayList<Integer> answers) {
         this.answers = answers;
     }
 
 
     /**
      * Adds a new answer
-     * @param answer {int}
+     * @param answer {Integer}
      */
-    public void addAnswer(int answer) {
+    public void addAnswer(Integer answer) {
         this.answers.add(answer);
     }
 }
