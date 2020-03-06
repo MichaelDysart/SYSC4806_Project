@@ -1,7 +1,7 @@
 # SYSC4806_Project [![Build Status](https://travis-ci.com/MichaelDysart/SYSC4806_Project.png?branch=master)](https://travis-ci.com/MichaelDysart/SYSC4806_Project)
 The SYSC4806_Project For Group 2
 
-Question-Quail (Mini-SurveyMonkey)
+Question Quail (Mini-SurveyMonkey)
 ==============
 
 # Background
@@ -19,9 +19,9 @@ A surveyor can create a survey with a list of Questions. Questions can be open-e
     
     HTTPS: git clone https://github.com/MichaelDysart/SYSC4806_Project.git
     
-  3. Open the cloned project folder in IntelliJ by running IntelliJ, clicking the "Open" button, and selecting the project          folder.
+  3. Open the cloned project folder in IntelliJ by running IntelliJ, clicking the "Open" button, and selecting the project folder.
   
-  4. Upon the project being opnened, ensure that you're workspace is using Maven and Java 8. IntelliJ should automatically prompt you to select your sdk and to import Maven.
+  4. Upon the project being opened, ensure that your workspace is using Maven and Java 8. IntelliJ should automatically prompt you to select your sdk and to import Maven.
   
   5. Click on the Maven tab on the right side of the page, and click on 
   SYSC4806_Project -> Lifecycle -> Package
@@ -33,8 +33,8 @@ A surveyor can create a survey with a list of Questions. Questions can be open-e
 # Schema and UML
 Schema:
 
-![Schema](Resources/Schema.png)
+![Schema](resources/schema.png)
 
 UML:
 
-![UML](Resources/SurveyQuail-Model-UML-diagram.png)
+![UML](resources/uml-diagram.png)
