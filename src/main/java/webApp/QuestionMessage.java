@@ -11,7 +11,17 @@ public class QuestionMessage {
     private final String max;
 
     /**
-     * A constructor containing boundary values
+     * An opened ended question message constructor
+     * @param type
+     * @param question
+     */
+    public QuestionMessage(String type, String question) {
+        this.type = type;
+        this.question = question;
+    }
+
+    /**
+     * A numeric based question message constructor with boundaries
      * @param type
      * @param question
      * @param min
