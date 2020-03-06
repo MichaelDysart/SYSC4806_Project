@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
+import DeleteIcon from '@material-ui/icons/Delete';
 import './App.scss';
 
 const qType = {
@@ -64,33 +66,38 @@ const App = () => {
     };
 
     /*
-    * The handler to add a new question to the end of the
-    * survey question list
+    * Add a new question to the end of the survey question list
     */
     const addQuestion = () => {
+        addQuestionAtIndex(questions.length);
+    };
+
+    const addQuestionAtIndex = (i) => {
         switch(currentType) {
             case qType.OPEN_ENDED:
                 setQuestions([
-                    ...questions,
+                    ...questions.slice(0, i),
                     {
                         type: currentType,
                         question: '',
                     },
+                    ...questions.slice(i, questions.length)
                 ]);
                 break;
             case qType.NUMERICAL:
                 setQuestions([
-                    ...questions,
+                    ...questions.slice(0, i),
                     {
                         type: currentType,
                         min: 0,
                         max: 0,
                         question: '',
                     },
+                    ...questions.slice(i, questions.length)
                 ]);
                 break;
             default:
-                console.log(`[WARNING] Unknown question type "${currentType}"`)
+                console.log(`[WARNING] Unknown question type "${currentType}"`);
         }
     };
 
@@ -108,6 +115,18 @@ const App = () => {
     };
 
     /*
+    * Delete a question at index i
+    */
+    const deleteQuestion = (i) => {
+        setQuestions(questions.filter((q, current) => {
+            if (current === i) {
+                return false;
+            }
+            return true;
+        }));
+    };
+
+    /*
     * Store a new survey on the server
     */
     const createSurvey = () => {
@@ -115,7 +134,7 @@ const App = () => {
             name: surveyName,
             questions,
         };
-        
+
         fetch(`${webUrl}createSurvey`, {
             method: 'POST',
             body: JSON.stringify(survey),
@@ -130,7 +149,7 @@ const App = () => {
 
     return (
         <div className="qq-app">
-            <h2>Question Quail</h2>
+            <Typography variant="h4" gutterBottom>Question Quail</Typography>
             <div>
                 <TextField
                     className="qq-app mv"
@@ -163,12 +182,25 @@ const App = () => {
                                 <div className="qq-app mv" key={i}>
                                     <div>{`Question ${i + 1} - Open Ended`}</div>
                                     <TextField
+                                        className="qq-app mv"
                                         value={questions[i].question}
                                         variant="outlined"
                                         label="Question"
                                         size="small"
                                         onChange={e => updateQuestion(i, { ...q, question: e.target.value })}
                                     />
+                                    <Button
+                                        className="qq-app m"
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => addQuestionAtIndex(i)}
+                                    >+</Button>
+                                    <Button
+                                        className="qq-app m"
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => deleteQuestion(i)}
+                                    ><DeleteIcon /></Button>
                                 </div>
                             );
                         case qType.NUMERICAL:
@@ -184,6 +216,34 @@ const App = () => {
                                         size="small"
                                         onChange={e => updateQuestion(i, { ...q, question: e.target.value })}
                                     />
+                                    <TextField
+                                        className="qq-app m qq-app__number_input"
+                                        value={questions[i].min}
+                                        variant="outlined"
+                                        label="Minimum"
+                                        size="small"
+                                        onChange={e => updateQuestion(i, { ...q, min: parseInt(e.target.value) || 0 })}
+                                    />
+                                    <TextField
+                                        className="qq-app m qq-app__number_input"
+                                        value={questions[i].max}
+                                        variant="outlined"
+                                        label="Maximum"
+                                        size="small"
+                                        onChange={e => updateQuestion(i, { ...q, max: parseInt(e.target.value) || 0 })}
+                                    />
+                                    <Button
+                                        className="qq-app m"
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => addQuestionAtIndex(i)}
+                                    >+</Button>
+                                    <Button
+                                        className="qq-app m"
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => deleteQuestion(i)}
+                                    ><DeleteIcon /></Button>
                                 </div>
                             );
                         default:
