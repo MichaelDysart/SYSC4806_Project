@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -149,109 +152,115 @@ const App = () => {
 
     return (
         <div className="qq-app">
-            <Typography variant="h4" gutterBottom>Question Quail</Typography>
-            <div>
-                <TextField
-                    className="qq-app mv"
-                    variant="outlined"
-                    label="Survey Name"
-                    size="small"
-                    onChange={e => setSurveyName(e.target.value)}
-                />
-                <Button className="qq-app m" variant="contained" color="primary" onClick={createSurvey}>Create</Button>
-            </div>
-            <div>
-                <FormControl className="qq-app mv qq-app__qtype_select">
-                    <InputLabel id="qtype_select_label">Question Type</InputLabel>
-                    <Select labelId="qtype_select_label" value={currentType} onChange={e => setCurrentType(e.target.value)}>
-                        <MenuItem value={qType.OPEN_ENDED}>Open-Ended</MenuItem>
-                        <MenuItem value={qType.NUMERICAL}>Numerical</MenuItem>
-                    </Select>
-                </FormControl>
-                <Button className="qq-app m" variant="contained" color="primary" disabled={!currentType} onClick={addQuestion}>+</Button>
-            </div>
-            <div>
-                <Button className="qq-app mv" variant="contained" color="primary" onClick={myFunc1}>Dev Test 1 (POST)</Button>
-                <Button className="qq-app m" variant="contained" color="primary" onClick={myFunc2}>Dev Test 2 (GET)</Button>
-            </div>
-            <div>
-                {questions.map((q, i) => {
-                    switch(q.type) {
-                        case qType.OPEN_ENDED:
-                            return (
-                                <div className="qq-app mv" key={i}>
-                                    <div>{`Question ${i + 1} - Open Ended`}</div>
-                                    <TextField
-                                        className="qq-app mv"
-                                        value={questions[i].question}
-                                        variant="outlined"
-                                        label="Question"
-                                        size="small"
-                                        onChange={e => updateQuestion(i, { ...q, question: e.target.value })}
-                                    />
-                                    <Button
-                                        className="qq-app m"
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() => addQuestionAtIndex(i)}
-                                    >+</Button>
-                                    <Button
-                                        className="qq-app m"
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() => deleteQuestion(i)}
-                                    ><DeleteIcon /></Button>
-                                </div>
-                            );
-                        case qType.NUMERICAL:
-                            // @TODO: Add min/max
-                            return (
-                                <div className="qq-app mv" key={i}>
-                                    <div>{`Question ${i + 1} - Numerical`}</div>
-                                    <TextField
-                                        className="qq-app mv"
-                                        value={questions[i].question}
-                                        variant="outlined"
-                                        label="Question"
-                                        size="small"
-                                        onChange={e => updateQuestion(i, { ...q, question: e.target.value })}
-                                    />
-                                    <TextField
-                                        className="qq-app m qq-app__number_input"
-                                        value={questions[i].min}
-                                        variant="outlined"
-                                        label="Minimum"
-                                        size="small"
-                                        onChange={e => updateQuestion(i, { ...q, min: parseInt(e.target.value) || 0 })}
-                                    />
-                                    <TextField
-                                        className="qq-app m qq-app__number_input"
-                                        value={questions[i].max}
-                                        variant="outlined"
-                                        label="Maximum"
-                                        size="small"
-                                        onChange={e => updateQuestion(i, { ...q, max: parseInt(e.target.value) || 0 })}
-                                    />
-                                    <Button
-                                        className="qq-app m"
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() => addQuestionAtIndex(i)}
-                                    >+</Button>
-                                    <Button
-                                        className="qq-app m"
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() => deleteQuestion(i)}
-                                    ><DeleteIcon /></Button>
-                                </div>
-                            );
-                        default:
-                            console.log(`[WARNING] Unknown question type "${q.question}"`)
-                            return (<div />);
-                    };
-                })}
-            </div>
+            <AppBar position="static">
+                <Toolbar>
+                    <Typography variant="h4">Question Quail</Typography>
+                </Toolbar>
+            </AppBar>
+            <Card className="qq-app qq-app__container">
+                <div>
+                    <TextField
+                        className="qq-app mv"
+                        variant="outlined"
+                        label="Survey Name"
+                        size="small"
+                        onChange={e => setSurveyName(e.target.value)}
+                    />
+                    <Button className="qq-app m" variant="contained" color="primary" onClick={createSurvey}>Create</Button>
+                </div>
+                <div>
+                    <FormControl className="qq-app mv qq-app__qtype_select">
+                        <InputLabel id="qtype_select_label">Question Type</InputLabel>
+                        <Select labelId="qtype_select_label" value={currentType} onChange={e => setCurrentType(e.target.value)}>
+                            <MenuItem value={qType.OPEN_ENDED}>Open-Ended</MenuItem>
+                            <MenuItem value={qType.NUMERICAL}>Numerical</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <Button className="qq-app m" variant="contained" color="primary" disabled={!currentType} onClick={addQuestion}>+</Button>
+                </div>
+                <div>
+                    <Button className="qq-app mv" variant="contained" color="primary" onClick={myFunc1}>Dev Test 1 (POST)</Button>
+                    <Button className="qq-app m" variant="contained" color="primary" onClick={myFunc2}>Dev Test 2 (GET)</Button>
+                </div>
+                <div>
+                    {questions.map((q, i) => {
+                        switch(q.type) {
+                            case qType.OPEN_ENDED:
+                                return (
+                                    <div className="qq-app mv" key={i}>
+                                        <div>{`Question ${i + 1} - Open Ended`}</div>
+                                        <TextField
+                                            className="qq-app mv"
+                                            value={questions[i].question}
+                                            variant="outlined"
+                                            label="Question"
+                                            size="small"
+                                            onChange={e => updateQuestion(i, { ...q, question: e.target.value })}
+                                        />
+                                        <Button
+                                            className="qq-app m"
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() => addQuestionAtIndex(i)}
+                                        >+</Button>
+                                        <Button
+                                            className="qq-app m"
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() => deleteQuestion(i)}
+                                        ><DeleteIcon /></Button>
+                                    </div>
+                                );
+                            case qType.NUMERICAL:
+                                // @TODO: Add min/max
+                                return (
+                                    <div className="qq-app mv" key={i}>
+                                        <div>{`Question ${i + 1} - Numerical`}</div>
+                                        <TextField
+                                            className="qq-app mv"
+                                            value={questions[i].question}
+                                            variant="outlined"
+                                            label="Question"
+                                            size="small"
+                                            onChange={e => updateQuestion(i, { ...q, question: e.target.value })}
+                                        />
+                                        <TextField
+                                            className="qq-app m qq-app__number_input"
+                                            value={questions[i].min}
+                                            variant="outlined"
+                                            label="Minimum"
+                                            size="small"
+                                            onChange={e => updateQuestion(i, { ...q, min: parseInt(e.target.value) || 0 })}
+                                        />
+                                        <TextField
+                                            className="qq-app m qq-app__number_input"
+                                            value={questions[i].max}
+                                            variant="outlined"
+                                            label="Maximum"
+                                            size="small"
+                                            onChange={e => updateQuestion(i, { ...q, max: parseInt(e.target.value) || 0 })}
+                                        />
+                                        <Button
+                                            className="qq-app m"
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() => addQuestionAtIndex(i)}
+                                        >+</Button>
+                                        <Button
+                                            className="qq-app m"
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() => deleteQuestion(i)}
+                                        ><DeleteIcon /></Button>
+                                    </div>
+                                );
+                            default:
+                                console.log(`[WARNING] Unknown question type "${q.question}"`)
+                                return (<div />);
+                        };
+                    })}
+                </div>
+            </Card>
         </div>
     );
 };
