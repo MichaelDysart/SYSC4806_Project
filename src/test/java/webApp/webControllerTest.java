@@ -22,10 +22,16 @@ public class webControllerTest {
     @Test
     public void testRestApplication() throws Exception {
         String surveyString = "{ \"name\" : \"survey1\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"numberQuestion\", \"question\": \"q1\", \"min\": \"0\", \"max\": \"5\" }]}";
-
         this.mockMvc.perform(post("/createSurvey").contentType("application/json")
                 .content(surveyString)).andExpect(status().isOk())
                 .andExpect(content().string(containsString("ok")))
                 .andExpect(content().string(containsString("done")));
+        surveyString = "{ \"name\" : \"survey2\", \"questions\" : [{ \"type\": \"numberQuestion\", \"question\": \"q1\", \"min\" : 1, \"max\" : 55 }, { \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"numberQuestion\", \"question\": \"q1\", \"min\": \"0\", \"max\": \"5\" }]}";
+        this.mockMvc.perform(post("/createSurvey").contentType("application/json")
+                .content(surveyString)).andExpect(status().isOk())
+                .andExpect(content().string(containsString("ok")))
+                .andExpect(content().string(containsString("done")));
+        this.mockMvc.perform(get("/retrieveSurveyNames")).andExpect(status().isOk())
+                .andExpect(content().string(containsString("[\"survey1\",\"survey2\"]")));
     }
 }
