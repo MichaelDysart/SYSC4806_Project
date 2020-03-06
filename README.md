@@ -14,7 +14,9 @@ A surveyor can create a survey with a list of Questions. Questions can be open-e
   1. Create a folder for the project to be located in.
   
   2. In your created folder, clone the repo from github using: 
+  
     SSH: git clone git@github.com:MichaelDysart/SYSC4806_Project.git
+    
     HTTPS: git clone https://github.com/MichaelDysart/SYSC4806_Project.git
     
   3. Open the cloned project folder in IntelliJ by running IntelliJ, clicking the "Open" button, and selecting the project          folder.
@@ -30,7 +32,7 @@ A surveyor can create a survey with a list of Questions. Questions can be open-e
 
 # Schema and UML
 Schema:
-![Schema](resources/Schema.png)
+![Schema](Resources/Schema.png)
 
 UML:
-![UML](resources/SurveyQuail Model-UML diagram.png)
+![UML](Resources/SurveyQuail Model-UML diagram.png)
