@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import survey.OpenEndedQuestion;
-import survey.Survey;
-import survey.Question;
+import survey.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,6 +31,8 @@ public class webController {
         for (QuestionMessage question : surveyMessage.getQuestions()) {
             if (question.getType().equals("openEnded")) {
                 questionList.add(new OpenEndedQuestion(question.getQuestion()));
+            } else if(question.getType().equals("numberQuestion")) {
+                questionList.add(new NumberQuestion(question.getQuestion(), question.getMin(), question.getMax()));
             }
         }
 
@@ -51,7 +51,13 @@ public class webController {
         if (surveys.size() == 1 ) {
 
             for (Question question : surveys.iterator().next().getQuestions()) {
-                questionMessages.add(new QuestionMessage("openEnded", question.getQuestion()));
+                if(question instanceof OpenEndedQuestion) {
+                    questionMessages.add(new QuestionMessage("openEnded", question.getQuestion(), 0, 0));
+                }else if(question instanceof NumberQuestion) {
+                    NumberQuestion numQ = (NumberQuestion)question;
+                    questionMessages.add(new QuestionMessage("numberQuestion", numQ.getQuestion(), numQ.getMin(), numQ.getMax()));
+
+                }
             }
 
             return new SurveyMessage(name, questionMessages);
