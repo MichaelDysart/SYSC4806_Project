@@ -120,8 +120,8 @@ function createSurvey() {
         if ($(element).hasClass('openEnded')) {
             survey.questions.push({ type: "openEnded", question: question })
         } else if($(element).hasClass('numberQuestion')) {
-            let min = $(element).children().eq(1).val();
-            let max = $(element).children().eq(2).val();
+            let min = parseInt($(element).children().eq(1).val());
+            let max = parseInt(element).children().eq(2).val();
 
             survey.questions.push( {type: "numberQuestion", question: question, min: min, max: max} )
         }
