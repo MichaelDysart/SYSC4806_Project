@@ -212,7 +212,6 @@ const App = () => {
                                     </div>
                                 );
                             case qType.NUMERICAL:
-                                // @TODO: Add min/max
                                 return (
                                     <div className="qq-app mv" key={i}>
                                         <div>{`Question ${i + 1} - Numerical`}</div>
