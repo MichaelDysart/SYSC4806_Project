@@ -1,0 +1,19 @@
+// !important is used to override MaterialUI default styles
+
+.qq-app {
+  .m {
+    margin: 5px;
+  }
+
+  .mv {
+    margin: 5px 0;
+  }
+
+  .mh {
+    margin: 0 5px;
+  }
+
+  div.qq-app__qtype_select {
+    min-width: 140px;
+  }
+}

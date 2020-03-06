@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import './App.scss';
 
 const qType = {
     OPEN_ENDED: "openEnded",
+    NUMERICAL: "numberQuestion",
 };
 
 /*
@@ -12,7 +19,7 @@ const App = () => {
     const [webUrl, setWebUrl] = useState('');
     const [surveyName, setSurveyName] = useState('');
     const [questions, setQuestions] = useState([]);
-    const [currentType, setCurrentType] = useState(qType.OPEN_ENDED);
+    const [currentType, setCurrentType] = useState('');
 
     // useEffect with no dependencies is equal to $(document).ready
     // for the component in context
@@ -61,13 +68,43 @@ const App = () => {
     * survey question list
     */
     const addQuestion = () => {
-        setQuestions([
-            ...questions,
-            {
-                type: currentType,
-                question: '',
-            },
-        ]);
+        switch(currentType) {
+            case qType.OPEN_ENDED:
+                setQuestions([
+                    ...questions,
+                    {
+                        type: currentType,
+                        question: '',
+                    },
+                ]);
+                break;
+            case qType.NUMERICAL:
+                setQuestions([
+                    ...questions,
+                    {
+                        type: currentType,
+                        min: 0,
+                        max: 0,
+                        question: '',
+                    },
+                ]);
+                break;
+            default:
+                console.log(`[WARNING] Unknown question type "${currentType}"`)
+        }
+    };
+
+    /*
+    * A helper function to update the array of
+    * current questions when a change is made
+    */
+    const updateQuestion = (i, newObjVal) => {
+        setQuestions(questions.map((q, current) => {
+            if (current === i) {
+                return newObjVal;
+            }
+            return q;
+        }));
     };
 
     /*
@@ -91,47 +128,66 @@ const App = () => {
         .catch(display);
     };
 
-    /*
-    * A helper function to update the array of
-    * current questions when a change is made
-    */
-    const updateQuestion = (i, newObjVal) => {
-        setQuestions(questions.map((q, current) => {
-            if (current === i) {
-                return newObjVal;
-            }
-            return q;
-        }));
-    }
-
     return (
         <div className="qq-app">
             <h2>Question Quail</h2>
             <div>
-                <Button variant="contained" color="primary" onClick={myFunc1}>Dev Test 1 (POST)</Button>
-                <Button variant="contained" color="primary" onClick={myFunc2}>Dev Test 2 (GET)</Button>
+                <TextField
+                    className="qq-app mv"
+                    variant="outlined"
+                    label="Survey Name"
+                    size="small"
+                    onChange={e => setSurveyName(e.target.value)}
+                />
+                <Button className="qq-app m" variant="contained" color="primary" onClick={createSurvey}>Create</Button>
             </div>
             <div>
-                <Button variant="contained" color="primary" onClick={createSurvey}>Create</Button>
-                <input value={surveyName} onChange={e => setSurveyName(e.target.value)} type="text" />
-                <select id="questionType">
-                    <option value={qType.OPEN_ENDED} onChange={setCurrentType(qType.OPEN_ENDED)}>OpenEnded</option>
-                </select>
-                <Button variant="contained" color="primary" onClick={addQuestion}>+</Button>
+                <FormControl className="qq-app mv qq-app__qtype_select">
+                    <InputLabel id="qtype_select_label">Question Type</InputLabel>
+                    <Select labelId="qtype_select_label" value={currentType} onChange={e => setCurrentType(e.target.value)}>
+                        <MenuItem value={qType.OPEN_ENDED}>Open-Ended</MenuItem>
+                        <MenuItem value={qType.NUMERICAL}>Numerical</MenuItem>
+                    </Select>
+                </FormControl>
+                <Button className="qq-app m" variant="contained" color="primary" disabled={!currentType} onClick={addQuestion}>+</Button>
+            </div>
+            <div>
+                <Button className="qq-app mv" variant="contained" color="primary" onClick={myFunc1}>Dev Test 1 (POST)</Button>
+                <Button className="qq-app m" variant="contained" color="primary" onClick={myFunc2}>Dev Test 2 (GET)</Button>
+            </div>
+            <div>
                 {questions.map((q, i) => {
                     switch(q.type) {
                         case qType.OPEN_ENDED:
                             return (
-                                <div key={i}>
-                                    <input
+                                <div className="qq-app mv" key={i}>
+                                    <div>{`Question ${i + 1} - Open Ended`}</div>
+                                    <TextField
                                         value={questions[i].question}
+                                        variant="outlined"
+                                        label="Question"
+                                        size="small"
                                         onChange={e => updateQuestion(i, { ...q, question: e.target.value })}
-                                        type="text"
+                                    />
+                                </div>
+                            );
+                        case qType.NUMERICAL:
+                            // @TODO: Add min/max
+                            return (
+                                <div className="qq-app mv" key={i}>
+                                    <div>{`Question ${i + 1} - Numerical`}</div>
+                                    <TextField
+                                        className="qq-app mv"
+                                        value={questions[i].question}
+                                        variant="outlined"
+                                        label="Question"
+                                        size="small"
+                                        onChange={e => updateQuestion(i, { ...q, question: e.target.value })}
                                     />
                                 </div>
                             );
                         default:
-                            console.log(`[WARNING] Unkown question type "${q.question}"`)
+                            console.log(`[WARNING] Unknown question type "${q.question}"`)
                             return (<div />);
                     };
                 })}
