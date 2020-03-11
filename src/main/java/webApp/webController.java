@@ -8,6 +8,7 @@ import survey.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 /*
  * The controller that accepts web requests to update and retrieve surveys
@@ -25,6 +26,10 @@ public class webController {
     @PostMapping(value = "/createSurvey", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public Response createSurvey(@RequestBody SurveyMessage surveyMessage) {
+        if (repo.findById(surveyMessage.getName()).isPresent()) {
+            return new Response("error", "Survey already exists with that name");
+        }
+
         Survey survey = new Survey(surveyMessage.getName());
         Collection<Question> questionList = new ArrayList<>();
 
@@ -47,10 +52,10 @@ public class webController {
 
         Collection<QuestionMessage> questionMessages = new ArrayList<>();
 
-        Collection<Survey> surveys = repo.findByName(name);
-        if (surveys.size() == 1 ) {
+        Optional<Survey> survey = repo.findById(name);
+        if (survey.isPresent()) {
 
-            for (Question question : surveys.iterator().next().getQuestions()) {
+            for (Question question : survey.get().getQuestions()) {
                 if(question instanceof OpenEndedQuestion) {
                     questionMessages.add(new QuestionMessage("openEnded", question.getQuestion(), 0, 0));
                 }else if(question instanceof NumberQuestion) {

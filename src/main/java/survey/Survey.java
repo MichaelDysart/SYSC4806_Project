@@ -8,10 +8,8 @@ import java.util.Collection;
  */
 @Entity
 public class Survey {
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Id
-    private long id;
 
+    @Id
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -52,22 +50,6 @@ public class Survey {
      */
     public String getName() {
         return this.name;
-    }
-
-    /*
-     * Sets the id
-     * @param id {long}
-     */
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    /*
-     * Retrieve the id
-     * @returns {long}
-     */
-    public long getId() {
-        return this.id;
     }
 
     /*
