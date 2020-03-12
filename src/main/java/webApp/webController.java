@@ -8,6 +8,7 @@ import survey.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
 
 /*
@@ -33,12 +34,21 @@ public class webController {
         Survey survey = new Survey(surveyMessage.getName());
         Collection<Question> questionList = new ArrayList<>();
 
+        ArrayList<String> questionTexts = new ArrayList<>();
+
         for (QuestionMessage question : surveyMessage.getQuestions()) {
+            questionTexts.add(question.getQuestion());
             if (question.getType().equals("openEnded")) {
                 questionList.add(new OpenEndedQuestion(question.getQuestion()));
             } else if(question.getType().equals("numberQuestion")) {
                 questionList.add(new NumberQuestion(question.getQuestion(), question.getMin(), question.getMax()));
             }
+        }
+
+        HashSet<String> set = new HashSet<>(questionTexts);
+
+        if(set.size() < questionTexts.size()){
+            return new Response("error", "Duplicate questions detected");
         }
 
         survey.setQuestions(questionList);

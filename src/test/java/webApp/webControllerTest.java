@@ -22,7 +22,7 @@ public class webControllerTest {
 
     @Test
     public void testRestApplication() throws Exception {
-        String surveyString = "{ \"name\" : \"survey1\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"numberQuestion\", \"question\": \"q1\", \"min\": 0, \"max\": 5 }]}";
+        String surveyString = "{ \"name\" : \"survey1\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"openEnded\", \"question\": \"q2\" }, { \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": 0, \"max\": 5 }]}";
 
         this.mockMvc.perform(post("/createSurvey").contentType("application/json")
                 .content(surveyString)).andExpect(status().isOk())
@@ -36,5 +36,12 @@ public class webControllerTest {
 
         this.mockMvc.perform(get("/retrieveSurvey?name=survey1")).andExpect(status().isOk())
                 .andExpect(content().json(surveyString));
+
+        surveyString = "{ \"name\" : \"survey2\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"numberQuestion\", \"question\": \"q1\", \"min\": 0, \"max\": 5 }]}";
+
+        this.mockMvc.perform(post("/createSurvey").contentType("application/json")
+                .content(surveyString)).andExpect(status().isOk())
+                .andExpect(content().string(containsString("error")))
+                .andExpect(content().string(containsString("Duplicate questions detected")));
     }
 }
