@@ -10,7 +10,10 @@ import java.util.Collection;
 public class Survey {
 
     @Id
-    private String name;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected int id;
+
+    protected String name;
 
     @OneToMany(cascade = CascadeType.ALL)
     private Collection<Question> questions;
@@ -35,6 +38,23 @@ public class Survey {
         this.name = name;
         this.questions = questions;
     }
+
+    /*
+     * Sets the id
+     * @param id {int}
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    /*
+     * Retrieve the id
+     * @returns {int}
+     */
+    public int getId() {
+        return this.id;
+    }
+
 
     /*
      * Sets the name
