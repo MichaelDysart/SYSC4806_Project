@@ -84,6 +84,13 @@ public class webControllerTest {
 
         Integer id1 = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
 
+        this.mockMvc.perform(get("/retrieveSurvey?id=" + id1)).andExpect(status().isOk())
+                .andExpect(content().json("{ \"name\" : \"survey1\", \"questions\" : [ " +
+                        "{ \"type\": \"openEnded\", \"question\": \"q1\", \"stringAnswerList\" : [], \"numberAnswerList\" : null }," +
+                        "{ \"type\": \"openEnded\", \"question\": \"q2\", \"stringAnswerList\" : [], \"numberAnswerList\" : null }," +
+                        "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": 1, \"max\": 5, \"stringAnswerList\" : null, \"numberAnswerList\" : [] }" +
+                        " ], \"status\"=\"ok\", \"id\" : " + id1 + "}"));
+
         surveyString1 = "{ \"id\" : " + id1 + ", \"questions\" : [" +
                 "{ \"type\": \"openEnded\", \"question\": \"q1\", \"stringAnswer\" : \"myAnswer\" }, " +
                 "{ \"type\": \"openEnded\", \"question\": \"q2\", \"stringAnswer\" : \"myAnswer\" }, " +
@@ -102,6 +109,13 @@ public class webControllerTest {
                 .content(surveyString1)).andExpect(status().isOk())
                 .andExpect(content().string(containsString("ok")))
                 .andExpect(content().string(containsString("answers saved")));
+
+        this.mockMvc.perform(get("/retrieveSurvey?id=" + id1)).andExpect(status().isOk())
+                .andExpect(content().json("{ \"name\" : \"survey1\", \"questions\" : [ " +
+                        "{ \"type\": \"openEnded\", \"question\": \"q1\", \"stringAnswerList\" : [\"myAnswer\", \"myAnswer2\"], \"numberAnswerList\" : null }," +
+                        "{ \"type\": \"openEnded\", \"question\": \"q2\", \"stringAnswerList\" : [\"myAnswer\"], \"numberAnswerList\" : null }," +
+                        "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": 1, \"max\": 5, \"stringAnswerList\" : null, \"numberAnswerList\" : [ 1, 3 ] }" +
+                        " ], \"status\"=\"ok\", \"id\" : " + id1 + "}"));
     }
 
     @Test

@@ -79,14 +79,15 @@ public class webController {
 
             for (Question question : survey.get().getQuestions()) {
                 if(question instanceof OpenEndedQuestion) {
-                    questionMessages.add(new QuestionMessage(openQuestionType, question.getQuestion(), 0, 0, "", 0));
+                    OpenEndedQuestion openQ = (OpenEndedQuestion)question;
+                    questionMessages.add(new QuestionMessage(openQuestionType, question.getQuestion(), 0, 0, "", 0, openQ.getAnswers(), null));
                 } else if(question instanceof NumberQuestion) {
                     NumberQuestion numQ = (NumberQuestion)question;
-                    questionMessages.add(new QuestionMessage(numQuestionType, numQ.getQuestion(), numQ.getMin(), numQ.getMax(), "", 0));
+                    questionMessages.add(new QuestionMessage(numQuestionType, numQ.getQuestion(), numQ.getMin(), numQ.getMax(), "", 0, null, numQ.getAnswers()));
                 }
             }
 
-            return new SurveyMessage(survey.get().getId(), "", survey.get().getName(), questionMessages);
+            return new SurveyMessage(survey.get().getId(), "ok", survey.get().getName(), questionMessages);
         }
         return new SurveyMessage(null, "error", "", questionMessages);
     }
