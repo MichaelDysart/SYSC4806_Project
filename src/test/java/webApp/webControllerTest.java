@@ -24,6 +24,8 @@ public class webControllerTest {
 
     @Test
     public void testRestApplication() throws Exception {
+        this.mockMvc.perform(get("/")).andExpect(status().isOk());
+
         String surveyString1 = "{ \"name\" : \"survey1\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"openEnded\", \"question\": \"q2\" }, { \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": 0, \"max\": 5 }]}";
 
         MvcResult result = this.mockMvc.perform(post("/createSurvey").contentType("application/json")
