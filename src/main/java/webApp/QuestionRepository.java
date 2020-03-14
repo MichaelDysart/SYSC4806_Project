@@ -8,5 +8,5 @@ import survey.Question;
  * A database for questions
  */
 @RepositoryRestResource(collectionResourceRel = "survey", path = "survey")
-public interface QuestionRepository extends PagingAndSortingRepository<Question, Long> {
+public interface QuestionRepository extends PagingAndSortingRepository<Question, Integer> {
 }
