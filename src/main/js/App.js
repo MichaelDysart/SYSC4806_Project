@@ -136,7 +136,7 @@ const App = () => {
         .then(res => res.json())
         .then(function (data) {
             console.log(data);
-            if (data.id !== null) {
+            if (data.status !== "error") {
                 setConsoleText(consoleText + "\nSurvey " + data.id + " retrieved");
             } else {
                 setConsoleText(consoleText + "\nError: Could not find survey with id " + data.id );
