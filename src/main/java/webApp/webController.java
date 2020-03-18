@@ -64,4 +64,14 @@ public class webController {
         }
         return new SurveyMessage("", questionMessages);
     }
+
+    @PostMapping(value = "/deleteSurvey", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public Response deleteSurvey(@RequestParam (name="name") String name) {
+        long deleted = repo.deleteByName(name);
+        if(deleted == 1) {
+            return new Response("survey deleted", "name: " + name + "found: " + deleted);
+        }
+        return new Response("survey not found", "name: " + name + "found: " + deleted);
+    }
 }
