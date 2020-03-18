@@ -11,6 +11,6 @@ import java.util.List;
  * A database for surveys
  */
 @RepositoryRestResource(collectionResourceRel = "survey", path = "survey")
-public interface SurveyRepository extends PagingAndSortingRepository<Survey, Long> {
+public interface SurveyRepository extends PagingAndSortingRepository<Survey, Integer> {
     List<Survey> findByName(@Param("name") String name);
 }

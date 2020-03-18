@@ -7,6 +7,7 @@ import java.util.Collection;
  */
 public class SurveyMessage {
 
+    private final Integer id;
     private final String name;
     private final Collection<QuestionMessage> questions;
 
@@ -15,9 +16,18 @@ public class SurveyMessage {
      * @param name {String}
      * @param questions {Collection<QuestionMessage>}
      */
-    public SurveyMessage(String name, Collection<QuestionMessage> questions) {
+    public SurveyMessage(Integer id, String name, Collection<QuestionMessage> questions) {
         this.questions = questions;
         this.name = name;
+        this.id = id;
+    }
+
+    /*
+     * Retrieve the survey id
+     * @returns {int}
+     */
+    public Integer getId() {
+        return id;
     }
 
     /*

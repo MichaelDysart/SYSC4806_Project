@@ -22,6 +22,7 @@ const qType = {
  */
 const App = () => {
     const [webUrl, setWebUrl] = useState('');
+    const [consoleText, setConsoleText] = useState('');
     const [surveyName, setSurveyName] = useState('');
     const [questions, setQuestions] = useState([]);
     const [currentType, setCurrentType] = useState('');
@@ -34,39 +35,9 @@ const App = () => {
         setWebUrl(window.location.href);
     }, []);
 
-    // Test function
-    // @TODO remove
-    const myFunc1 = () => {
-        const survey = {
-            name : "survey1",
-            questions : [ { type: qType.OPEN_ENDED, question: "q1" }, { type: qType.OPEN_ENDED, question: "q2" } ]
-        };
-
-        fetch(`${webUrl}createSurvey`, {
-            method: 'POST',
-            body: JSON.stringify(survey),
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-        .then(res => res.json()) // Asynchronously get response JSON
-        .then(display)
-        .catch(display);
-    };
-
-    // Test function
-    // @TODO remove
-    const myFunc2 = () => {
-        console.log(`${webUrl}retrieveSurvey?name=${surveyName}`);
-        fetch(`${webUrl}retrieveSurvey?name=${surveyName}`)
-        .then(res => res.json())
-        .then(display)
-        .catch(display);
-    };
-
-    // Test function
-    // @TODO remove
+    // Display to the console
     const display = (data) => {
+        setConsoleText(consoleText + "\n" + data);
         console.log(data);
     };
 
@@ -148,15 +119,32 @@ const App = () => {
             },
         })
         .then(res => res.json())
-        .then(display)
-        .catch(display);
+        .then(function (data) {
+            console.log(data);
+            if (data.message === "ok") {
+                setConsoleText(consoleText + "\nSurvey " + survey.name + " Created with ID: " + data.id);
+            } else {
+                setConsoleText(consoleText + "\nSurvey Creation Error: " + data.content);
+            }
+        })
+        .catch(console.log);
     };
 
     const retrieveSurvey = () => {
-        console.log(`${webUrl}retrieveSurvey?name=${userSurveyName}`);
-        fetch(`${webUrl}retrieveSurvey?name=${userSurveyName}`)
+        console.log(`${webUrl}retrieveSurvey?id=${userSurveyName}`);
+        fetch(`${webUrl}retrieveSurvey?id=${userSurveyName}`)
         .then(res => res.json())
         .then(function (data) {
+            console.log(data);
+            if (data.id !== null) {
+                setConsoleText(consoleText + "\nSurvey " + data.id + " retrieved");
+            } else {
+                setConsoleText(consoleText + "\nError: Could not find survey with id " + data.id );
+            }
+
+            if (data.id == null) {
+                return
+            }
             let arr = [];
             arr = data.questions.map( function (q) {
                 switch(q.type) {
@@ -171,7 +159,7 @@ const App = () => {
             data.answers = arr;
             setUserSurvey(data);
         })
-        .catch(display);
+        .catch(console.log);
     };
 
     const updateAnswer = (i, newObjVal) => {
@@ -215,10 +203,6 @@ const App = () => {
                         </Select>
                     </FormControl>
                     <Button className="qq-app m" variant="contained" color="primary" disabled={!currentType} onClick={addQuestion}>+</Button>
-                </div>
-                <div>
-                    <Button className="qq-app mv" variant="contained" color="primary" onClick={myFunc1}>Dev Test 1 (POST)</Button>
-                    <Button className="qq-app m" variant="contained" color="primary" onClick={myFunc2}>Dev Test 2 (GET)</Button>
                 </div>
                 <div>
                     {questions.map((q, i) => {
@@ -301,7 +285,7 @@ const App = () => {
                     <TextField
                              className="qq-app mv"
                              variant="outlined"
-                             label="Survey Name"
+                             label="Survey Id"
                              size="small"
                              onChange={e => setUserSurveyName(e.target.value)}
                     />
@@ -356,6 +340,10 @@ const App = () => {
                                 return (<div />);
                         };
                     })}
+                    </div>
+                    <div>
+                        <div>{"Console"}</div>
+                        <textarea>{consoleText}</textarea>
                     </div>
                 </div>
             </Card>
