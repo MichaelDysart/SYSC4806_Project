@@ -136,7 +136,7 @@ const App = () => {
         .then(res => res.json())
         .then(function (data) {
             console.log(data);
-            if (data.id !== null) {
+            if (data.status !== "error") {
                 setConsoleText(consoleText + "\nSurvey " + data.id + " retrieved");
             } else {
                 setConsoleText(consoleText + "\nError: Could not find survey with id " + data.id );
@@ -145,18 +145,7 @@ const App = () => {
             if (data.id == null) {
                 return
             }
-            let arr = [];
-            arr = data.questions.map( function (q) {
-                switch(q.type) {
-                    case qType.OPEN_ENDED:
-                        return '';
-                    case qType.NUMERICAL:
-                        return q.min;
-                    default:
-                        return '';
-                }
-            });
-            data.answers = arr;
+
             setUserSurvey(data);
         })
         .catch(console.log);
@@ -166,15 +155,40 @@ const App = () => {
         setUserSurvey(
             {
                 ...userSurvey,
-                answers : userSurvey.answers.map((q, current) => {
+                questions : userSurvey.questions.map((q, current) => {
                         if (current === i) {
-                            return newObjVal;
+                            return {...q, ...newObjVal};
                         }
                         return q;
                     })
             }
         );
     };
+
+    const submitAnswers = () => {
+            const survey = {
+                id : userSurvey.id,
+                questions : userSurvey.questions,
+            };
+            console.log(survey);
+            fetch(`${webUrl}addAnswers`, {
+                method: 'POST',
+                body: JSON.stringify(survey),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(res => res.json())
+            .then(function (data) {
+                console.log(data);
+                if (data.message === "ok") {
+                    setConsoleText(consoleText + "\nAnswers added to survey: " + userSurvey.name + "; ID: " + data.id);
+                } else {
+                    setConsoleText(consoleText + "\nAnswer Addition Error: " + data.content);
+                }
+            })
+            .catch(console.log);
+        };
 
     return (
         <div className="qq-app">
@@ -290,6 +304,7 @@ const App = () => {
                              onChange={e => setUserSurveyName(e.target.value)}
                     />
                     <Button className="qq-app m" variant="contained" color="primary" onClick={retrieveSurvey}>Retrieve Survey</Button>
+                    <Button className="qq-app m" variant="contained" color="primary" onClick={submitAnswers}>Submit Answers</Button>
                     <div>
                         {userSurvey.questions.map((q, i) => {
                         switch(q.type) {
@@ -306,11 +321,11 @@ const App = () => {
                                         />
                                         <TextField
                                             className="qq-app mv"
-                                            value={userSurvey.answers[i]}
+                                            value={userSurvey.questions[i].stringAnswer}
                                             variant="outlined"
                                             label="Answer"
                                             size="small"
-                                            onChange={e => updateAnswer(i, e.target.value)}
+                                            onChange={e => updateAnswer(i, { stringAnswer : e.target.value })}
                                         />
                                     </div>
                                 );
@@ -327,11 +342,11 @@ const App = () => {
                                         />
                                         <TextField
                                             className="qq-app m qq-app__number_input"
-                                            value={userSurvey.answers[i]}
+                                            value={userSurvey.questions[i].numberAnswer}
                                             variant="outlined"
                                             label="Answer"
                                             size="small"
-                                            onChange={e => updateAnswer(i, parseInt(e.target.value) || 0)}
+                                            onChange={e => updateAnswer(i, { numberAnswer : parseInt(e.target.value) || 0 })}
                                         />
                                     </div>
                                 );
@@ -343,7 +358,7 @@ const App = () => {
                     </div>
                     <div>
                         <div>{"Console"}</div>
-                        <textarea>{consoleText}</textarea>
+                        <textarea readOnly value={consoleText}></textarea>
                     </div>
                 </div>
             </Card>
