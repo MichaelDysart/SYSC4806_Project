@@ -149,11 +149,12 @@ public class webController {
 
     @PostMapping(value = "/deleteSurvey", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public Response deleteSurvey(@RequestParam (name="name") String name) {
-        long deleted = repo.deleteByName(name);
-        if(deleted == 1) {
-            return new Response("survey deleted", "name: " + name + "found: " + deleted);
+    public Response deleteSurvey(@RequestParam (name="id") int id) {
+        Optional<Survey> survey = repo.findById(id);
+        if (survey.isPresent()) {
+            repo.deleteById(id);
+            return new Response(id, "ok", "Survey deleted");
         }
-        return new Response("survey not found", "name: " + name + "found: " + deleted);
+        return new Response(null, "error", "Survey" + id + " not found");
     }
 }
