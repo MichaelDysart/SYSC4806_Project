@@ -22,7 +22,7 @@ public class Response {
 
     /*
      * Retrieve the survey id
-     * @returns {int}
+     * @returns {Integer}
      */
     public Integer getId() {
         return id;
