@@ -8,11 +8,12 @@ import java.util.Collection;
  */
 @Entity
 public class Survey {
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Id
-    private long id;
 
-    private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected int id;
+
+    protected String name;
 
     @OneToMany(cascade = CascadeType.ALL)
     private Collection<Question> questions;
@@ -39,6 +40,23 @@ public class Survey {
     }
 
     /*
+     * Sets the id
+     * @param id {int}
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    /*
+     * Retrieve the id
+     * @returns {int}
+     */
+    public int getId() {
+        return this.id;
+    }
+
+
+    /*
      * Sets the name
      * @param name {String}
      */
@@ -52,22 +70,6 @@ public class Survey {
      */
     public String getName() {
         return this.name;
-    }
-
-    /*
-     * Sets the id
-     * @param id {long}
-     */
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    /*
-     * Retrieve the id
-     * @returns {long}
-     */
-    public long getId() {
-        return this.id;
     }
 
     /*

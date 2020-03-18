@@ -13,7 +13,7 @@ public abstract class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected long id;
+    protected int id;
     protected String question;
 
     /*
@@ -33,17 +33,17 @@ public abstract class Question {
 
     /*
      * Retrieve the id
-     * @returns {long}
+     * @returns {int}
      */
-    public long getId() {
+    public int getId() {
         return id;
     }
 
     /*
      * Sets the id
-     * @param id {long}
+     * @param id {int}
      */
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
