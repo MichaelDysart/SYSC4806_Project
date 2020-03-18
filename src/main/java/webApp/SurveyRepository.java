@@ -13,4 +13,5 @@ import java.util.List;
 @RepositoryRestResource(collectionResourceRel = "survey", path = "survey")
 public interface SurveyRepository extends PagingAndSortingRepository<Survey, Long> {
     List<Survey> findByName(@Param("name") String name);
+    Long deleteByName(@Param("name") String name);
 }
