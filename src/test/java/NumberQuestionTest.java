@@ -58,4 +58,26 @@ public class NumberQuestionTest {
         assertEquals(nq2.getAnswers(),new ArrayList<Integer>(Arrays.asList(36,28,47,88)));
     }
 
+    @Test
+    public void getSetId() {
+        nq1.setId(8);
+        assertEquals(nq1.getId(),8);
+        assertEquals(nq2.getId(),0);
+        nq2.setId(-4);
+        assertEquals(nq2.getId(),-4);
+        assertEquals(nq3.getId(),0);
+        assertEquals(nq4.getId(),0);
+    }
+
+    @Test
+    public void getSetQuestion() {
+        nq1.setQuestion("This is the best question ever");
+        assertEquals(nq1.getQuestion(),"This is the best question ever");
+        assertEquals(nq2.getQuestion(),"How old are you?");
+        nq2.setQuestion("How many pets do you have?");
+        assertEquals(nq2.getQuestion(),"How many pets do you have?");
+        assertEquals(nq3.getQuestion(),"On a scale from 1-10, how much do you enjoy question quail?");
+        assertEquals(nq4.getQuestion(),"On a scale from -10-9001, how much do you enjoy question quail?");
+    }
+
 }
