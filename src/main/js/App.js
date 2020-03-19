@@ -27,7 +27,8 @@ const App = () => {
     const [questions, setQuestions] = useState([]);
     const [currentType, setCurrentType] = useState('');
     const [userSurvey, setUserSurvey] = useState({ questions : [], answers : [] });
-    const [userSurveyName, setUserSurveyName] = useState('');
+    const [userSurveyId, setUserSurveyId] = useState('');
+    const [userSurveyList, setUserSurveyList] = useState({ nameList : [], idList : [] });
 
     // useEffect with no dependencies is equal to $(document).ready
     // for the component in context
@@ -126,13 +127,14 @@ const App = () => {
             } else {
                 setConsoleText(consoleText + "\nSurvey Creation Error: " + data.content);
             }
+            retrieveSurveyNames();
         })
         .catch(console.log);
     };
 
     const retrieveSurvey = () => {
-        console.log(`${webUrl}retrieveSurvey?id=${userSurveyName}`);
-        fetch(`${webUrl}retrieveSurvey?id=${userSurveyName}`)
+        console.log(`${webUrl}retrieveSurvey?id=${userSurveyId}`);
+        fetch(`${webUrl}retrieveSurvey?id=${userSurveyId}`)
         .then(res => res.json())
         .then(function (data) {
             console.log(data);
@@ -150,6 +152,17 @@ const App = () => {
         })
         .catch(console.log);
     };
+
+    const retrieveSurveyNames = () => {
+            fetch(`${webUrl}retrieveSurveyNames?id=${}`)
+            .then(res => res.json())
+            .then(function (data) {
+                console.log(data);
+
+                setUserSurveyList(data);
+            })
+            .catch(console.log);
+    }
 
     const updateAnswer = (i, newObjVal) => {
         setUserSurvey(
@@ -300,8 +313,18 @@ const App = () => {
                              variant="outlined"
                              label="Survey Id"
                              size="small"
-                             onChange={e => setUserSurveyName(e.target.value)}
+                             onChange={e => setUserSurveyId(e.target.value)}
                     />
+                    <Select labelId="surveyIds_select_label" value={currentType}
+                        onChange={e => setUserSurveyId(e.target.value)}>
+                        {
+                        userSurveyList.idList.map((id, i) => {
+                            return(
+                                <MenuItem value={id}>{userSurveyList.nameList[i]}</MenuItem>
+                            )
+                        })
+                        }
+                    </Select>
                     <Button className="qq-app m" variant="contained" color="primary" onClick={retrieveSurvey}>Retrieve Survey</Button>
                     <Button className="qq-app m" variant="contained" color="primary" onClick={submitAnswers}>Submit Answers</Button>
                     <div>
