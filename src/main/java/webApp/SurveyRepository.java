@@ -15,6 +15,6 @@ import java.util.List;
 public interface SurveyRepository extends PagingAndSortingRepository<Survey, Integer> {
     List<Survey> findByName(@Param("name") String name);
 
-    @Query("SELECT name FROM Survey")
+    @Query("SELECT * FROM Survey")
     List<String> findNames();
 }

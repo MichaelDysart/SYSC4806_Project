@@ -150,18 +150,17 @@ public class webController {
 
     @GetMapping(value = "/retrieveSurveyNames", produces = "application/json")
     @ResponseBody
-    public Response retrieveSurveyNames() {
-        List<String> listOfSurveys = repo.findNames();
+    public SurveyIDList retrieveSurveyNames() {
+        List<String> nameList = new ArrayList<>();
+        List<Integer> idList = new ArrayList<>();
 
-        if (listOfSurveys.size() == 0) {
-            return new Response(null, "No surveys exist","Help");
-        }
+        this.repo.findAll().forEach(survey -> {
+            nameList.add(survey.getName());
+            idList.add(survey.getId());
+        });
 
-        StringBuilder surveyString = new StringBuilder("The list of survey(s) are as follows: \n");
-        for(String survey: listOfSurveys) {
-            surveyString.append(survey + "\n");
-        }
+        SurveyIDList surveryIdList = new SurveyIDList(nameList, idList);
 
-        return new Response(null, surveyString.toString(), "Help");
+        return surveryIdList;
     }
 }

@@ -29,12 +29,8 @@ public class webControllerTest {
     public void testRetrieveSurveyNames() throws Exception {
         String surveyString = "{ \"name\" : \"survey1\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"openEnded\", \"question\": \"q2\" }, { \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": \"0\", \"max\": \"5\" }]}";
 
-        //@TODO replace this test with the one immediately below
         this.mockMvc.perform(get("/retrieveSurveyNames")).andExpect(status().isOk())
-                .andExpect(content().json("{ \"message\":\"No surveys exist\", \"content\" : \"Help\"}"));
-
-        //this.mockMvc.perform(get("/retrieveSurveyNames")).andExpect(status().isOk())
-        //       .andExpect(content().json("{ \"names\":[], \"ids\" : []}"));
+               .andExpect(content().json("{ \"nameList\":[], \"idList\" : []}"));
 
         MvcResult result = this.mockMvc.perform(post("/createSurvey").contentType("application/json")
                 .content(surveyString)).andExpect(status().isOk())
@@ -55,12 +51,8 @@ public class webControllerTest {
 
         Integer id2 = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
 
-        //@TODO replace this test with the one immediately below
         this.mockMvc.perform(get("/retrieveSurveyNames")).andExpect(status().isOk())
-                .andExpect(content().json("{ \"message\":\"The list of survey(s) are as follows: \nsurvey1\nsurvey2\n\", \"content\" : \"Help\"}"));
-
-        //this.mockMvc.perform(get("/retrieveSurveyNames")).andExpect(status().isOk())
-        //       .andExpect(content().json("{ \"names\" : [\"survey1\",\"survey2\"], \"ids\" : ["+id1+","+id2+"]}"));
+               .andExpect(content().json("{ \"nameList\" : [\"survey1\",\"survey2\"], \"idList\" : ["+id1+","+id2+"]}"));
 
     }
 
