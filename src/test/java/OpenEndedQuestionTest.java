@@ -1,6 +1,5 @@
 import org.junit.Before;
 import org.junit.Test;
-import survey.NumberQuestion;
 import survey.OpenEndedQuestion;
 
 import java.util.ArrayList;
