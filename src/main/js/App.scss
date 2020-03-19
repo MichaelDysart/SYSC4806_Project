@@ -1,0 +1,39 @@
+$screen-phone: 640px;
+$screen-tablet: 768px;
+$screen-desktop: 1024px;
+
+body {
+  margin: 0;
+}
+
+.qq-app {
+  .m {
+    margin: 5px;
+  }
+
+  .mv {
+    margin: 5px 0;
+  }
+
+  .mh {
+    margin: 0 5px;
+  }
+
+  &__container {
+    @media (min-width: $screen-desktop) {
+      max-width: 60%;
+    }
+    min-height: 82vh;
+    margin: auto;
+    margin-top: 25px;
+    padding: 25px;
+  }
+
+  div.qq-app__qtype_select {
+    min-width: 140px;
+  }
+
+  &__number_input {
+    max-width: 80px;
+  }
+}

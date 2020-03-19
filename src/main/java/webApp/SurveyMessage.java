@@ -7,17 +7,39 @@ import java.util.Collection;
  */
 public class SurveyMessage {
 
+    private final Integer id;
     private final String name;
+    private final String status;
     private final Collection<QuestionMessage> questions;
 
     /*
      * A constructor
+     * @param id {Integer}
+     * @param status {String}
      * @param name {String}
      * @param questions {Collection<QuestionMessage>}
      */
-    public SurveyMessage(String name, Collection<QuestionMessage> questions) {
+    public SurveyMessage(Integer id, String status, String name, Collection<QuestionMessage> questions) {
         this.questions = questions;
         this.name = name;
+        this.id = id;
+        this.status = status;
+    }
+
+    /*
+     * Retrieve the survey id
+     * @returns {Integer}
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /*
+     * Retrieve the status of the operation
+     * @returns {string}
+     */
+    public String getStatus() {
+        return status;
     }
 
     /*
