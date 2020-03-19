@@ -149,7 +149,7 @@ public class webController {
 
     @DeleteMapping(value = "/survey/{id}", produces = "application/json")
     @ResponseBody
-    public Response deleteSurvey(@PathVariable Integer id) {
+    public Response deleteSurvey(@PathVariable int id) {
         Optional<Survey> survey = repo.findById(id);
         if (survey.isPresent()) {
             repo.deleteById(id);

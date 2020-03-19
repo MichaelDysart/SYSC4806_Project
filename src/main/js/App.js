@@ -132,11 +132,13 @@ const App = () => {
 
     const deleteSurvey = () => {
         console.log(`${webUrl}survey/${userSurveyName}`);
-        fetch(`${webUrl}survey/${userSurveyName}`)
+        fetch(`${webUrl}survey/${userSurveyName}`, {
+            method: 'DELETE'
+        })
         .then(res => res.json())
         .then(function(data) {
             console.log(data);
-            if(data.message !== "error") {
+            if(data.message == "ok") {
                 setConsoleText(consoleText + "\nSurvey " + data.id + " deleted");
             } else {
                 setConsoleText(consoleText + "\nError: Could not delete survey with id " + data.id );
