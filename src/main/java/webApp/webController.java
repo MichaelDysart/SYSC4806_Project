@@ -155,6 +155,6 @@ public class webController {
             repo.deleteById(id);
             return new Response(id, "ok", "Survey deleted");
         }
-        return new Response(null, "error", "Survey" + id + " not found");
+        return new Response(id, "error", "Survey" + id + " not found");
     }
 }
