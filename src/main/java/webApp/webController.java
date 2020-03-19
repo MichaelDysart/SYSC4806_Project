@@ -154,7 +154,7 @@ public class webController {
         List<String> listOfSurveys = repo.findNames();
 
         if (listOfSurveys.size() == 0) {
-            return new Response("No surveys exist","Help");
+            return new Response(null, "No surveys exist","Help");
         }
 
         StringBuilder surveyString = new StringBuilder("The list of survey(s) are as follows: \n");
@@ -162,6 +162,6 @@ public class webController {
             surveyString.append(survey + "\n");
         }
 
-        return new Response(surveyString.toString(), "Help");
+        return new Response(null, surveyString.toString(), "Help");
     }
 }
