@@ -154,10 +154,10 @@ public class webController {
         List<String> nameList = new ArrayList<>();
         List<Integer> idList = new ArrayList<>();
 
-        this.repo.findAll().forEach(survey -> {
+        for (Survey survey : this.repo.findAllSorted()) {
             nameList.add(survey.getName());
             idList.add(survey.getId());
-        });
+        }
 
         SurveyIDList surveryIdList = new SurveyIDList(nameList, idList);
 
