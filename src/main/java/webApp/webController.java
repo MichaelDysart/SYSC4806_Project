@@ -147,9 +147,9 @@ public class webController {
         return new Response(null, "error", "Survey \""+ surveyMessage.getId() +"\" not available");
     }
 
-    @PostMapping(value = "/deleteSurvey", consumes = "application/json", produces = "application/json")
+    @DeleteMapping(value = "/survey/{id}", produces = "application/json")
     @ResponseBody
-    public Response deleteSurvey(@RequestParam (name="id") int id) {
+    public Response deleteSurvey(@PathVariable Integer id) {
         Optional<Survey> survey = repo.findById(id);
         if (survey.isPresent()) {
             repo.deleteById(id);
