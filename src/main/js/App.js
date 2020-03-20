@@ -133,7 +133,6 @@ const App = () => {
             } else {
                 setConsoleText(consoleText + "\nSurvey Creation Error: " + data.content);
             }
-            retrieveSurveyNames();
         })
         .catch(console.log);
     };
@@ -343,6 +342,7 @@ const App = () => {
                             <Select labelId="surveyIds_select_label" value={
                                 userSurveyId
                             }
+                                onClick={retrieveSurveyNames()}
                                 onChange={e => setUserSurveyId(e.target.value)}>
                             {
                                 userSurveyList.idList.map((id, i) => {
