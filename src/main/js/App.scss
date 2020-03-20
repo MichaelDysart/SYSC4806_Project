@@ -6,6 +6,17 @@ body {
   margin: 0;
 }
 
+.console {
+    width:60%
+}
+
+.content-group {
+    border-radius: 4px;
+    border-color: rgba(0,0,0,0.2);
+    border-style: solid;
+    padding: 10px;
+}
+
 .qq-app {
   .m {
     margin: 5px;
@@ -31,6 +42,10 @@ body {
 
   div.qq-app__qtype_select {
     min-width: 140px;
+  }
+
+  div.qq-app__survey-ids_select {
+      min-width: 140px;
   }
 
   &__number_input {

@@ -19,6 +19,7 @@ import java.util.Optional;
 public class webController {
     private static final String numQuestionType = "numberQuestion";
     private static final String openQuestionType = "openEnded";
+    private static final String dropdownQuestionType = "dropdown";
 
     @Autowired
     private SurveyRepository repo;
@@ -54,6 +55,8 @@ public class webController {
                     return new Response(null, "error",
                             "Min is greater than max for question \"" + questionMsg.getQuestion() + "\"");
                 }
+            } else if (questionMsg.getType().equals(dropdownQuestionType)) {
+                questionList.add(new DropdownQuestion(questionMsg.getQuestion(), (ArrayList<String>) questionMsg.getOptions()));
             }
         }
 
@@ -81,10 +84,13 @@ public class webController {
             for (Question question : survey.get().getQuestions()) {
                 if(question instanceof OpenEndedQuestion) {
                     OpenEndedQuestion openQ = (OpenEndedQuestion)question;
-                    questionMessages.add(new QuestionMessage(openQuestionType, question.getQuestion(), 0, 0, "", 0, openQ.getAnswers(), null));
+                    questionMessages.add(new QuestionMessage(openQuestionType, question.getQuestion(), null, 0, 0, "", 0, openQ.getAnswers(), null));
                 } else if(question instanceof NumberQuestion) {
                     NumberQuestion numQ = (NumberQuestion)question;
-                    questionMessages.add(new QuestionMessage(numQuestionType, numQ.getQuestion(), numQ.getMin(), numQ.getMax(), "", 0, null, numQ.getAnswers()));
+                    questionMessages.add(new QuestionMessage(numQuestionType, question.getQuestion(), null, numQ.getMin(), numQ.getMax(), "", 0, null, numQ.getAnswers()));
+                } else if(question instanceof DropdownQuestion) {
+                    DropdownQuestion dropQ = (DropdownQuestion) question;
+                    questionMessages.add(new QuestionMessage(dropdownQuestionType, question.getQuestion(), dropQ.getOptions(), 0, 0, "", 0, dropQ.getAnswers(), null));
                 }
             }
 
@@ -130,12 +136,23 @@ public class webController {
                                 "Value for question \"" + questionMsg.getQuestion() + "\" outside of range: Want " +
                                         nQuestion.getMin() + " to " + nQuestion.getMax() + " but got " + questionMsg.getNumberAnswer());
                     }
+                } else if(question instanceof DropdownQuestion && questionMsg.getType().equals(dropdownQuestionType)) {
+                    DropdownQuestion dQuestion = (DropdownQuestion) question;
+                    if (dQuestion.getOptions().contains(questionMsg.getStringAnswer())) {
+                        dQuestion.addAnswer(questionMsg.getStringAnswer());
+                    } else {
+                        return new Response(surveyMessage.getId(), "error",
+                                "Answer for question \"" + questionMsg.getQuestion() + "\" is " +
+                                        questionMsg.getStringAnswer() + " which is not an option for this question");
+                    }
                 } else {
                     String expectedType = "unknown";
                     if(question instanceof OpenEndedQuestion) {
                         expectedType = openQuestionType;
                     } else if(question instanceof NumberQuestion) {
                         expectedType = numQuestionType;
+                    } else if(question instanceof DropdownQuestion) {
+                        expectedType = dropdownQuestionType;
                     }
                     return new Response(surveyMessage.getId(), "error",
                             "Mismatched types for question \"" + questionMsg.getQuestion() + "\": Want " +

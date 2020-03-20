@@ -1,6 +1,8 @@
 package webApp;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /*
  * Message between client and server describing a question
@@ -9,6 +11,7 @@ public class QuestionMessage {
 
     private final String type;
     private final String question;
+    private final Collection<String> options;
     private final int min;
     private final int max;
     private final String stringAnswer;
@@ -20,14 +23,16 @@ public class QuestionMessage {
      * A numeric based question message constructor with boundaries
      * @param type  the question type
      * @param question  the question text
+     * @param options  the options to display to the user for the question
      * @param min   the minimum value
      * @param max   the maximum value
      * @param stringAnswer   the answer if the type is string
      * @param numberAnswer   the answer if the type is numerical
      */
-    public QuestionMessage(String type, String question, int min, int max, String stringAnswer, int numberAnswer, Collection<String> stringAnswerList, Collection<Integer> numberAnswerList) {
+    public QuestionMessage(String type, String question, Collection<String> options, int min, int max, String stringAnswer, int numberAnswer, Collection<String> stringAnswerList, Collection<Integer> numberAnswerList) {
         this.type = type;
         this.question = question;
+        this.options = options;
         this.min = min;
         this.max = max;
         this.stringAnswer = stringAnswer;
@@ -51,6 +56,12 @@ public class QuestionMessage {
     public String getQuestion() {
         return question;
     }
+
+    /*
+     * Retrieve the question options
+     * @returns {Collection<String>}
+     */
+    public Collection<String> getOptions() { return options; }
 
     /*
      * Retrieve the minimum value
