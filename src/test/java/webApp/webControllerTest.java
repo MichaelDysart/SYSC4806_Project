@@ -313,41 +313,4 @@ public class webControllerTest {
                 .andExpect(content().string(containsString("Survey" + id1 + " not found")));
 
     }
-
-    @Test
-    public void testDeleteSurvey() throws Exception {
-
-        String surveyString1 = "{ \"name\" : \"survey1\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"openEnded\", \"question\": \"q2\" }, { \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": 1, \"max\": 5 }]}";
-
-        //create a survey
-        MvcResult result = this.mockMvc.perform(post("/createSurvey")
-                .contentType("application/json")
-                .content(surveyString1)).andExpect(status().isOk())
-                .andExpect(content().string(containsString("ok")))
-                .andExpect(content().string(containsString("done")))
-                .andReturn();
-
-        //get id of the survey
-        Integer id1 = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
-
-        //delete the survey
-        this.mockMvc.perform(delete("/survey/{id}", id1)
-                .contentType("application/json"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("ok")))
-                .andExpect(content().string(containsString("Survey deleted")));
-
-        //check that the survey has been deleted
-        this.mockMvc.perform(get("/retrieveSurvey?id=" + id1))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("error")));
-
-        //delete the survey again
-        this.mockMvc.perform(delete("/survey/{id}", id1)
-                .contentType("application/json"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("error")))
-                .andExpect(content().string(containsString("Survey" + id1 + " not found")));
-
-    }
 }

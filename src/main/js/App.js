@@ -49,6 +49,14 @@ const App = () => {
         addQuestionAtIndex(questions.length);
     };
 
+    const checkRequest = (res) => {
+        if (res.status === 200) {
+            return res.json();
+        } else {
+            throw res;
+        }
+    };
+
     const addQuestionAtIndex = (i) => {
         switch(currentType) {
             case qType.OPEN_ENDED:
@@ -119,13 +127,7 @@ const App = () => {
                 'Content-Type': 'application/json'
             },
         })
-        .then(res => {
-            if (res.status === 200) {
-                return res.json();
-            } else {
-                throw res;
-            }
-        })
+        .then(checkRequest)
         .then(data => {
             console.log(data);
             if (data.message === "ok") {
@@ -145,13 +147,7 @@ const App = () => {
         fetch(`${webUrl}survey/${userSurveyId}`, {
             method: 'DELETE'
         })
-        .then(res => {
-                    if (res.status === 200) {
-                        return res.json();
-                    } else {
-                        throw res;
-                    }
-                })
+        .then(checkRequest)
         .then(data => {
             console.log(data);
             if(data.message == "ok") {
@@ -168,13 +164,7 @@ const App = () => {
     const retrieveSurvey = () => {
         console.log(`${webUrl}retrieveSurvey?id=${userSurveyId}`);
         fetch(`${webUrl}retrieveSurvey?id=${userSurveyId}`)
-        .then(res => {
-            if (res.status === 200) {
-                return res.json();
-            } else {
-                throw res;
-            }
-        })
+        .then(checkRequest)
         .then(data => {
             if (data.status !== "error") {
                 setConsoleText(consoleText + "\nSurvey " + data.id + " retrieved");
@@ -188,13 +178,7 @@ const App = () => {
 
     const retrieveSurveyNames = () => {
             fetch(`${webUrl}retrieveSurveyNames`)
-            .then(res => {
-                if (res.status === 200) {
-                    return res.json();
-                } else {
-                    throw res;
-                }
-            })
+            .then(checkRequest)
             .then(data => {
                 console.log(data);
 
