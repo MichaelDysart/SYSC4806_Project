@@ -2,9 +2,6 @@ import org.junit.Before;
 import org.junit.Test;
 import webApp.Response;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import static org.junit.Assert.assertEquals;
 
 
