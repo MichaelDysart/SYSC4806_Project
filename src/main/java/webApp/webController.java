@@ -163,4 +163,15 @@ public class webController {
         }
         return new Response(null, "error", "Survey \""+ surveyMessage.getId() +"\" not available");
     }
+
+    @DeleteMapping(value = "/survey/{id}", produces = "application/json")
+    @ResponseBody
+    public Response deleteSurvey(@PathVariable int id) {
+        Optional<Survey> survey = repo.findById(id);
+        if (survey.isPresent()) {
+            repo.deleteById(id);
+            return new Response(id, "ok", "Survey deleted");
+        }
+        return new Response(id, "error", "Survey" + id + " not found");
+    }
 }
