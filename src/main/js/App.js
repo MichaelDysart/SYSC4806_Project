@@ -164,6 +164,9 @@ const App = () => {
     };
 
     const retrieveSurveyNames = () => {
+        // A hack for the client tests
+        // @TODO perform proper mocking of the fetch
+        if (fetch) {
             fetch(`${webUrl}retrieveSurveyNames`)
             .then(res => {
                 if (res.status === 200) {
@@ -178,6 +181,7 @@ const App = () => {
                 setUserSurveyList(data);
             })
             .catch(console.log);
+        }
     }
 
     const updateAnswer = (i, newObjVal) => {
@@ -337,12 +341,12 @@ const App = () => {
                              size="small"
                              onChange={e => setUserSurveyId(e.target.value)}
                     />
-                     <FormControl className="qq-app mv qq-app__qtype_select">
+                     <FormControl className="qq-app mv qq-app__seletIds_select">
                             <InputLabel id="surveyIds_select_label">Survey Name</InputLabel>
                             <Select labelId="surveyIds_select_label" value={
                                 userSurveyId
                             }
-                                onClick={retrieveSurveyNames()}
+                                onClick={retrieveSurveyNames}
                                 onChange={e => setUserSurveyId(e.target.value)}>
                             {
                                 userSurveyList.idList.map((id, i) => {
