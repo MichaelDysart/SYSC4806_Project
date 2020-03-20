@@ -369,7 +369,7 @@ const App = () => {
                             {
                                 userSurveyList.idList.map((id, i) => {
                                     return(
-                                        <MenuItem value={id}>{{`${userSurveyList.nameList[i]} : ${id}`}}</MenuItem>
+                                        <MenuItem value={id}>{`${userSurveyList.nameList[i]} : ${id}`}</MenuItem>
                                     )
                                 })
                             }
