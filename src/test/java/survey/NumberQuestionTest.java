@@ -1,3 +1,4 @@
+package survey;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +16,7 @@ public class NumberQuestionTest {
     NumberQuestion nq4;
 
     @Before
-    public void setup() throws Exception{
+    public void setup() {
         nq1 = new NumberQuestion();
         nq2 = new NumberQuestion("How old are you?",0,120);
         nq3 = new NumberQuestion("On a scale from 1-10, how much do you enjoy question quail?",1,10);
@@ -46,16 +47,16 @@ public class NumberQuestionTest {
 
     @Test
     public void getSetAddAnswers(){
-        ArrayList<Integer> a1 = new ArrayList<Integer>(Arrays.asList(36,28,47));
-        ArrayList<Integer> a2 = new ArrayList<Integer>(Arrays.asList(-9,28,47));
+        ArrayList<Integer> a1 = new ArrayList<>(Arrays.asList(36,28,47));
+        ArrayList<Integer> a2 = new ArrayList<>(Arrays.asList(-9,28,47));
 
         nq2.setAnswers(a1);
         nq4.setAnswers(a2);
-        assertEquals(nq2.getAnswers(),new ArrayList<Integer>(Arrays.asList(36,28,47)));
-        assertEquals(nq4.getAnswers(), new ArrayList<Integer>(Arrays.asList(-9,28,47)));
+        assertEquals(nq2.getAnswers(),new ArrayList<>(Arrays.asList(36,28,47)));
+        assertEquals(nq4.getAnswers(), new ArrayList<>(Arrays.asList(-9,28,47)));
 
         nq2.addAnswer(88);
-        assertEquals(nq2.getAnswers(),new ArrayList<Integer>(Arrays.asList(36,28,47,88)));
+        assertEquals(nq2.getAnswers(),new ArrayList<>(Arrays.asList(36,28,47,88)));
     }
 
     @Test

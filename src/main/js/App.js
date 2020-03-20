@@ -27,7 +27,8 @@ const App = () => {
     const [questions, setQuestions] = useState([]);
     const [currentType, setCurrentType] = useState('');
     const [userSurvey, setUserSurvey] = useState({ questions : [], answers : [] });
-    const [userSurveyName, setUserSurveyName] = useState('');
+    const [userSurveyId, setUserSurveyId] = useState('');
+    const [userSurveyList, setUserSurveyList] = useState({ nameList : [], idList : [] });
 
     // useEffect with no dependencies is equal to $(document).ready
     // for the component in context
@@ -46,6 +47,14 @@ const App = () => {
     */
     const addQuestion = () => {
         addQuestionAtIndex(questions.length);
+    };
+
+    const checkRequest = (res) => {
+        if (res.status === 200) {
+            return res.json();
+        } else {
+            throw res;
+        }
     };
 
     const addQuestionAtIndex = (i) => {
@@ -118,11 +127,14 @@ const App = () => {
                 'Content-Type': 'application/json'
             },
         })
-        .then(res => res.json())
-        .then(function (data) {
+        .then(checkRequest)
+        .then(data => {
             console.log(data);
             if (data.message === "ok") {
                 setConsoleText(consoleText + "\nSurvey " + survey.name + " Created with ID: " + data.id);
+
+                // Retrieve survey names after creating a new survey
+                retrieveSurveyNames();
             } else {
                 setConsoleText(consoleText + "\nSurvey Creation Error: " + data.content);
             }
@@ -131,15 +143,18 @@ const App = () => {
     };
 
     const deleteSurvey = () => {
-        console.log(`${webUrl}survey/${userSurveyName}`);
-        fetch(`${webUrl}survey/${userSurveyName}`, {
+        console.log(`${webUrl}survey/${userSurveyId}`);
+        fetch(`${webUrl}survey/${userSurveyId}`, {
             method: 'DELETE'
         })
-        .then(res => res.json())
-        .then(function(data) {
+        .then(checkRequest)
+        .then(data => {
             console.log(data);
             if(data.message == "ok") {
                 setConsoleText(consoleText + "\nSurvey " + data.id + " deleted");
+
+                // Retrieve survey names after deleting a new survey
+                retrieveSurveyNames();
             } else {
                 setConsoleText(consoleText + "\nError: Could not delete survey with id " + data.id );
             }
@@ -147,25 +162,30 @@ const App = () => {
     };
 
     const retrieveSurvey = () => {
-        console.log(`${webUrl}retrieveSurvey?id=${userSurveyName}`);
-        fetch(`${webUrl}retrieveSurvey?id=${userSurveyName}`)
-        .then(res => res.json())
-        .then(function (data) {
-            console.log(data);
+        console.log(`${webUrl}retrieveSurvey?id=${userSurveyId}`);
+        fetch(`${webUrl}retrieveSurvey?id=${userSurveyId}`)
+        .then(checkRequest)
+        .then(data => {
             if (data.status !== "error") {
                 setConsoleText(consoleText + "\nSurvey " + data.id + " retrieved");
+                setUserSurvey(data);
             } else {
                 setConsoleText(consoleText + "\nError: Could not find survey with id " + data.id );
             }
-
-            if (data.id == null) {
-                return
-            }
-
-            setUserSurvey(data);
         })
         .catch(console.log);
     };
+
+    const retrieveSurveyNames = () => {
+            fetch(`${webUrl}retrieveSurveyNames`)
+            .then(checkRequest)
+            .then(data => {
+                console.log(data);
+
+                setUserSurveyList(data);
+            })
+            .catch(console.log);
+    }
 
     const updateAnswer = (i, newObjVal) => {
         setUserSurvey(
@@ -194,8 +214,14 @@ const App = () => {
                     'Content-Type': 'application/json'
                 },
             })
-            .then(res => res.json())
-            .then(function (data) {
+            .then(res => {
+                if (res.status === 200) {
+                    return res.json();
+                } else {
+                    throw res;
+                }
+            })
+            .then(data => {
                 console.log(data);
                 if (data.message === "ok") {
                     setConsoleText(consoleText + "\nAnswers added to survey: " + userSurvey.name + "; ID: " + data.id);
@@ -311,13 +337,22 @@ const App = () => {
                     })}
                 </div>
                 <div>
-                    <TextField
-                             className="qq-app mv"
-                             variant="outlined"
-                             label="Survey Id"
-                             size="small"
-                             onChange={e => setUserSurveyName(e.target.value)}
-                    />
+                     <FormControl className="qq-app mv qq-app__survey-ids_select">
+                            <InputLabel id="surveyIds_select_label">Survey Name</InputLabel>
+                            <Select labelId="surveyIds_select_label" value={
+                                userSurveyId
+                            }
+                                onClick={e => retrieveSurveyNames()}
+                                onChange={e => setUserSurveyId(e.target.value)}>
+                            {
+                                userSurveyList.idList.map((id, i) => {
+                                    return(
+                                        <MenuItem value={id}>{`${userSurveyList.nameList[i]} : ${id}`}</MenuItem>
+                                    )
+                                })
+                            }
+                        </Select>
+                    </FormControl>
                     <Button className="qq-app m" variant="contained" color="primary" onClick={retrieveSurvey}>Retrieve Survey</Button>
                     <Button className="qq-app m" variant="contained" color="primary" onClick={deleteSurvey}>Delete Survey</Button>
                     <Button className="qq-app m" variant="contained" color="primary" onClick={submitAnswers}>Submit Answers</Button>

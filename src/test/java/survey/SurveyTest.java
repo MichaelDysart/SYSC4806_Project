@@ -1,3 +1,5 @@
+package survey;
+
 import org.junit.Before;
 import org.junit.Test;
 import survey.NumberQuestion;
@@ -20,21 +22,21 @@ public class SurveyTest {
     Collection<Question> questions;
 
     @Before
-    public void setup() throws Exception{
+    public void setup() {
         survey1 = new Survey();
         survey2 = new Survey("The greatest survey known to man");
-        questions = new ArrayList<Question>(Arrays.asList(new NumberQuestion("How old are you?",0,120),new OpenEndedQuestion("What is your SID?")));
+        questions = new ArrayList<>(Arrays.asList(new NumberQuestion("How old are you?",0,120),new OpenEndedQuestion("What is your SID?")));
         survey3 = new Survey("Take the survey for a free $100 itunes gift card",questions);
     }
 
     @Test
     public void getSetQuestions(){
-        Collection<Question> q1 = new ArrayList<Question>(Arrays.asList(new NumberQuestion("How many jelly beans do you have?",0,120),new OpenEndedQuestion("How much wood could a wood chuck chuck if a wood chuck could chuck wood?")));
+        Collection<Question> q1 = new ArrayList<>(Arrays.asList(new NumberQuestion("How many jelly beans do you have?",0,120),new OpenEndedQuestion("How much wood could a wood chuck chuck if a wood chuck could chuck wood?")));
         survey1.setQuestions(q1);
         assertEquals(survey1.getQuestions(),q1);
         assertEquals(survey3.getQuestions(),questions);
 
-        Collection<Question> q2 = new ArrayList<Question>(Arrays.asList(new NumberQuestion("How many jelly beans can I have?",0,120),new OpenEndedQuestion("How sea shells does she sell down by the seashore?")));
+        Collection<Question> q2 = new ArrayList<>(Arrays.asList(new NumberQuestion("How many jelly beans can I have?",0,120),new OpenEndedQuestion("How sea shells does she sell down by the seashore?")));
         survey3.setQuestions(q2);
         assertEquals(survey3.getQuestions(),q2);
     }

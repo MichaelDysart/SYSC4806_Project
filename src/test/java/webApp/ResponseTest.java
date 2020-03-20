@@ -1,3 +1,5 @@
+package webApp;
+
 import org.junit.Before;
 import org.junit.Test;
 import webApp.Response;
@@ -12,7 +14,7 @@ public class ResponseTest {
 
 
     @Before
-    public void setup() throws Exception{
+    public void setup() {
         rep1 = new Response(1, "Perfection", "This is content");
         rep2 = new Response(2, "The program worked properly", "PASS");
         rep3 = new Response(3, "The program failed", "FAIL");
@@ -20,9 +22,9 @@ public class ResponseTest {
 
     @Test
     public void getId(){
-        assertEquals(rep1.getId(),new Integer(1));
-        assertEquals(rep2.getId(),new Integer(2));
-        assertEquals(rep3.getId(),new Integer(3));
+        assertEquals(rep1.getId(),Integer.valueOf(1));
+        assertEquals(rep2.getId(),Integer.valueOf(2));
+        assertEquals(rep3.getId(),Integer.valueOf(3));
     }
 
     @Test
