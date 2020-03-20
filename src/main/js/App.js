@@ -126,7 +126,7 @@ const App = () => {
                 throw res;
             }
         })
-        .then(function (data) {
+        .then(data => {
             console.log(data);
             if (data.message === "ok") {
                 setConsoleText(consoleText + "\nSurvey " + survey.name + " Created with ID: " + data.id);
@@ -146,7 +146,7 @@ const App = () => {
             method: 'DELETE'
         })
         .then(res => res.json())
-        .then(function(data) {
+        .then(data => {
             console.log(data);
             if(data.message == "ok") {
                 setConsoleText(consoleText + "\nSurvey " + data.id + " deleted");
@@ -169,7 +169,7 @@ const App = () => {
                 throw res;
             }
         })
-        .then(function (data) {
+        .then(data => {
             if (data.status !== "error") {
                 setConsoleText(consoleText + "\nSurvey " + data.id + " retrieved");
             } else {
@@ -194,7 +194,7 @@ const App = () => {
                     throw res;
                 }
             })
-            .then(function (data) {
+            .then(data => {
                 console.log(data);
 
                 setUserSurveyList(data);
@@ -236,7 +236,7 @@ const App = () => {
                     throw res;
                 }
             })
-            .then(function (data) {
+            .then(data => {
                 console.log(data);
                 if (data.message === "ok") {
                     setConsoleText(consoleText + "\nAnswers added to survey: " + userSurvey.name + "; ID: " + data.id);
@@ -359,7 +359,7 @@ const App = () => {
                              size="small"
                              onChange={e => setUserSurveyId(e.target.value)}
                     />
-                     <FormControl className="qq-app mv qq-app__seletIds_select">
+                     <FormControl className="qq-app mv qq-app__survey-ids_select">
                             <InputLabel id="surveyIds_select_label">Survey Name</InputLabel>
                             <Select labelId="surveyIds_select_label" value={
                                 userSurveyId
@@ -369,7 +369,7 @@ const App = () => {
                             {
                                 userSurveyList.idList.map((id, i) => {
                                     return(
-                                        <MenuItem value={id}>{userSurveyList.nameList[i] + " : " + id}</MenuItem>
+                                        <MenuItem value={id}>{{`${userSurveyList.nameList[i]} : ${id}`}}</MenuItem>
                                     )
                                 })
                             }
