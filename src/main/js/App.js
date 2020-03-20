@@ -7,9 +7,11 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Tooltip from '@material-ui/core/Tooltip';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import DeleteIcon from '@material-ui/icons/Delete';
+import HelpIcon from '@material-ui/icons/Help';
 import './App.scss';
 
 const qType = {
@@ -74,7 +76,15 @@ const App = () => {
                 ]);
                 break;
             case qType.DROPDOWN:
-                //TODO:
+                setQuestions([
+                    ...questions.slice(0, i),
+                    {
+                        type: currentType,
+                        options: [],
+                        question: '',
+                    },
+                    ...questions.slice(i, questions.length)
+                ]);
                 break;
             default:
                 console.log(`[WARNING] Unknown question type "${currentType}"`);
@@ -112,7 +122,13 @@ const App = () => {
     const createSurvey = () => {
         const survey = {
             name: surveyName,
-            questions,
+            questions: questions.map(q => {
+                if (q.type === 'dropdown') {
+                    // For dropdowns, split the input before sending it
+                    q.options = q.options.split(',');
+                }
+                return q;
+            }),
         };
 
         fetch(`${webUrl}createSurvey`, {
@@ -245,12 +261,13 @@ const App = () => {
                         switch(q.type) {
                             case qType.OPEN_ENDED:
                                 return (
-                                    <div className="qq-app mv" key={i} label="Open Question Input">
+                                    <div className="qq-app mv" key={i}>
                                         <div>{`Question ${i + 1} - Open Ended`}</div>
                                         <TextField
                                             className="qq-app mv"
                                             value={questions[i].question}
                                             variant="outlined"
+                                            label="Title"
                                             size="small"
                                             onChange={e => updateQuestion(i, { ...q, question: e.target.value })}
                                         />
@@ -276,6 +293,7 @@ const App = () => {
                                             className="qq-app mv"
                                             value={questions[i].question}
                                             variant="outlined"
+                                            label="Title"
                                             size="small"
                                             onChange={e => updateQuestion(i, { ...q, question: e.target.value })}
                                         />
@@ -311,7 +329,40 @@ const App = () => {
                                 );
                             case qType.DROPDOWN:
                                 return (
-                                    <div>UNIMPLEMENTED</div>
+                                    <div className="qq-app mv" key={i}>
+                                        <div>{`Question ${i + 1} - Dropdown`}</div>
+                                        <TextField
+                                            className="qq-app m"
+                                            value={questions[i].question}
+                                            variant="outlined"
+                                            label="Title"
+                                            size="small"
+                                            onChange={e => updateQuestion(i, { ...q, question: e.target.value })}
+                                        />
+                                        <TextField
+                                            className="qq-app m"
+                                            value={questions[i].options}
+                                            variant="outlined"
+                                            label="Options"
+                                            size="small"
+                                            onChange={e => updateQuestion(i, { ...q, options: e.target.value })}
+                                        />
+                                        <Button
+                                            className="qq-app m"
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() => addQuestionAtIndex(i)}
+                                        >+</Button>
+                                        <Button
+                                            className="qq-app m"
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() => deleteQuestion(i)}
+                                        ><DeleteIcon /></Button>
+                                        <Tooltip title="Separate dropdown options using commas">
+                                            <HelpIcon />
+                                        </Tooltip>
+                                    </div>
                                 );
                             default:
                                 console.log(`[WARNING] Unknown question type "${q.question}"`)
@@ -321,11 +372,11 @@ const App = () => {
                 </div>
                 <div>
                     <TextField
-                             className="qq-app mv"
-                             variant="outlined"
-                             label="Survey Id"
-                             size="small"
-                             onChange={e => setUserSurveyName(e.target.value)}
+                        className="qq-app mv"
+                        variant="outlined"
+                        label="Survey Id"
+                        size="small"
+                        onChange={e => setUserSurveyName(e.target.value)}
                     />
                     <Button className="qq-app m" variant="contained" color="primary" onClick={retrieveSurvey}>Retrieve Survey</Button>
                     <Button className="qq-app m" variant="contained" color="primary" onClick={deleteSurvey}>Delete Survey</Button>
@@ -377,7 +428,21 @@ const App = () => {
                                 );
                             case qType.DROPDOWN:
                                 return (
-                                    <div>UNIMPLEMENTED</div>
+                                    <div className="qq-app mv" key={i}>
+                                        <FormControl className="qq-app mv qq-app__qtype_select">
+                                            <InputLabel id={`label_${q.question}`}>{userSurvey.questions[i].question}</InputLabel>
+                                            <Select
+                                                labelId={`label_${q.question}`}
+                                                value={userSurvey.questions[i].stringAnswer}
+                                                onChange={e => updateAnswer(i, { stringAnswer : e.target.value })}
+                                            >
+                                                {q.options.map(option => (
+                                                    <MenuItem key={option} value={option}>{option}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                        
+                                    </div>
                                 );
                             default:
                                 console.log(`[WARNING] Unknown question type "${q.question}"`)
