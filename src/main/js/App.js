@@ -130,6 +130,22 @@ const App = () => {
         .catch(console.log);
     };
 
+    const deleteSurvey = () => {
+        console.log(`${webUrl}survey/${userSurveyName}`);
+        fetch(`${webUrl}survey/${userSurveyName}`, {
+            method: 'DELETE'
+        })
+        .then(res => res.json())
+        .then(function(data) {
+            console.log(data);
+            if(data.message == "ok") {
+                setConsoleText(consoleText + "\nSurvey " + data.id + " deleted");
+            } else {
+                setConsoleText(consoleText + "\nError: Could not delete survey with id " + data.id );
+            }
+        }).catch(console.log);
+    };
+
     const retrieveSurvey = () => {
         console.log(`${webUrl}retrieveSurvey?id=${userSurveyName}`);
         fetch(`${webUrl}retrieveSurvey?id=${userSurveyName}`)
@@ -303,6 +319,7 @@ const App = () => {
                              onChange={e => setUserSurveyName(e.target.value)}
                     />
                     <Button className="qq-app m" variant="contained" color="primary" onClick={retrieveSurvey}>Retrieve Survey</Button>
+                    <Button className="qq-app m" variant="contained" color="primary" onClick={deleteSurvey}>Delete Survey</Button>
                     <Button className="qq-app m" variant="contained" color="primary" onClick={submitAnswers}>Submit Answers</Button>
                     <div>
                         {userSurvey.questions.map((q, i) => {
