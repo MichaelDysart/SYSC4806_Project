@@ -1,5 +1,3 @@
-package webApp;
-
 import org.junit.Before;
 import org.junit.Test;
 import webApp.QuestionMessage;
