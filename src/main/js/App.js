@@ -158,7 +158,7 @@ const App = () => {
         .then(res => res.json())
         .then(function(data) {
             console.log(data);
-            if(data.message == "ok") {
+            if(data.message === "ok") {
                 setConsoleText(consoleText + "\nSurvey " + data.id + " deleted");
             } else {
                 setConsoleText(consoleText + "\nError: Could not delete survey with id " + data.id );
@@ -178,7 +178,7 @@ const App = () => {
                 setConsoleText(consoleText + "\nError: Could not find survey with id " + data.id );
             }
 
-            if (data.id == null) {
+            if (data.id === null) {
                 return
             }
 
@@ -261,7 +261,7 @@ const App = () => {
                         switch(q.type) {
                             case qType.OPEN_ENDED:
                                 return (
-                                    <div className="qq-app mv" key={i}>
+                                    <div className="qq-app mv" key={i} label="Open Question Input">
                                         <div>{`Question ${i + 1} - Open Ended`}</div>
                                         <TextField
                                             className="qq-app mv"
