@@ -15,6 +15,7 @@ import './App.scss';
 const qType = {
     OPEN_ENDED: "openEnded",
     NUMERICAL: "numberQuestion",
+    DROPDOWN: "dropdown",
 };
 
 /*
@@ -71,6 +72,9 @@ const App = () => {
                     },
                     ...questions.slice(i, questions.length)
                 ]);
+                break;
+            case qType.DROPDOWN:
+                //TODO:
                 break;
             default:
                 console.log(`[WARNING] Unknown question type "${currentType}"`);
@@ -214,6 +218,7 @@ const App = () => {
                         <Select labelId="qtype_select_label" value={currentType} onChange={e => setCurrentType(e.target.value)}>
                             <MenuItem value={qType.OPEN_ENDED}>Open-Ended</MenuItem>
                             <MenuItem value={qType.NUMERICAL}>Numerical</MenuItem>
+                            <MenuItem value={qType.DROPDOWN}>Dropdown</MenuItem>
                         </Select>
                     </FormControl>
                     <Button className="qq-app m"
@@ -288,6 +293,10 @@ const App = () => {
                                         ><DeleteIcon /></Button>
                                     </div>
                                 );
+                            case qType.DROPDOWN:
+                                return (
+                                    <div>UNIMPLEMENTED</div>
+                                );
                             default:
                                 console.log(`[WARNING] Unknown question type "${q.question}"`)
                                 return (<div />);
@@ -348,6 +357,10 @@ const App = () => {
                                             onChange={e => updateAnswer(i, { numberAnswer : parseInt(e.target.value) || 0 })}
                                         />
                                     </div>
+                                );
+                            case qType.DROPDOWN:
+                                return (
+                                    <div>UNIMPLEMENTED</div>
                                 );
                             default:
                                 console.log(`[WARNING] Unknown question type "${q.question}"`)
