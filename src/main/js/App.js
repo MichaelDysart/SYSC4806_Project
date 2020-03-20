@@ -119,7 +119,13 @@ const App = () => {
                 'Content-Type': 'application/json'
             },
         })
-        .then(res => res.json())
+        .then(res => {
+            if (res.status === 200) {
+                return res.json();
+            } else {
+                throw res;
+            }
+        })
         .then(function (data) {
             console.log(data);
             if (data.message === "ok") {
@@ -127,6 +133,7 @@ const App = () => {
             } else {
                 setConsoleText(consoleText + "\nSurvey Creation Error: " + data.content);
             }
+            // Retrieve survey names after creating a new survey
             retrieveSurveyNames();
         })
         .catch(console.log);
@@ -135,9 +142,14 @@ const App = () => {
     const retrieveSurvey = () => {
         console.log(`${webUrl}retrieveSurvey?id=${userSurveyId}`);
         fetch(`${webUrl}retrieveSurvey?id=${userSurveyId}`)
-        .then(res => res.json())
+        .then(res => {
+            if (res.status === 200) {
+                return res.json();
+            } else {
+                throw res;
+            }
+        })
         .then(function (data) {
-            console.log(data);
             if (data.status !== "error") {
                 setConsoleText(consoleText + "\nSurvey " + data.id + " retrieved");
             } else {
@@ -154,8 +166,14 @@ const App = () => {
     };
 
     const retrieveSurveyNames = () => {
-            fetch(`${webUrl}retrieveSurveyNames?id=${}`)
-            .then(res => res.json())
+            fetch(`${webUrl}retrieveSurveyNames`)
+            .then(res => {
+                if (res.status === 200) {
+                    return res.json();
+                } else {
+                    throw res;
+                }
+            })
             .then(function (data) {
                 console.log(data);
 
@@ -191,7 +209,13 @@ const App = () => {
                     'Content-Type': 'application/json'
                 },
             })
-            .then(res => res.json())
+            .then(res => {
+                if (res.status === 200) {
+                    return res.json();
+                } else {
+                    throw res;
+                }
+            })
             .then(function (data) {
                 console.log(data);
                 if (data.message === "ok") {
@@ -315,16 +339,22 @@ const App = () => {
                              size="small"
                              onChange={e => setUserSurveyId(e.target.value)}
                     />
-                    <Select labelId="surveyIds_select_label" value={currentType}
-                        onChange={e => setUserSurveyId(e.target.value)}>
-                        {
-                        userSurveyList.idList.map((id, i) => {
-                            return(
-                                <MenuItem value={id}>{userSurveyList.nameList[i]}</MenuItem>
-                            )
-                        })
-                        }
-                    </Select>
+                     <FormControl className="qq-app mv qq-app__seletIds_select">
+                            <InputLabel id="surveyIds_select_label">Survey Name</InputLabel>
+                            <Select labelId="surveyIds_select_label" value={
+                                userSurveyId
+                            }
+                                onClick={e => retrieveSurveyNames()}
+                                onChange={e => setUserSurveyId(e.target.value)}>
+                            {
+                                userSurveyList.idList.map((id, i) => {
+                                    return(
+                                        <MenuItem value={id}>{userSurveyList.nameList[i] + " : " + id}</MenuItem>
+                                    )
+                                })
+                            }
+                        </Select>
+                    </FormControl>
                     <Button className="qq-app m" variant="contained" color="primary" onClick={retrieveSurvey}>Retrieve Survey</Button>
                     <Button className="qq-app m" variant="contained" color="primary" onClick={submitAnswers}>Submit Answers</Button>
                     <div>
