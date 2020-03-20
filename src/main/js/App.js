@@ -166,9 +166,6 @@ const App = () => {
     };
 
     const retrieveSurveyNames = () => {
-        // A hack for the client tests
-        // @TODO perform proper mocking of the fetch
-        if (fetch) {
             fetch(`${webUrl}retrieveSurveyNames`)
             .then(res => {
                 if (res.status === 200) {
@@ -183,7 +180,6 @@ const App = () => {
                 setUserSurveyList(data);
             })
             .catch(console.log);
-        }
     }
 
     const updateAnswer = (i, newObjVal) => {
@@ -230,8 +226,7 @@ const App = () => {
             })
             .catch(console.log);
         };
-    // Run when starting up
-    retrieveSurveyNames();
+
     return (
         <div className="qq-app">
             <AppBar position="static">
