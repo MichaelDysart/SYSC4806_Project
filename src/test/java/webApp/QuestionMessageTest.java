@@ -1,3 +1,5 @@
+package webApp;
+
 import org.junit.Before;
 import org.junit.Test;
 import webApp.QuestionMessage;
@@ -19,12 +21,12 @@ public class QuestionMessageTest {
     Collection<Integer> nal2;
 
     @Before
-    public void setup() throws Exception{
-        sal1 = new ArrayList<String>(Arrays.asList("1", "2", "3"));
-        sal2 = new ArrayList<String>(Arrays.asList("Bye", "See ya", "Ciao"));
+    public void setup() {
+        sal1 = new ArrayList<>(Arrays.asList("1", "2", "3"));
+        sal2 = new ArrayList<>(Arrays.asList("Bye", "See ya", "Ciao"));
 
-        nal1 = new ArrayList<Integer>(Arrays.asList(1,2,3));
-        nal2 = new ArrayList<Integer>(Arrays.asList(-1,-2,-3));
+        nal1 = new ArrayList<>(Arrays.asList(1,2,3));
+        nal2 = new ArrayList<>(Arrays.asList(-1,-2,-3));
 
 
         qm1 = new QuestionMessage("Number","First 3 numbers?", null, 1,3,"1,2,3", 123,sal1,nal1 );
@@ -69,14 +71,14 @@ public class QuestionMessageTest {
 
     @Test
     public void getStringAnswerList(){
-        assertEquals(qm1.getStringAnswerList(), new ArrayList<String>(Arrays.asList("1", "2", "3")));
-        assertEquals(qm2.getStringAnswerList(), new ArrayList<String>(Arrays.asList("Bye", "See ya", "Ciao")));
+        assertEquals(qm1.getStringAnswerList(), new ArrayList<>(Arrays.asList("1", "2", "3")));
+        assertEquals(qm2.getStringAnswerList(), new ArrayList<>(Arrays.asList("Bye", "See ya", "Ciao")));
     }
 
     @Test
     public void getNumberAnswerList(){
-        assertEquals(qm1.getNumberAnswerList(),new ArrayList<Integer>(Arrays.asList(1,2,3)));
-        assertEquals(qm2.getNumberAnswerList(), new ArrayList<Integer>(Arrays.asList(-1,-2,-3)));
+        assertEquals(qm1.getNumberAnswerList(),new ArrayList<>(Arrays.asList(1,2,3)));
+        assertEquals(qm2.getNumberAnswerList(), new ArrayList<>(Arrays.asList(-1,-2,-3)));
     }
 
 }
