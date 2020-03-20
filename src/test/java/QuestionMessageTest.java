@@ -27,8 +27,8 @@ public class QuestionMessageTest {
         nal2 = new ArrayList<Integer>(Arrays.asList(-1,-2,-3));
 
 
-        qm1 = new QuestionMessage("Number","First 3 numbers?",1,3,"1,2,3", 123,sal1,nal1 );
-        qm2 = new QuestionMessage("String", "How to say bye?", 0,0,"Bye, See ya, Ciao", 0,sal2,nal2);
+        qm1 = new QuestionMessage("Number","First 3 numbers?", null, 1,3,"1,2,3", 123,sal1,nal1 );
+        qm2 = new QuestionMessage("String", "How to say bye?", null, 0,0,"Bye, See ya, Ciao", 0,sal2,nal2);
     }
 
     @Test

@@ -24,8 +24,8 @@ public class SurveyMessageTest {
 
     @Before
     public void setup() throws Exception {
-        q1 = new ArrayList<QuestionMessage>(Arrays.asList(new QuestionMessage("Number", "First 3 numbers?", 1, 3, "1,2,3", 123, sal1, nal1)));
-        q2 = new ArrayList<QuestionMessage>(Arrays.asList(new QuestionMessage("String", "How to say bye?", 0, 0, "Bye, See ya, Ciao", 0, sal2, nal2)));
+        q1 = new ArrayList<QuestionMessage>(Arrays.asList(new QuestionMessage("Number", "First 3 numbers?", null, 1, 3, "1,2,3", 123, sal1, nal1)));
+        q2 = new ArrayList<QuestionMessage>(Arrays.asList(new QuestionMessage("String", "How to say bye?", null, 0, 0, "Bye, See ya, Ciao", 0, sal2, nal2)));
         sm1 = new SurveyMessage(1, "200", "All good", q1);
         sm2 = new SurveyMessage(2, "404", "Error:Not Found", q2);
     }
