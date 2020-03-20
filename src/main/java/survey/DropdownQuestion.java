@@ -2,7 +2,6 @@ package survey;
 
 import javax.persistence.Entity;
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * A question type that allows selecting one option from a dropdown of many
@@ -11,7 +10,7 @@ import java.util.Collection;
 @Entity
 public class DropdownQuestion extends Question {
 
-    private Collection<String> options;
+    private ArrayList<String> options;
     private ArrayList<String> answers = new ArrayList<>();
 
     /**
@@ -26,14 +25,14 @@ public class DropdownQuestion extends Question {
      * @param question the question text
      * @param options the possible options to choose from
      */
-    public DropdownQuestion(String question, Collection<String> options) {
+    public DropdownQuestion(String question, ArrayList<String> options) {
 
         super(question);
         this.options = options;
 
     }
 
-    public Collection<String> getOptions() {
+    public ArrayList<String> getOptions() {
         return options;
     }
 

@@ -55,7 +55,7 @@ public class webController {
                             "Min is greater than max for question \"" + questionMsg.getQuestion() + "\"");
                 }
             } else if (questionMsg.getType().equals(dropdownQuestionType)) {
-                questionList.add(new DropdownQuestion(questionMsg.getQuestion(), questionMsg.getOptions()));
+                questionList.add(new DropdownQuestion(questionMsg.getQuestion(), (ArrayList<String>) questionMsg.getOptions()));
             }
         }
 
