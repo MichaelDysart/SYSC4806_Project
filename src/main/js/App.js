@@ -130,11 +130,12 @@ const App = () => {
             console.log(data);
             if (data.message === "ok") {
                 setConsoleText(consoleText + "\nSurvey " + survey.name + " Created with ID: " + data.id);
+
+                // Retrieve survey names after creating a new survey
+                retrieveSurveyNames();
             } else {
                 setConsoleText(consoleText + "\nSurvey Creation Error: " + data.content);
             }
-            // Retrieve survey names after creating a new survey
-            retrieveSurveyNames();
         })
         .catch(console.log);
     };
@@ -149,6 +150,9 @@ const App = () => {
             console.log(data);
             if(data.message == "ok") {
                 setConsoleText(consoleText + "\nSurvey " + data.id + " deleted");
+
+                // Retrieve survey names after deleting a new survey
+                retrieveSurveyNames();
             } else {
                 setConsoleText(consoleText + "\nError: Could not delete survey with id " + data.id );
             }
