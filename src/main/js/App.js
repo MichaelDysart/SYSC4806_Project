@@ -346,7 +346,15 @@ const App = () => {
                             <Select labelId="surveyIds_select_label" value={
                                 userSurveyId
                             }
-                                onClick={retrieveSurveyNames}
+                                // We put retrieve survey names here to ensure the
+                                // select is always up to date
+                                // @TODO try to find a way to only run this when
+                                // this form is clicked (but before displaying contents).
+                                // I'm also not sure why it works to have this in the onClick
+                                // It seems to run both when this is created and when I click,
+                                // but if I replace with e => retrieveSurveyName() it only
+                                // run as the end of the click
+                                onClick={retrieveSurveyNames()}
                                 onChange={e => setUserSurveyId(e.target.value)}>
                             {
                                 userSurveyList.idList.map((id, i) => {
