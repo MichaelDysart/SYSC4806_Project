@@ -141,11 +141,17 @@ const App = () => {
     };
 
     const deleteSurvey = () => {
-        console.log(`${webUrl}survey/${userSurveyName}`);
-        fetch(`${webUrl}survey/${userSurveyName}`, {
+        console.log(`${webUrl}survey/${userSurveyId}`);
+        fetch(`${webUrl}survey/${userSurveyId}`, {
             method: 'DELETE'
         })
-        .then(res => res.json())
+        .then(res => {
+                    if (res.status === 200) {
+                        return res.json();
+                    } else {
+                        throw res;
+                    }
+                })
         .then(data => {
             console.log(data);
             if(data.message == "ok") {
@@ -172,15 +178,10 @@ const App = () => {
         .then(data => {
             if (data.status !== "error") {
                 setConsoleText(consoleText + "\nSurvey " + data.id + " retrieved");
+                setUserSurvey(data);
             } else {
                 setConsoleText(consoleText + "\nError: Could not find survey with id " + data.id );
             }
-
-            if (data.id == null) {
-                return
-            }
-
-            setUserSurvey(data);
         })
         .catch(console.log);
     };
@@ -352,13 +353,6 @@ const App = () => {
                     })}
                 </div>
                 <div>
-                    <TextField
-                             className="qq-app mv"
-                             variant="outlined"
-                             label="Survey Id"
-                             size="small"
-                             onChange={e => setUserSurveyId(e.target.value)}
-                    />
                      <FormControl className="qq-app mv qq-app__survey-ids_select">
                             <InputLabel id="surveyIds_select_label">Survey Name</InputLabel>
                             <Select labelId="surveyIds_select_label" value={
