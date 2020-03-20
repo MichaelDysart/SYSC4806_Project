@@ -160,7 +160,7 @@ public class webControllerTest {
                 .andExpect(content().json("{ \"name\" : \"survey1\", \"questions\" : [ " +
                         "{ \"type\": \"openEnded\", \"question\": \"q1\", \"stringAnswerList\" : [\"myAnswer\", \"myAnswer2\", \"myAnswer3\"], \"numberAnswerList\" : null }," +
                         "{ \"type\": \"openEnded\", \"question\": \"q2\", \"stringAnswerList\" : [\"myAnswer\"], \"numberAnswerList\" : null }," +
-                        "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": -5, \"max\": 5, \"stringAnswerList\" : null, \"numberAnswerList\" : [ 1, 3 ] }," +
+                        "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": -5, \"max\": 5, \"stringAnswerList\" : null, \"numberAnswerList\" : [ 1, 3, -3 ] }," +
                         "{ \"type\": \"dropdown\", \"question\": \"q4\", \"options\": [\"o1\", \"o2\"], \"stringAnswerList\" : [\"o1\"], \"numberAnswerList\" : null }" +
                         " ], \"status\"=\"ok\", \"id\" : " + id1 + "}"));
     }
