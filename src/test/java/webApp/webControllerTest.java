@@ -227,6 +227,15 @@ public class webControllerTest {
                 .andExpect(content().string(containsString("Mismatched types for question \\\"q3\\\": Want numberQuestion but got openEnded")));
 
         surveyString1 = "{ \"id\" : " + id1 + ", \"questions\" : [" +
+                "{ \"type\": \"number\", \"question\": \"q4\", \"numberAnswer\" : 3 }]}";
+
+        this.mockMvc.perform(post("/addAnswers").contentType("application/json")
+                .content(surveyString1)).andExpect(status().isOk())
+                .andExpect(content().string(containsString("error")))
+                .andExpect(content().string(containsString("Mismatched types for question \\\"q4\\\": Want dropdown but got number")));
+
+
+        surveyString1 = "{ \"id\" : " + id1 + ", \"questions\" : [" +
                 "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"numberAnswer\" : 1024 }]}";
 
         this.mockMvc.perform(post("/addAnswers").contentType("application/json")
