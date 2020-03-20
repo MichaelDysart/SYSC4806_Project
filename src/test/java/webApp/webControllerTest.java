@@ -123,7 +123,7 @@ public class webControllerTest {
                 .andExpect(content().json("{ \"name\" : \"survey1\", \"questions\" : [ " +
                         "{ \"type\": \"openEnded\", \"question\": \"q1\", \"stringAnswerList\" : [], \"numberAnswerList\" : null }," +
                         "{ \"type\": \"openEnded\", \"question\": \"q2\", \"stringAnswerList\" : [], \"numberAnswerList\" : null }," +
-                        "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": -5, \"max\": 5, \"stringAnswerList\" : null, \"numberAnswerList\" : [] }" +
+                        "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": -5, \"max\": 5, \"stringAnswerList\" : null, \"numberAnswerList\" : [] }," +
                         "{ \"type\": \"dropdown\", \"question\": \"q4\", \"options\": [\"o1\", \"o2\"], \"stringAnswerList\" : [], \"numberAnswerList\" : null }" +
                         " ], \"status\"=\"ok\", \"id\" : " + id1 + "}"));
 
@@ -160,7 +160,7 @@ public class webControllerTest {
                 .andExpect(content().json("{ \"name\" : \"survey1\", \"questions\" : [ " +
                         "{ \"type\": \"openEnded\", \"question\": \"q1\", \"stringAnswerList\" : [\"myAnswer\", \"myAnswer2\", \"myAnswer3\"], \"numberAnswerList\" : null }," +
                         "{ \"type\": \"openEnded\", \"question\": \"q2\", \"stringAnswerList\" : [\"myAnswer\"], \"numberAnswerList\" : null }," +
-                        "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": -5, \"max\": 5, \"stringAnswerList\" : null, \"numberAnswerList\" : [ 1, 3 ] }," +
+                        "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": -5, \"max\": 5, \"stringAnswerList\" : null, \"numberAnswerList\" : [ 1, 3, -3 ] }," +
                         "{ \"type\": \"dropdown\", \"question\": \"q4\", \"options\": [\"o1\", \"o2\"], \"stringAnswerList\" : [\"o1\"], \"numberAnswerList\" : null }" +
                         " ], \"status\"=\"ok\", \"id\" : " + id1 + "}"));
     }
@@ -232,7 +232,7 @@ public class webControllerTest {
         this.mockMvc.perform(post("/addAnswers").contentType("application/json")
                 .content(surveyString1)).andExpect(status().isOk())
                 .andExpect(content().string(containsString("error")))
-                .andExpect(content().string(containsString("Value for question \\\"q3\\\" outside of range: Want 1 to 5 but got 1024")));
+                .andExpect(content().string(containsString("Value for question \\\"q3\\\" outside of range: Want -5 to 5 but got 1024")));
 
         surveyString1 = "{ \"id\" : " + id1 + ", \"questions\" : [" +
                 "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"numberAnswer\" : -123 }]}";
@@ -240,7 +240,7 @@ public class webControllerTest {
         this.mockMvc.perform(post("/addAnswers").contentType("application/json")
                 .content(surveyString1)).andExpect(status().isOk())
                 .andExpect(content().string(containsString("error")))
-                .andExpect(content().string(containsString("Value for question \\\"q3\\\" outside of range: Want 1 to 5 but got -123")));
+                .andExpect(content().string(containsString("Value for question \\\"q3\\\" outside of range: Want -5 to 5 but got -123")));
 
 
         surveyString1 = "{ \"id\" : " + (id1 + 1) + ", \"questions\" : [" +
