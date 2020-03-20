@@ -14,6 +14,9 @@ public class QuestionMessageTest {
     QuestionMessage qm1;
     QuestionMessage  qm2;
 
+    ArrayList<String>  ops1;
+    ArrayList<String>  ops2;
+
     Collection<String>  sal1;
     Collection<String>  sal2;
 
@@ -22,15 +25,17 @@ public class QuestionMessageTest {
 
     @Before
     public void setup() {
+        ops1 = new ArrayList<>(Arrays.asList("Python", "JavaScript", "GoLang"));
+        ops2 = new ArrayList<>(Arrays.asList("Black Lotus", "Ancestral Recall", "Lightning Bolt"));
+
         sal1 = new ArrayList<>(Arrays.asList("1", "2", "3"));
         sal2 = new ArrayList<>(Arrays.asList("Bye", "See ya", "Ciao"));
 
         nal1 = new ArrayList<>(Arrays.asList(1,2,3));
         nal2 = new ArrayList<>(Arrays.asList(-1,-2,-3));
 
-
-        qm1 = new QuestionMessage("Number","First 3 numbers?", null, 1,3,"1,2,3", 123,sal1,nal1 );
-        qm2 = new QuestionMessage("String", "How to say bye?", null, 0,0,"Bye, See ya, Ciao", 0,sal2,nal2);
+        qm1 = new QuestionMessage("Number","First 3 numbers?", ops1, 1,3,"1,2,3", 123,sal1,nal1 );
+        qm2 = new QuestionMessage("String", "How to say bye?", ops2, 0,0,"Bye, See ya, Ciao", 0,sal2,nal2);
     }
 
     @Test
@@ -43,6 +48,12 @@ public class QuestionMessageTest {
     public void getQuestion(){
         assertEquals(qm1.getQuestion(), "First 3 numbers?");
         assertEquals(qm2.getQuestion(), "How to say bye?");
+    }
+
+    @Test
+    public void getOptions(){
+        assertEquals(qm1.getOptions(), new ArrayList<>(Arrays.asList("Python", "JavaScript", "GoLang")));
+        assertEquals(qm2.getOptions(), new ArrayList<>(Arrays.asList("Black Lotus", "Ancestral Recall", "Lightning Bolt")));
     }
 
     @Test
