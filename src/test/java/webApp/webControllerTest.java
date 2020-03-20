@@ -4,6 +4,7 @@ import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
@@ -16,10 +17,41 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class webControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Test
+    public void testRetrieveSurveyNames() throws Exception {
+        String surveyString = "{ \"name\" : \"survey1\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"openEnded\", \"question\": \"q2\" }, { \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": \"0\", \"max\": \"5\" }]}";
+
+        this.mockMvc.perform(get("/retrieveSurveyNames")).andExpect(status().isOk())
+               .andExpect(content().json("{ \"nameList\":[], \"idList\" : []}"));
+
+        MvcResult result = this.mockMvc.perform(post("/createSurvey").contentType("application/json")
+                .content(surveyString)).andExpect(status().isOk())
+                .andExpect(content().string(containsString("ok")))
+                .andExpect(content().string(containsString("done")))
+                .andReturn();
+
+        Integer id1 = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
+
+        surveyString = "{ \"name\" : \"survey2\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"openEnded\", \"question\": \"q2\" }, { \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": \"0\", \"max\": \"5\" }]}";
+
+        result = this.mockMvc.perform(post("/createSurvey").contentType("application/json")
+                .content(surveyString)).andExpect(status().isOk())
+                .andExpect(content().string(containsString("ok")))
+                .andExpect(content().string(containsString("done")))
+                .andReturn();
+
+        Integer id2 = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
+
+        this.mockMvc.perform(get("/retrieveSurveyNames")).andExpect(status().isOk())
+               .andExpect(content().json("{ \"nameList\" : [\"survey1\",\"survey2\"], \"idList\" : ["+id1+","+id2+"]}"));
+
+    }
 
     @Test
     public void testRestApplication() throws Exception {
@@ -32,7 +64,7 @@ public class webControllerTest {
 
         MvcResult result = this.mockMvc.perform(post("/createSurvey").contentType("application/json")
                 .content(surveyString1)).andExpect(status().isOk())
-                .andExpect(content().string(containsString("ok")))
+                       .andExpect(content().string(containsString("ok")))
                 .andExpect(content().string(containsString("done")))
                 .andReturn();
 
@@ -65,7 +97,6 @@ public class webControllerTest {
                 .andExpect(content().string(containsString("Duplicate questions detected")));
 
         surveyString1 = "{ \"name\" : \"survey2\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"numberQuestion\", \"question\": \"q1\", \"min\": 5, \"max\": 1 }]}";
-
         this.mockMvc.perform(post("/createSurvey").contentType("application/json")
                 .content(surveyString1)).andExpect(status().isOk())
                 .andExpect(content().string(containsString("error")))
@@ -77,7 +108,7 @@ public class webControllerTest {
     public void testAddAnswers() throws Exception {
 
         String surveyString1 = "{ \"name\" : \"survey1\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, " +
-                "{ \"type\": \"openEnded\", \"question\": \"q2\" }, { \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": 1, \"max\": 5 }," +
+                "{ \"type\": \"openEnded\", \"question\": \"q2\" }, { \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": -5, \"max\": 5 }," +
                 "{ \"type\": \"dropdown\", \"question\": \"q4\", \"options\": [\"o1\", \"o2\"] }]}";
 
         MvcResult result = this.mockMvc.perform(post("/createSurvey").contentType("application/json")
@@ -92,7 +123,7 @@ public class webControllerTest {
                 .andExpect(content().json("{ \"name\" : \"survey1\", \"questions\" : [ " +
                         "{ \"type\": \"openEnded\", \"question\": \"q1\", \"stringAnswerList\" : [], \"numberAnswerList\" : null }," +
                         "{ \"type\": \"openEnded\", \"question\": \"q2\", \"stringAnswerList\" : [], \"numberAnswerList\" : null }," +
-                        "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": 1, \"max\": 5, \"stringAnswerList\" : null, \"numberAnswerList\" : [] }," +
+                        "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": -5, \"max\": 5, \"stringAnswerList\" : null, \"numberAnswerList\" : [] }," +
                         "{ \"type\": \"dropdown\", \"question\": \"q4\", \"options\": [\"o1\", \"o2\"], \"stringAnswerList\" : [], \"numberAnswerList\" : null }" +
                         " ], \"status\"=\"ok\", \"id\" : " + id1 + "}"));
 
@@ -116,11 +147,20 @@ public class webControllerTest {
                 .andExpect(content().string(containsString("ok")))
                 .andExpect(content().string(containsString("answers saved")));
 
+        surveyString1 = "{ \"id\" : " + id1 + ", \"questions\" : [" +
+                "{ \"type\": \"openEnded\", \"question\": \"q1\", \"stringAnswer\" : \"myAnswer3\" }, " +
+                "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"numberAnswer\" : -3 }]}";
+
+        this.mockMvc.perform(post("/addAnswers").contentType("application/json")
+                .content(surveyString1)).andExpect(status().isOk())
+                .andExpect(content().string(containsString("ok")))
+                .andExpect(content().string(containsString("answers saved")));
+
         this.mockMvc.perform(get("/retrieveSurvey?id=" + id1)).andExpect(status().isOk())
                 .andExpect(content().json("{ \"name\" : \"survey1\", \"questions\" : [ " +
-                        "{ \"type\": \"openEnded\", \"question\": \"q1\", \"stringAnswerList\" : [\"myAnswer\", \"myAnswer2\"], \"numberAnswerList\" : null }," +
+                        "{ \"type\": \"openEnded\", \"question\": \"q1\", \"stringAnswerList\" : [\"myAnswer\", \"myAnswer2\", \"myAnswer3\"], \"numberAnswerList\" : null }," +
                         "{ \"type\": \"openEnded\", \"question\": \"q2\", \"stringAnswerList\" : [\"myAnswer\"], \"numberAnswerList\" : null }," +
-                        "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": 1, \"max\": 5, \"stringAnswerList\" : null, \"numberAnswerList\" : [ 1, 3 ] }," +
+                        "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": -5, \"max\": 5, \"stringAnswerList\" : null, \"numberAnswerList\" : [ 1, 3 ] }," +
                         "{ \"type\": \"dropdown\", \"question\": \"q4\", \"options\": [\"o1\", \"o2\"], \"stringAnswerList\" : [\"o1\"], \"numberAnswerList\" : null }" +
                         " ], \"status\"=\"ok\", \"id\" : " + id1 + "}"));
     }
@@ -194,6 +234,15 @@ public class webControllerTest {
                 .andExpect(content().string(containsString("error")))
                 .andExpect(content().string(containsString("Value for question \\\"q3\\\" outside of range: Want 1 to 5 but got 1024")));
 
+        surveyString1 = "{ \"id\" : " + id1 + ", \"questions\" : [" +
+                "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"numberAnswer\" : -123 }]}";
+
+        this.mockMvc.perform(post("/addAnswers").contentType("application/json")
+                .content(surveyString1)).andExpect(status().isOk())
+                .andExpect(content().string(containsString("error")))
+                .andExpect(content().string(containsString("Value for question \\\"q3\\\" outside of range: Want 1 to 5 but got -123")));
+
+
         surveyString1 = "{ \"id\" : " + (id1 + 1) + ", \"questions\" : [" +
                 "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"numberAnswer\" : 4 }]}";
 
@@ -235,6 +284,15 @@ public class webControllerTest {
 
         this.mockMvc.perform(post("/addAnswers").contentType("application/json")
                 .content("null")).andExpect(status().isBadRequest());
+
+        this.mockMvc.perform(get("/retrieveSurvey?id=")).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testRetrieveSurveyError() throws Exception {
+        this.mockMvc.perform(get("/retrieveSurvey?id=1")).andExpect(status().isOk())
+                .andExpect(content().json("{ \"name\" : \"\", \"questions\" : [], \"status\"=\"error\", \"id\" : null }"));
+
     }
 
     @Test

@@ -21,7 +21,7 @@ describe('Test rendering', () => {
    it('perform a shallow render without crashing', () => {
         shallow(<App />);
    });
-   it('perform a shallow render without crashing', () => {
+   it('perform a full render without crashing', () => {
         mount(<App />);
    });
 });

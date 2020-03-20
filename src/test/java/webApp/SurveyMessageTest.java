@@ -1,3 +1,5 @@
+package webApp;
+
 import org.junit.Before;
 import org.junit.Test;
 import webApp.QuestionMessage;
@@ -23,17 +25,17 @@ public class SurveyMessageTest {
     Collection<Integer> nal2;
 
     @Before
-    public void setup() throws Exception {
-        q1 = new ArrayList<QuestionMessage>(Arrays.asList(new QuestionMessage("Number", "First 3 numbers?", null, 1, 3, "1,2,3", 123, sal1, nal1)));
-        q2 = new ArrayList<QuestionMessage>(Arrays.asList(new QuestionMessage("String", "How to say bye?", null, 0, 0, "Bye, See ya, Ciao", 0, sal2, nal2)));
+    public void setup() {
+        q1 = new ArrayList<>(Arrays.asList(new QuestionMessage("Number", "First 3 numbers?", null, 1, 3, "1,2,3", 123, sal1, nal1)));
+        q2 = new ArrayList<>(Arrays.asList(new QuestionMessage("String", "How to say bye?", null, 0, 0, "Bye, See ya, Ciao", 0, sal2, nal2)));
         sm1 = new SurveyMessage(1, "200", "All good", q1);
         sm2 = new SurveyMessage(2, "404", "Error:Not Found", q2);
     }
 
     @Test
     public void getId() {
-        assertEquals(sm1.getId(), new Integer(1));
-        assertEquals(sm2.getId(), new Integer(2));
+        assertEquals(sm1.getId(), Integer.valueOf(1));
+        assertEquals(sm2.getId(), Integer.valueOf(2));
     }
 
     @Test

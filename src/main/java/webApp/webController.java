@@ -8,6 +8,7 @@ import survey.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.HashSet;
 import java.util.Optional;
 
@@ -173,5 +174,21 @@ public class webController {
             return new Response(id, "ok", "Survey deleted");
         }
         return new Response(id, "error", "Survey" + id + " not found");
+    }
+
+    @GetMapping(value = "/retrieveSurveyNames", produces = "application/json")
+    @ResponseBody
+    public SurveyIDList retrieveSurveyNames() {
+        List<String> nameList = new ArrayList<>();
+        List<Integer> idList = new ArrayList<>();
+
+        for (Survey survey : this.repo.findAllSorted()) {
+            nameList.add(survey.getName());
+            idList.add(survey.getId());
+        }
+
+        SurveyIDList surveryIdList = new SurveyIDList(nameList, idList);
+
+        return surveryIdList;
     }
 }
