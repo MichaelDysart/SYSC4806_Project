@@ -14,8 +14,8 @@ public class QuestionMessageTest {
     QuestionMessage qm1;
     QuestionMessage  qm2;
 
-    Collection<String>  ops1;
-    Collection<String>  ops2;
+    ArrayList<String>  ops1;
+    ArrayList<String>  ops2;
 
     Collection<String>  sal1;
     Collection<String>  sal2;
