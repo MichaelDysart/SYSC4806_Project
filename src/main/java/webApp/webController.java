@@ -46,17 +46,21 @@ public class webController {
                 return new Response(null, "error", "Question was null");
             }
             questionTexts.add(questionMsg.getQuestion());
-            if (questionMsg.getType().equals(openQuestionType)) {
-                questionList.add(new OpenEndedQuestion(questionMsg.getQuestion()));
-            } else if(questionMsg.getType().equals(numQuestionType)) {
-                if (questionMsg.getMin() <= questionMsg.getMax()) {
-                    questionList.add(new NumberQuestion(questionMsg.getQuestion(), questionMsg.getMin(), questionMsg.getMax()));
-                } else {
-                    return new Response(null, "error",
-                            "Min is greater than max for question \"" + questionMsg.getQuestion() + "\"");
-                }
-            } else if (questionMsg.getType().equals(dropdownQuestionType)) {
-                questionList.add(new DropdownQuestion(questionMsg.getQuestion(), questionMsg.getOptions()));
+            switch (questionMsg.getType()) {
+                case openQuestionType:
+                    questionList.add(new OpenEndedQuestion(questionMsg.getQuestion()));
+                    break;
+                case numQuestionType:
+                    if (questionMsg.getMin() <= questionMsg.getMax()) {
+                        questionList.add(new NumberQuestion(questionMsg.getQuestion(), questionMsg.getMin(), questionMsg.getMax()));
+                    } else {
+                        return new Response(null, "error",
+                                "Min is greater than max for question \"" + questionMsg.getQuestion() + "\"");
+                    }
+                    break;
+                case dropdownQuestionType:
+                    questionList.add(new DropdownQuestion(questionMsg.getQuestion(), questionMsg.getOptions()));
+                    break;
             }
         }
 
@@ -94,9 +98,29 @@ public class webController {
                 }
             }
 
-            return new SurveyMessage(survey.get().getId(), "ok", survey.get().getName(), questionMessages);
+            return new SurveyMessage(survey.get().getId(), "ok", survey.get().getName(), survey.get().getClosed(), questionMessages);
         }
-        return new SurveyMessage(null, "error", "", questionMessages);
+        return new SurveyMessage(null, "error", "", false, questionMessages);
+    }
+
+    @PostMapping(value = "/closeSurvey", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public Response closeSurvey(@RequestBody SurveyMessage surveyMessage) {
+        if (surveyMessage.getId() == null) {
+            return new Response(null, "error", "Survey id was null");
+        }
+        Optional<Survey> survey = repo.findById(surveyMessage.getId());
+        if (survey.isPresent()) {
+            if (!survey.get().getClosed()) {
+                survey.get().setClosed(true);
+                repo.save(survey.get());
+                return new Response(surveyMessage.getId(), "ok", "Survey \""+ surveyMessage.getId() +"\" closed successfully");
+            } else {
+                return new Response(null, "error", "Survey \""+ surveyMessage.getId() +"\" already closed");
+            }
+        } else {
+            return new Response(null, "error", "Survey \""+ surveyMessage.getId() +"\" not available");
+        }
     }
 
     @PostMapping(value = "/addAnswers", consumes = "application/json", produces = "application/json")
@@ -111,56 +135,60 @@ public class webController {
         Optional<Survey> survey = repo.findById(surveyMessage.getId());
         if (survey.isPresent()) {
 
-            for (QuestionMessage questionMsg : surveyMessage.getQuestions()) {
-                if (questionMsg == null) {
-                    return new Response(surveyMessage.getId(), "error", "Question was null");
-                }
-                Question question = null;
-                for (Question searchQuestion : survey.get().getQuestions()) {
-                    if(searchQuestion.getQuestion().equals(questionMsg.getQuestion())) {
-                        question = searchQuestion;
-                        break;
+            if (!survey.get().getClosed()) {
+                for (QuestionMessage questionMsg : surveyMessage.getQuestions()) {
+                    if (questionMsg == null) {
+                        return new Response(surveyMessage.getId(), "error", "Question was null");
                     }
-                }
-                if (question == null) {
-                    return new Response(surveyMessage.getId(), "error", "Missing Question \"" + questionMsg.getQuestion() + "\"");
-                } else if(question instanceof OpenEndedQuestion && questionMsg.getType().equals(openQuestionType)) {
-                    ((OpenEndedQuestion) question).addAnswer(questionMsg.getStringAnswer());
-                } else if(question instanceof NumberQuestion && questionMsg.getType().equals(numQuestionType)) {
-                    NumberQuestion nQuestion = (NumberQuestion) question;
-                    if (questionMsg.getNumberAnswer() <= nQuestion.getMax() &&
-                            questionMsg.getNumberAnswer() >= nQuestion.getMin()) {
-                        nQuestion.addAnswer(questionMsg.getNumberAnswer());
+                    Question question = null;
+                    for (Question searchQuestion : survey.get().getQuestions()) {
+                        if(searchQuestion.getQuestion().equals(questionMsg.getQuestion())) {
+                            question = searchQuestion;
+                            break;
+                        }
+                    }
+                    if (question == null) {
+                        return new Response(surveyMessage.getId(), "error", "Missing Question \"" + questionMsg.getQuestion() + "\"");
+                    } else if(question instanceof OpenEndedQuestion && questionMsg.getType().equals(openQuestionType)) {
+                        ((OpenEndedQuestion) question).addAnswer(questionMsg.getStringAnswer());
+                    } else if(question instanceof NumberQuestion && questionMsg.getType().equals(numQuestionType)) {
+                        NumberQuestion nQuestion = (NumberQuestion) question;
+                        if (questionMsg.getNumberAnswer() <= nQuestion.getMax() &&
+                                questionMsg.getNumberAnswer() >= nQuestion.getMin()) {
+                            nQuestion.addAnswer(questionMsg.getNumberAnswer());
+                        } else {
+                            return new Response(surveyMessage.getId(), "error",
+                                    "Value for question \"" + questionMsg.getQuestion() + "\" outside of range: Want " +
+                                            nQuestion.getMin() + " to " + nQuestion.getMax() + " but got " + questionMsg.getNumberAnswer());
+                        }
+                    } else if(question instanceof DropdownQuestion && questionMsg.getType().equals(dropdownQuestionType)) {
+                        DropdownQuestion dQuestion = (DropdownQuestion) question;
+                        if (dQuestion.getOptions().contains(questionMsg.getStringAnswer())) {
+                            dQuestion.addAnswer(questionMsg.getStringAnswer());
+                        } else {
+                            return new Response(surveyMessage.getId(), "error",
+                                    "Answer for question \"" + questionMsg.getQuestion() + "\" is " +
+                                            questionMsg.getStringAnswer() + " which is not an option for this question");
+                        }
                     } else {
+                        String expectedType = "unknown";
+                        if(question instanceof OpenEndedQuestion) {
+                            expectedType = openQuestionType;
+                        } else if(question instanceof NumberQuestion) {
+                            expectedType = numQuestionType;
+                        } else if(question instanceof DropdownQuestion) {
+                            expectedType = dropdownQuestionType;
+                        }
                         return new Response(surveyMessage.getId(), "error",
-                                "Value for question \"" + questionMsg.getQuestion() + "\" outside of range: Want " +
-                                        nQuestion.getMin() + " to " + nQuestion.getMax() + " but got " + questionMsg.getNumberAnswer());
+                                "Mismatched types for question \"" + questionMsg.getQuestion() + "\": Want " +
+                                        expectedType + " but got " + questionMsg.getType());
                     }
-                } else if(question instanceof DropdownQuestion && questionMsg.getType().equals(dropdownQuestionType)) {
-                    DropdownQuestion dQuestion = (DropdownQuestion) question;
-                    if (dQuestion.getOptions().contains(questionMsg.getStringAnswer())) {
-                        dQuestion.addAnswer(questionMsg.getStringAnswer());
-                    } else {
-                        return new Response(surveyMessage.getId(), "error",
-                                "Answer for question \"" + questionMsg.getQuestion() + "\" is " +
-                                        questionMsg.getStringAnswer() + " which is not an option for this question");
-                    }
-                } else {
-                    String expectedType = "unknown";
-                    if(question instanceof OpenEndedQuestion) {
-                        expectedType = openQuestionType;
-                    } else if(question instanceof NumberQuestion) {
-                        expectedType = numQuestionType;
-                    } else if(question instanceof DropdownQuestion) {
-                        expectedType = dropdownQuestionType;
-                    }
-                    return new Response(surveyMessage.getId(), "error",
-                            "Mismatched types for question \"" + questionMsg.getQuestion() + "\": Want " +
-                                    expectedType + " but got " + questionMsg.getType());
                 }
+                repo.save(survey.get());
+                return new Response(surveyMessage.getId(), "ok", "answers saved");
+            } else {
+                return new Response(null, "error", "Could not add answers: Survey \""+ surveyMessage.getId() +"\" closed");
             }
-            repo.save(survey.get());
-            return new Response(surveyMessage.getId(), "ok", "answers saved");
         }
         return new Response(null, "error", "Survey \""+ surveyMessage.getId() +"\" not available");
     }
@@ -187,8 +215,6 @@ public class webController {
             idList.add(survey.getId());
         }
 
-        SurveyIDList surveryIdList = new SurveyIDList(nameList, idList);
-
-        return surveryIdList;
+        return new SurveyIDList(nameList, idList);
     }
 }

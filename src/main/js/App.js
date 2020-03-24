@@ -29,7 +29,7 @@ const App = () => {
     const [surveyName, setSurveyName] = useState('');
     const [questions, setQuestions] = useState([]);
     const [currentType, setCurrentType] = useState('');
-    const [userSurvey, setUserSurvey] = useState({ questions : [], answers : [] });
+    const [userSurvey, setUserSurvey] = useState({ id : null, closed : false, questions : [] });
     const [userSurveyId, setUserSurveyId] = useState('');
     const [userSurveyList, setUserSurveyList] = useState({ nameList : [], idList : [] });
 
@@ -168,6 +168,10 @@ const App = () => {
             if(data.message === "ok") {
                 setConsoleText(consoleText + "\nSurvey " + data.id + " deleted");
 
+                if (userSurvey.id === data.id) {
+                    setUserSurvey({ id : null, closed : false, questions : [] });
+                }
+
                 // Retrieve survey names after deleting a new survey
                 retrieveSurveyNames();
             } else {
@@ -217,29 +221,57 @@ const App = () => {
     };
 
     const submitAnswers = () => {
-            const survey = {
-                id : userSurvey.id,
-                questions : userSurvey.questions,
-            };
-            console.log(survey);
-            fetch(`${webUrl}addAnswers`, {
-                method: 'POST',
-                body: JSON.stringify(survey),
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(checkRequest)
-            .then(data => {
-                console.log(data);
-                if (data.message === "ok") {
-                    setConsoleText(consoleText + "\nAnswers added to survey: " + userSurvey.name + "; ID: " + data.id);
-                } else {
-                    setConsoleText(consoleText + "\nAnswer Addition Error: " + data.content);
-                }
-            })
-            .catch(console.log);
+        const survey = {
+            id : userSurvey.id,
+            questions : userSurvey.questions,
         };
+        console.log(survey);
+        fetch(`${webUrl}addAnswers`, {
+            method: 'POST',
+            body: JSON.stringify(survey),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(checkRequest)
+        .then(data => {
+            console.log(data);
+            if (data.message === "ok") {
+                setConsoleText(consoleText + "\nAnswers added to survey: " + userSurvey.name + "; ID: " + data.id);
+            } else {
+                setConsoleText(consoleText + "\nAnswer Addition Error: " + data.content);
+            }
+        })
+        .catch(console.log);
+    };
+
+    const closeSurvey = () => {
+        const survey = {
+            id : userSurvey.id,
+        };
+        console.log(survey);
+        fetch(`${webUrl}closeSurvey`, {
+            method: 'POST',
+            body: JSON.stringify(survey),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(checkRequest)
+        .then(data => {
+            console.log(data);
+            if (data.message === "ok") {
+                setConsoleText(consoleText + "\nSurvey was closed: " + userSurvey.name + "; ID: " + data.id);
+
+                if (userSurvey.id === data.id) {
+                    setUserSurvey({ ...userSurvey, closed : true});
+                }
+            } else {
+                setConsoleText(consoleText + "\nSurvey close failed: " + data.content);
+            }
+        })
+        .catch(console.log);
+    };
 
     return (
         <div className="qq-app">
@@ -410,6 +442,7 @@ const App = () => {
                     </div>
                     <div>
                         <Button className="qq-app m" variant="contained" color="primary" onClick={deleteSurvey}>Delete Survey</Button>
+                        <Button className="qq-app m" variant="contained" color="primary" onClick={closeSurvey}>Close Survey</Button>
                         <Button className="qq-app m" variant="contained" color="primary" onClick={submitAnswers}>Submit Answers</Button>
                     </div>
                     <div>
@@ -432,7 +465,13 @@ const App = () => {
                                                 variant="outlined"
                                                 label="Answer"
                                                 size="small"
-                                                onChange={e => updateAnswer(i, { stringAnswer : e.target.value })}
+                                                onChange={
+                                                    e => {
+                                                        if (!userSurvey.closed) {
+                                                            updateAnswer(i, { stringAnswer : e.target.value });
+                                                        }
+                                                    }
+                                                }
                                             />
                                         </div>
                                     );
@@ -453,7 +492,13 @@ const App = () => {
                                                 variant="outlined"
                                                 label="Answer"
                                                 size="small"
-                                                onChange={e => updateAnswer(i, { numberAnswer : parseInt(e.target.value) || 0 })}
+                                                onChange= {
+                                                    e => {
+                                                        if (!userSurvey.closed) {
+                                                            updateAnswer(i, { numberAnswer : parseInt(e.target.value) || 0 });
+                                                        }
+                                                    }
+                                                }
                                             />
                                         </div>
                                     );
@@ -473,7 +518,13 @@ const App = () => {
                                                 <Select
                                                     labelId={`label_${q.question}`}
                                                     value={userSurvey.questions[i].stringAnswer}
-                                                    onChange={e => updateAnswer(i, { stringAnswer : e.target.value })}
+                                                    onChange={
+                                                        e => {
+                                                            if (!userSurvey.closed) {
+                                                                updateAnswer(i, { stringAnswer : e.target.value });
+                                                            }
+                                                        }
+                                                    }
                                                 >
                                                     {q.options.map(option => (
                                                         <MenuItem key={option} value={option}>{option}</MenuItem>

@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class SurveyTest {
 
@@ -59,5 +61,15 @@ public class SurveyTest {
         survey2.setName("An even better survey");
         assertEquals(survey2.getName(),"An even better survey");
         assertEquals(survey3.getName(),"Take the survey for a free $100 itunes gift card");
+    }
+
+    @Test
+    public void getSetClosed() {
+        survey1.setClosed(true);
+        assertTrue(survey1.getClosed());
+        assertFalse(survey2.getClosed());
+        survey2.setClosed(true);
+        assertTrue(survey1.getClosed());
+        assertTrue(survey2.getClosed());
     }
 }

@@ -105,6 +105,80 @@ public class webControllerTest {
     }
 
     @Test
+    public void testCloseSurvey() throws Exception {
+
+        String surveyString1 = "{ \"name\" : \"survey1\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, " +
+                "{ \"type\": \"openEnded\", \"question\": \"q2\" }, { \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": -5, \"max\": 5 }," +
+                "{ \"type\": \"dropdown\", \"question\": \"q4\", \"options\": [\"o1\", \"o2\"] }]}";
+
+        MvcResult result = this.mockMvc.perform(post("/createSurvey").contentType("application/json")
+                .content(surveyString1)).andExpect(status().isOk())
+                .andExpect(content().string(containsString("ok")))
+                .andExpect(content().string(containsString("done")))
+                .andReturn();
+
+        Integer id1 = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
+
+        this.mockMvc.perform(get("/retrieveSurvey?id=" + id1)).andExpect(status().isOk())
+                .andExpect(content().json("{ \"name\" : \"survey1\", \"closed\" : false, \"questions\" : [ " +
+                        "{ \"type\": \"openEnded\", \"question\": \"q1\", \"stringAnswerList\" : [], \"numberAnswerList\" : null }," +
+                        "{ \"type\": \"openEnded\", \"question\": \"q2\", \"stringAnswerList\" : [], \"numberAnswerList\" : null }," +
+                        "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": -5, \"max\": 5, \"stringAnswerList\" : null, \"numberAnswerList\" : [] }," +
+                        "{ \"type\": \"dropdown\", \"question\": \"q4\", \"options\": [\"o1\", \"o2\"], \"stringAnswerList\" : [], \"numberAnswerList\" : null }" +
+                        " ], \"status\"=\"ok\", \"id\" : " + id1 + "}"));
+
+        surveyString1 = "{ \"id\" : " + id1 + ", \"questions\" : [" +
+                "{ \"type\": \"openEnded\", \"question\": \"q1\", \"stringAnswer\" : \"myAnswer\" }, " +
+                "{ \"type\": \"openEnded\", \"question\": \"q2\", \"stringAnswer\" : \"myAnswer\" }, " +
+                "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"numberAnswer\" : 1 }," +
+                "{ \"type\": \"dropdown\", \"question\": \"q4\", \"stringAnswer\" : \"o1\" }]}";
+
+        this.mockMvc.perform(post("/addAnswers").contentType("application/json")
+                .content(surveyString1)).andExpect(status().isOk())
+                .andExpect(content().string(containsString("ok")))
+                .andExpect(content().string(containsString("answers saved")));
+
+        String surveyString2 = "{ \"id\" : " + (id1 + 1) + "}";
+
+        this.mockMvc.perform(post("/closeSurvey").contentType("application/json")
+                .content(surveyString2)).andExpect(status().isOk())
+                .andExpect(content().string(containsString("error")))
+                .andExpect(content().string(containsString("Survey \\\""+ (id1 + 1) +"\\\" not available")));
+
+        surveyString2 = "{ \"id\" : " + id1 + "}";
+
+        this.mockMvc.perform(post("/closeSurvey").contentType("application/json")
+                .content(surveyString2)).andExpect(status().isOk())
+                .andExpect(content().string(containsString("ok")))
+                .andExpect(content().string(containsString("Survey \\\""+ id1 +"\\\" closed successfully")));
+
+        surveyString2 = "{ \"id\" : " + id1 + "}";
+
+        this.mockMvc.perform(post("/closeSurvey").contentType("application/json")
+                .content(surveyString2)).andExpect(status().isOk())
+                .andExpect(content().string(containsString("error")))
+                .andExpect(content().string(containsString("Survey \\\""+ id1 +"\\\" already closed")));
+
+        this.mockMvc.perform(get("/retrieveSurvey?id=" + id1)).andExpect(status().isOk())
+                .andExpect(content().json("{ \"name\" : \"survey1\", \"closed\" : true, \"questions\" : [ " +
+                        "{ \"type\": \"openEnded\", \"question\": \"q1\", \"stringAnswerList\" : [\"myAnswer\"], \"numberAnswerList\" : null }," +
+                        "{ \"type\": \"openEnded\", \"question\": \"q2\", \"stringAnswerList\" : [\"myAnswer\"], \"numberAnswerList\" : null }," +
+                        "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": -5, \"max\": 5, \"stringAnswerList\" : null, \"numberAnswerList\" : [1] }," +
+                        "{ \"type\": \"dropdown\", \"question\": \"q4\", \"options\": [\"o1\", \"o2\"], \"stringAnswerList\" : [\"o1\"], \"numberAnswerList\" : null }" +
+                        " ], \"status\"=\"ok\", \"id\" : " + id1 + "}"));
+
+        this.mockMvc.perform(post("/addAnswers").contentType("application/json")
+                .content(surveyString1)).andExpect(status().isOk())
+                .andExpect(content().string(containsString("error")))
+                .andExpect(content().string(containsString("Could not add answers: Survey \\\""+ id1 +"\\\" closed")));
+
+        this.mockMvc.perform(post("/closeSurvey").contentType("application/json")
+                .content("{}")).andExpect(status().isOk())
+                .andExpect(content().string(containsString("error")))
+                .andExpect(content().string(containsString("Survey id was null")));
+    }
+
+    @Test
     public void testAddAnswers() throws Exception {
 
         String surveyString1 = "{ \"name\" : \"survey1\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, " +
