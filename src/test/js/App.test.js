@@ -115,6 +115,10 @@ describe('Test adding questions', () => {
         }
    });
 
+   beforeEach(() => {
+        fetch.resetMocks()
+   });
+
    it('Save survey', () => {
 
         let createRequest;
