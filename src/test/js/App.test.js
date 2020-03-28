@@ -119,7 +119,7 @@ describe('Test adding questions', () => {
         fetch.resetMocks()
    });
 
-   it('Save survey', () => {
+   it('Save survey', (done) => {
 
         let createRequest;
         let nameRequest;
@@ -157,7 +157,7 @@ describe('Test adding questions', () => {
         wrapper.find(Select).find({ labelId: "qtype_select_label" }).at(0).simulate('change', { target: { value: "dropdown" } } );
         wrapper.find(Button).find({ label: "Add Question" }).at(0).simulate('click');
 
-        wrapper.find(Button).find({ label: "Create Survey" }).at(0).simulate('click');
+        let prom = wrapper.find(Button).find({ label: "Create Survey" }).at(0).simulate('click');
 
         expect(fetch).toHaveBeenCalledTimes(1);
         expect(createRequest.method).toBe('POST');
@@ -167,7 +167,12 @@ describe('Test adding questions', () => {
         expect(JSON.parse(createRequest.body).questions[1].type).toBe('numberQuestion');
         expect(JSON.parse(createRequest.body).questions[2].type).toBe('dropdown');
 
-        createPromise.then(() => expect(wrapper.find({ className: "console" }).at(0).text()).toBe("\nSurvey Survey1 Created with ID: 1"));
-
+        new Promise(function(resolve) {
+                setTimeout(resolve, 1000);
+            }).then().then().then().then(() => {
+            console.log("abc");
+            expect(wrapper.find({ className: "console" }).at(0).props().value).toBe("\nSurvey Survey1 Created with ID: 1");
+            done();
+        });
    });
 });
