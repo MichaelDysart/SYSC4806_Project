@@ -146,7 +146,6 @@ const App = () => {
             if (data.message === "ok") {
                 setConsoleText(consoleText + "\nSurvey " + survey.name + " Created with ID: " + data.id);
 
-            console.log("def");
                 // Retrieve survey names after creating a new survey
                 retrieveSurveyNames();
             } else {

@@ -168,9 +168,8 @@ describe('Test adding questions', () => {
         expect(JSON.parse(createRequest.body).questions[2].type).toBe('dropdown');
 
         new Promise(function(resolve) {
-                setTimeout(resolve, 1000);
+                setTimeout(resolve, 0);
             }).then().then().then().then(() => {
-            console.log("abc");
             expect(wrapper.find({ className: "console" }).at(0).props().value).toBe("\nSurvey Survey1 Created with ID: 1");
             done();
         });
