@@ -125,7 +125,7 @@ const App = () => {
         }));
     };
 
-    /*S
+    /*
     * Store a new survey on the server
     */
     const createSurvey = () => {
