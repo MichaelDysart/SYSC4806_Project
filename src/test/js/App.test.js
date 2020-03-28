@@ -19,7 +19,7 @@ import Adapter from 'enzyme-adapter-react-16';
 configure({ adapter: new Adapter() });
 
 import { enableFetchMocks } from 'jest-fetch-mock';
-enableFetchMocks()
+enableFetchMocks();
 
 describe('Test rendering', () => {
    it('perform a shallow render without crashing', () => {
@@ -154,19 +154,19 @@ describe('Test adding questions', () => {
         wrapper.find(Button).find({ label: "Add Question" }).at(0).simulate('click');
 
         wrapper.find(Button).find({ label: "Create Survey" }).at(0).simulate('click');
-//
-//        expect(fetch).toHaveBeenCalledTimes(1);
-//        expect(createRequest.method).toBe('POST');
-//        expect(JSON.parse(createRequest.body).name).toBe('Survey1');
-//
-//        expect(JSON.parse(createRequest.body).questions[0].type).toBe('openEnded');
-//        expect(JSON.parse(createRequest.body).questions[1].type).toBe('numberQuestion');
-//        expect(JSON.parse(createRequest.body).questions[2].type).toBe('dropdown');
-//
-//        console.log(wrapper.find({ className: "console" }).at(0).text());
-//        console.log(wrapper.find(Select).find({ labelId: "qtype_select_label" }).at(0).text());
-//
-//        createPromise.then(() => expect(wrapper.find({ className: "console" }).at(0).text()).toBe("\nSurvey Survey1 Created with ID: 1"));
+
+        expect(fetch).toHaveBeenCalledTimes(1);
+        expect(createRequest.method).toBe('POST');
+        expect(JSON.parse(createRequest.body).name).toBe('Survey1');
+
+        expect(JSON.parse(createRequest.body).questions[0].type).toBe('openEnded');
+        expect(JSON.parse(createRequest.body).questions[1].type).toBe('numberQuestion');
+        expect(JSON.parse(createRequest.body).questions[2].type).toBe('dropdown');
+
+        console.log(wrapper.find({ className: "console" }).at(0).text());
+        console.log(wrapper.find(Select).find({ labelId: "qtype_select_label" }).at(0).text());
+
+        createPromise.then(() => expect(wrapper.find({ className: "console" }).at(0).text()).toBe("\nSurvey Survey1 Created with ID: 1"));
 
    });
 });
