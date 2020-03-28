@@ -96,7 +96,7 @@ const App = () => {
                 ]);
                 break;
             default:
-                console.log(`[WARNING] Unknown question type "${currentType}"`);
+                // console.log(`[WARNING] Unknown question type "${currentType}"`);
         }
     };
 
@@ -125,17 +125,16 @@ const App = () => {
         }));
     };
 
-    /*
+    /*S
     * Store a new survey on the server
     */
     const createSurvey = () => {
-        console.log(questions);
         const survey = {
             name: surveyName,
             questions: questions,
         };
 
-        fetch(`${webUrl}createSurvey`, {
+        return fetch(`${webUrl}createSurvey`, {
             method: 'POST',
             body: JSON.stringify(survey),
             headers: {
@@ -144,7 +143,6 @@ const App = () => {
         })
         .then(checkRequest)
         .then(data => {
-            console.log(data);
             if (data.message === "ok") {
                 setConsoleText(consoleText + "\nSurvey " + survey.name + " Created with ID: " + data.id);
 
@@ -158,13 +156,11 @@ const App = () => {
     };
 
     const deleteSurvey = () => {
-        console.log(`${webUrl}survey/${userSurveyId}`);
-        fetch(`${webUrl}survey/${userSurveyId}`, {
+        return fetch(`${webUrl}survey/${userSurveyId}`, {
             method: 'DELETE'
         })
         .then(checkRequest)
         .then(data => {
-            console.log(data);
             if(data.message === "ok") {
                 setConsoleText(consoleText + "\nSurvey " + data.id + " deleted");
 
@@ -177,8 +173,7 @@ const App = () => {
     };
 
     const retrieveSurvey = () => {
-        console.log(`${webUrl}retrieveSurvey?id=${userSurveyId}`);
-        fetch(`${webUrl}retrieveSurvey?id=${userSurveyId}`)
+        return fetch(`${webUrl}retrieveSurvey?id=${userSurveyId}`)
         .then(checkRequest)
         .then(data => {
             if (data.status !== "error") {
@@ -192,11 +187,9 @@ const App = () => {
     };
 
     const retrieveSurveyNames = () => {
-            fetch(`${webUrl}retrieveSurveyNames`)
+            return fetch(`${webUrl}retrieveSurveyNames`)
             .then(checkRequest)
             .then(data => {
-                console.log(data);
-
                 setUserSurveyList(data);
             })
             .catch(console.log);
@@ -221,8 +214,7 @@ const App = () => {
                 id : userSurvey.id,
                 questions : userSurvey.questions,
             };
-            console.log(survey);
-            fetch(`${webUrl}addAnswers`, {
+            return fetch(`${webUrl}addAnswers`, {
                 method: 'POST',
                 body: JSON.stringify(survey),
                 headers: {
@@ -231,7 +223,6 @@ const App = () => {
             })
             .then(checkRequest)
             .then(data => {
-                console.log(data);
                 if (data.message === "ok") {
                     setConsoleText(consoleText + "\nAnswers added to survey: " + userSurvey.name + "; ID: " + data.id);
                 } else {
@@ -252,13 +243,13 @@ const App = () => {
                 <div className="content-group">
                     <div>
                         <TextField
+                            label="Survey Name"
                             className="qq-app mv"
                             variant="outlined"
-                            label="Survey Name"
                             size="small"
                             onChange={e => setSurveyName(e.target.value)}
                         />
-                        <Button className="qq-app m" variant="contained" color="primary" onClick={createSurvey}>Create</Button>
+                        <Button label="Create Survey" className="qq-app m" variant="contained" color="primary" onClick={createSurvey}>Create</Button>
                     </div>
                     <div>
                         <FormControl className="qq-app mv qq-app__qtype_select">
@@ -345,7 +336,7 @@ const App = () => {
                                     );
                                 case qType.DROPDOWN:
                                     return (
-                                        <div className="qq-app mv" key={i}>
+                                        <div className="qq-app mv" key={i} label="Dropdown Question Input">
                                             <div>{`Question ${i + 1} - Dropdown`}</div>
                                             <TextField
                                                 className="qq-app m"
@@ -382,7 +373,7 @@ const App = () => {
                                         </div>
                                     );
                                 default:
-                                    console.log(`[WARNING] Unknown question type "${q.question}"`)
+                                    // console.log(`[WARNING] Unknown question type "${q.question}"`)
                                     return (<div />);
                             };
                         })}
@@ -400,7 +391,7 @@ const App = () => {
                                 {
                                     userSurveyList.idList.map((id, i) => {
                                         return(
-                                            <MenuItem value={id}>{`${userSurveyList.nameList[i]} : ${id}`}</MenuItem>
+                                            <MenuItem value={id} key={i}>{`${userSurveyList.nameList[i]} : ${id}`}</MenuItem>
                                         )
                                     })
                                 }
@@ -484,7 +475,7 @@ const App = () => {
                                         </div>
                                     );
                                 default:
-                                    console.log(`[WARNING] Unknown question type "${q.question}"`)
+                                    //console.log(`[WARNING] Unknown question type "${q.question}"`)
                                     return (<div />);
                             };
                         })}
@@ -492,7 +483,7 @@ const App = () => {
                 </div>
                 <div>
                     <div>{"Console"}</div>
-                    <textarea readOnly value={consoleText} class="console"></textarea>
+                    <textarea readOnly value={consoleText} className="console"></textarea>
                 </div>
             </Card>
         </div>
