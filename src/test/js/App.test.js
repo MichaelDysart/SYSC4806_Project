@@ -167,9 +167,6 @@ describe('Test adding questions', () => {
         expect(JSON.parse(createRequest.body).questions[1].type).toBe('numberQuestion');
         expect(JSON.parse(createRequest.body).questions[2].type).toBe('dropdown');
 
-        console.log(wrapper.find({ className: "console" }).at(0).text());
-        console.log(wrapper.find(Select).find({ labelId: "qtype_select_label" }).at(0).text());
-
         createPromise.then(() => expect(wrapper.find({ className: "console" }).at(0).text()).toBe("\nSurvey Survey1 Created with ID: 1"));
 
    });
