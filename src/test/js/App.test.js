@@ -125,6 +125,7 @@ describe('Test adding questions', () => {
         let nameRequest;
         let createPromise;
 
+        // uses 'jest-fetch-mock'
         fetch.mockResponse(req => {
             if (req.url.endsWith('createSurvey')) {
                 createRequest = req;
