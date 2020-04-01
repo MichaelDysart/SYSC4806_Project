@@ -15,6 +15,8 @@ public class Survey {
 
     protected String name;
 
+    protected boolean closed;
+
     @OneToMany(cascade = CascadeType.ALL)
     private Collection<Question> questions;
 
@@ -86,6 +88,22 @@ public class Survey {
      */
     public Collection<Question> getQuestions() {
         return questions;
+    }
+
+    /*
+     * Sets the closed status of the survey
+     * @returns {boolean}
+     */
+    public boolean getClosed() {
+        return closed;
+    }
+
+    /*
+     * Tests if the survey is closed
+     * @param closed {boolean}
+     */
+    public void setClosed(boolean closed) {
+        this.closed = closed;
     }
 
 }

@@ -11,6 +11,7 @@ public class SurveyMessage {
     private final String name;
     private final String status;
     private final Collection<QuestionMessage> questions;
+    private final boolean closed;
 
     /*
      * A constructor
@@ -19,11 +20,12 @@ public class SurveyMessage {
      * @param name {String}
      * @param questions {Collection<QuestionMessage>}
      */
-    public SurveyMessage(Integer id, String status, String name, Collection<QuestionMessage> questions) {
+    public SurveyMessage(Integer id, String status, String name, boolean closed, Collection<QuestionMessage> questions) {
         this.questions = questions;
         this.name = name;
         this.id = id;
         this.status = status;
+        this.closed = closed;
     }
 
     /*
@@ -48,6 +50,14 @@ public class SurveyMessage {
      */
     public String getName() {
         return name;
+    }
+
+    /*
+     * Retrieve the closed status
+     * @returns {boolean}
+     */
+    public boolean getClosed() {
+        return closed;
     }
 
     /*
