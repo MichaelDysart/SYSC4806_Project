@@ -38,12 +38,12 @@ public class webController {
         ArrayList<String> questionTexts = new ArrayList<>();
 
         if (surveyMessage.getQuestions() == null) {
-            return new Response(null, "error", "Questions were null");
+            return new Response(null, null, "error", "Questions were null");
         }
 
         for (QuestionMessage questionMsg : surveyMessage.getQuestions()) {
             if (questionMsg == null) {
-                return new Response(null, "error", "Question was null");
+                return new Response(null, null, "error", "Question was null");
             }
             questionTexts.add(questionMsg.getQuestion());
             if (questionMsg.getType().equals(openQuestionType)) {
@@ -52,7 +52,7 @@ public class webController {
                 if (questionMsg.getMin() <= questionMsg.getMax()) {
                     questionList.add(new NumberQuestion(questionMsg.getQuestion(), questionMsg.getMin(), questionMsg.getMax()));
                 } else {
-                    return new Response(null, "error",
+                    return new Response(null, null, "error",
                             "Min is greater than max for question \"" + questionMsg.getQuestion() + "\"");
                 }
             } else if (questionMsg.getType().equals(dropdownQuestionType)) {
@@ -63,13 +63,13 @@ public class webController {
         HashSet<String> set = new HashSet<>(questionTexts);
 
         if(set.size() < questionTexts.size()){
-            return new Response(null, "error", "Duplicate questions detected");
+            return new Response(null, null, "error", "Duplicate questions detected");
         }
 
         Survey survey = new Survey(surveyMessage.getName());
         survey.setQuestions(questionList);
         repo.save(survey);
-        return new Response(survey.getId(), "ok", "done");
+        return new Response(survey.getId(), survey.getLink(), "ok", "done");
     }
 
     @GetMapping(value = "/retrieveSurvey", produces = "application/json")
@@ -103,17 +103,17 @@ public class webController {
     @ResponseBody
     public Response addAnswers(@RequestBody SurveyMessage surveyMessage) {
         if (surveyMessage.getQuestions() == null) {
-            return new Response(null, "error", "Questions were null");
+            return new Response(null, null, "error", "Questions were null");
         }
         if (surveyMessage.getId() == null) {
-            return new Response(null, "error", "Survey id was null");
+            return new Response(null, null, "error", "Survey id was null");
         }
         Optional<Survey> survey = repo.findById(surveyMessage.getId());
         if (survey.isPresent()) {
 
             for (QuestionMessage questionMsg : surveyMessage.getQuestions()) {
                 if (questionMsg == null) {
-                    return new Response(surveyMessage.getId(), "error", "Question was null");
+                    return new Response(surveyMessage.getId(), null, "error", "Question was null");
                 }
                 Question question = null;
                 for (Question searchQuestion : survey.get().getQuestions()) {
@@ -123,7 +123,7 @@ public class webController {
                     }
                 }
                 if (question == null) {
-                    return new Response(surveyMessage.getId(), "error", "Missing Question \"" + questionMsg.getQuestion() + "\"");
+                    return new Response(surveyMessage.getId(), null, "error", "Missing Question \"" + questionMsg.getQuestion() + "\"");
                 } else if(question instanceof OpenEndedQuestion && questionMsg.getType().equals(openQuestionType)) {
                     ((OpenEndedQuestion) question).addAnswer(questionMsg.getStringAnswer());
                 } else if(question instanceof NumberQuestion && questionMsg.getType().equals(numQuestionType)) {
@@ -132,7 +132,7 @@ public class webController {
                             questionMsg.getNumberAnswer() >= nQuestion.getMin()) {
                         nQuestion.addAnswer(questionMsg.getNumberAnswer());
                     } else {
-                        return new Response(surveyMessage.getId(), "error",
+                        return new Response(surveyMessage.getId(), null, "error",
                                 "Value for question \"" + questionMsg.getQuestion() + "\" outside of range: Want " +
                                         nQuestion.getMin() + " to " + nQuestion.getMax() + " but got " + questionMsg.getNumberAnswer());
                     }
@@ -141,7 +141,7 @@ public class webController {
                     if (dQuestion.getOptions().contains(questionMsg.getStringAnswer())) {
                         dQuestion.addAnswer(questionMsg.getStringAnswer());
                     } else {
-                        return new Response(surveyMessage.getId(), "error",
+                        return new Response(surveyMessage.getId(), null, "error",
                                 "Answer for question \"" + questionMsg.getQuestion() + "\" is " +
                                         questionMsg.getStringAnswer() + " which is not an option for this question");
                     }
@@ -154,15 +154,15 @@ public class webController {
                     } else if(question instanceof DropdownQuestion) {
                         expectedType = dropdownQuestionType;
                     }
-                    return new Response(surveyMessage.getId(), "error",
+                    return new Response(surveyMessage.getId(), null, "error",
                             "Mismatched types for question \"" + questionMsg.getQuestion() + "\": Want " +
                                     expectedType + " but got " + questionMsg.getType());
                 }
             }
             repo.save(survey.get());
-            return new Response(surveyMessage.getId(), "ok", "answers saved");
+            return new Response(surveyMessage.getId(), null, "ok", "answers saved");
         }
-        return new Response(null, "error", "Survey \""+ surveyMessage.getId() +"\" not available");
+        return new Response(null, null, "error", "Survey \""+ surveyMessage.getId() +"\" not available");
     }
 
     @DeleteMapping(value = "/survey/{id}", produces = "application/json")
@@ -171,9 +171,9 @@ public class webController {
         Optional<Survey> survey = repo.findById(id);
         if (survey.isPresent()) {
             repo.deleteById(id);
-            return new Response(id, "ok", "Survey deleted");
+            return new Response(id, null, "ok", "Survey deleted");
         }
-        return new Response(id, "error", "Survey" + id + " not found");
+        return new Response(id, null, "error", "Survey" + id + " not found");
     }
 
     @GetMapping(value = "/retrieveSurveyNames", produces = "application/json")

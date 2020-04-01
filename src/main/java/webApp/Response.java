@@ -1,5 +1,7 @@
 package webApp;
 
+import java.util.UUID;
+
 /*
  * A response message to report status data to the client
  */
@@ -8,16 +10,18 @@ public class Response {
     private final String message;
     private final String content;
     private final Integer id;
+    private final UUID link;
 
     /*
      * A constructor
      * @param message {String}
      * @param content {String}
      */
-    public Response(Integer id, String message, String content) {
+    public Response(Integer id, UUID link, String message, String content) {
         this.message = message;
         this.content = content;
         this.id = id;
+        this.link = link;
     }
 
     /*
@@ -26,6 +30,14 @@ public class Response {
      */
     public Integer getId() {
         return id;
+    }
+
+    /*
+     * Retrieve the survey link
+     * @returns {UUID}
+     */
+    public UUID getLink() {
+        return link;
     }
 
     /*

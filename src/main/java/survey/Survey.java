@@ -2,6 +2,7 @@ package survey;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.UUID;
 
 /*
  * A class to store surveys, comprising a list of questions
@@ -13,6 +14,8 @@ public class Survey {
     @GeneratedValue(strategy = GenerationType.AUTO)
     protected int id;
 
+    protected UUID link;
+
     protected String name;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -21,13 +24,17 @@ public class Survey {
     /*
      * A default constructor
      */
-    public Survey(){ }
+    public Survey(){
+        this(null);
+    }
 
     /*
      * A constructor
      * @param name {String}
      */
-    public Survey(String name){ this.name = name; }
+    public Survey(String name){
+        this(name, null);
+    }
 
     /*
      * A constructor
@@ -37,6 +44,7 @@ public class Survey {
     public Survey(String name, Collection<Question> questions){
         this.name = name;
         this.questions = questions;
+        this.link = UUID.randomUUID();
     }
 
     /*
@@ -53,6 +61,22 @@ public class Survey {
      */
     public int getId() {
         return this.id;
+    }
+
+    /*
+     * Sets the link
+     * @param link {UUID}
+     */
+    public void setLink(UUID link) {
+        this.link = link;
+    }
+
+    /*
+     * Retrieve the link
+     * @returns {UUID}
+     */
+    public UUID getLink() {
+        return this.link;
     }
 
 
