@@ -143,7 +143,7 @@ describe('Test adding questions', () => {
                 });
             } else {
                 return Promise.resolve({
-                    status: 400,
+                    status: 404,
                 });
             }
         });
