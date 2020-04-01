@@ -146,7 +146,6 @@ const App = () => {
         })
         .then(checkRequest)
         .then(data => {
-            console.log(data);
             if (data.message === "ok") {
                 setConsoleText(consoleText + "\nSurvey " + survey.name + " Created with ID: " + data.id);
 
@@ -216,8 +215,6 @@ const App = () => {
             fetch(`${webUrl}retrieveSurveyNames`)
             .then(checkRequest)
             .then(data => {
-                console.log(data);
-
                 setUserSurveyList(data);
             })
             .catch(console.log);
@@ -252,7 +249,6 @@ const App = () => {
         })
         .then(checkRequest)
         .then(data => {
-            console.log(data);
             if (data.message === "ok") {
                 setConsoleText(consoleText + "\nAnswers added to survey: " + userSurvey.name + "; ID: " + data.id);
             } else {
@@ -266,7 +262,6 @@ const App = () => {
         const survey = {
             id : userSurvey.id,
         };
-        console.log(survey);
         fetch(`${webUrl}closeSurvey`, {
             method: 'POST',
             body: JSON.stringify(survey),
