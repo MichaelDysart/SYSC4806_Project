@@ -13,6 +13,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Tooltip from '@material-ui/core/Tooltip';
 import HelpIcon from '@material-ui/icons/Help';
 import { useParams } from 'react-router-dom';
+import Summary from './Summary';
 import './SurveyPage.scss';
 
 const qType = {
@@ -31,6 +32,7 @@ const SurveyPage = () => {
     const [questions, setQuestions] = useState([]);
     const [currentType, setCurrentType] = useState('');
     const [userSurvey, setUserSurvey] = useState({ id : null, closed : false, questions : [] });
+    const [summarySurvey, setSummarySurvey] = useState({ id : null, closed : false, questions : [] });
     const [userSurveyId, setUserSurveyId] = useState('');
     const [userSurveyList, setUserSurveyList] = useState({ nameList : [], idList : [] });
 
@@ -199,6 +201,21 @@ const SurveyPage = () => {
         .catch(console.log);
     };
 
+    const summariseSurvey = () => {
+        console.log(`${webUrl}retrieveSurvey?id=${userSurveyId}`);
+        fetch(`${webUrl}retrieveSurvey?id=${userSurveyId}`)
+        .then(checkRequest)
+        .then(data => {
+            if (data.status !== "error") {
+                setConsoleText(consoleText + "\nSurvey " + data.id + " retrieved");
+                setSummarySurvey(data);
+            } else {
+                setConsoleText(consoleText + "\nError: Could not find survey with id " + data.id );
+            }
+        })
+        .catch(console.log);
+    };
+
     const retrieveSurveyNames = () => {
             fetch(`${webUrl}retrieveSurveyNames`)
             .then(checkRequest)
@@ -253,8 +270,7 @@ const SurveyPage = () => {
         const survey = {
             id : userSurvey.id,
         };
-        console.log(survey);
-        fetch(`${webUrl}closeSurvey`, {
+        return fetch(`${webUrl}closeSurvey`, {
             method: 'POST',
             body: JSON.stringify(survey),
             headers: {
@@ -443,12 +459,14 @@ const SurveyPage = () => {
                                 </Select>
                          </FormControl>
                          <Button className="qq-app m" variant="contained" color="primary" onClick={retrieveSurvey}>Retrieve Survey</Button>
+                         <Button className="qq-app m" variant="contained" color="primary" onClick={summariseSurvey}>Summarise Survey</Button>
                     </div>
                     <div>
                         <Button className="qq-app m" variant="contained" color="primary" onClick={deleteSurvey}>Delete Survey</Button>
                         <Button className="qq-app m" variant="contained" color="primary" onClick={closeSurvey}>Close Survey</Button>
                         <Button className="qq-app m" variant="contained" color="primary" onClick={submitAnswers}>Submit Answers</Button>
                     </div>
+                    <Summary questions={summarySurvey.questions}/>
                     <div>
                             {userSurvey.questions.map((q, i) => {
                             switch(q.type) {
