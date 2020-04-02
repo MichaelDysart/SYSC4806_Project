@@ -31,7 +31,7 @@ const SurveyPage = () => {
     const [surveyName, setSurveyName] = useState('');
     const [questions, setQuestions] = useState([]);
     const [currentType, setCurrentType] = useState('');
-    const [userSurvey, setUserSurvey] = useState({ id : null, closed : false, questions : [], answers : []  });
+    const [userSurvey, setUserSurvey] = useState({ id : null, closed : false, questions : [] });
     const [summarySurvey, setSummarySurvey] = useState({ id : null, closed : false, questions : [] });
     const [userSurveyId, setUserSurveyId] = useState('');
     const [userSurveyList, setUserSurveyList] = useState({ nameList : [], idList : [] });
