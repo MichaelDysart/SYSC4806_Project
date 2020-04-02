@@ -12,6 +12,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Tooltip from '@material-ui/core/Tooltip';
 import HelpIcon from '@material-ui/icons/Help';
+import { useParams } from 'react-router-dom';
 import './SurveyPage.scss';
 
 const qType = {
@@ -32,6 +33,12 @@ const SurveyPage = () => {
     const [userSurvey, setUserSurvey] = useState({ id : null, closed : false, questions : [] });
     const [userSurveyId, setUserSurveyId] = useState('');
     const [userSurveyList, setUserSurveyList] = useState({ nameList : [], idList : [] });
+
+    // TODO: Delete this test code once the survey page is split and uuid is used somewhere
+    const { uuid } = useParams();
+    if (process.env.NODE_ENV !== 'production') {
+      console.log("### uuid", uuid);
+    }
 
     // useEffect with no dependencies is equal to $(document).ready
     // for the component in context

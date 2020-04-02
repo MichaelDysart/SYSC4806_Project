@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    BrowserRouter as Router,
+    HashRouter,
     Switch,
     Route,
 } from "react-router-dom";
@@ -8,13 +8,12 @@ import SurveyPage from './SurveyPage';
 
 const App = () => {
     return (
-        <Router>
+        <HashRouter>
             <Switch>
-                <Route path="/">
-                    <SurveyPage />
-                </Route>
+                <Route exact path="/" component={SurveyPage} />
+                <Route path="/survey/:uuid" component={SurveyPage} />
             </Switch>
-        </Router>
+        </HashRouter>
     );
 };
 
