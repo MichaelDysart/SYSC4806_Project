@@ -542,9 +542,20 @@ const App = () => {
                     </div>
                 </div>
                 <div>
-                    <div>{"Console"}</div>
-                    <textarea readOnly value={consoleText} class="console"></textarea>
-                </div>
+                    {process.env.NODE_ENV !== 'production' &&
+                    <TextField
+                              className="console"
+                              id="Console"
+                              label="Console"
+                              multiline
+                              defaultValue="Nothing in the console."
+                              value = {consoleText}
+                              variant="outlined"
+                              disabled="true"
+                              fullWidth
+                            />
+                            }
+                   </div>
             </Card>
         </div>
     );
