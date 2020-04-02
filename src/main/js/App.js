@@ -544,6 +544,7 @@ const App = () => {
                 <div>
                     {process.env.NODE_ENV !== 'production' &&
                     <TextField
+                              className="console"
                               id="Console"
                               label="Console"
                               multiline
