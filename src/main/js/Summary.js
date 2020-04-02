@@ -21,7 +21,7 @@ const Summary = (props) => {
                     case qType.OPEN_ENDED:
                         return (
                             <div className="qq-app mv" key={i} label="Open Question Summary">
-                                <div>{`Question ${i + 1} - Numerical`}</div>
+                                <div>{`Question ${i + 1} - Open Ended`}</div>
                                 <TextField
                                     className="qq-app mv"
                                     value={props.questions[i].question}
@@ -73,7 +73,7 @@ const Summary = (props) => {
                     case qType.DROPDOWN:
                         return (
                             <div className="qq-app mv" key={i} label="Dropdown Question Summary">
-                                <div>{`Question ${i + 1} - Numerical`}</div>
+                                <div>{`Question ${i + 1} - Dropdown`}</div>
                                 <TextField
                                     className="qq-app mv"
                                     value={props.questions[i].question}
