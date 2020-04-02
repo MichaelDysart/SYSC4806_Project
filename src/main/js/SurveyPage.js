@@ -34,11 +34,8 @@ const SurveyPage = () => {
     const [userSurveyId, setUserSurveyId] = useState('');
     const [userSurveyList, setUserSurveyList] = useState({ nameList : [], idList : [] });
 
-    // TODO: Delete this test code once the survey page is split and uuid is used somewhere
-    const { uuid } = useParams();
-    if (process.env.NODE_ENV !== 'production') {
-      console.log("### uuid", uuid);
-    }
+    // TODO: Uncomment this code to obtain the UUID of the survey requested
+    // const { uuid } = useParams();
 
     // useEffect with no dependencies is equal to $(document).ready
     // for the component in context

@@ -9,7 +9,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { shallow, render, mount } from 'enzyme';
-import App from './../../main/js/App';
+import SurveyPage from '../../main/js/SurveyPage';
 import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
 
@@ -19,16 +19,16 @@ configure({ adapter: new Adapter() });
 
 describe('Test rendering', () => {
    it('perform a shallow render without crashing', () => {
-        shallow(<App />);
+        shallow(<SurveyPage />);
    });
    it('perform a full render without crashing', () => {
-        mount(<App />);
+        mount(<SurveyPage />);
    });
 });
 
 describe('Test adding questions', () => {
    it('No question adding', () => {
-        let wrapper = shallow(<App />);
+        let wrapper = shallow(<SurveyPage />);
 
         wrapper.find(Button).find({ label: "Add Question" }).at(0).simulate('click');
         expect(wrapper.find({ label: "Open Question Input" }).length).toBe(0);
@@ -36,7 +36,7 @@ describe('Test adding questions', () => {
    });
 
    it('Add a single open question', () => {
-        let wrapper = shallow(<App />);
+        let wrapper = shallow(<SurveyPage />);
 
         wrapper.find(Select).find({ labelId: "qtype_select_label" }).at(0).simulate('change', { target: { value: "openEnded" } } );
         expect(wrapper.find({ label: "Open Question Input" }).length).toBe(0);
@@ -48,7 +48,7 @@ describe('Test adding questions', () => {
    });
 
    it('Add a single number questions', () => {
-        let wrapper = shallow(<App />);
+        let wrapper = shallow(<SurveyPage />);
 
         wrapper.find(Select).find({ labelId: "qtype_select_label" }).at(0).simulate('change', { target: { value: "numberQuestion" } } );
         expect(wrapper.find({ label: "Open Question Input" }).length).toBe(0);
@@ -61,7 +61,7 @@ describe('Test adding questions', () => {
 
    it('Add a question', () => {
 
-        let wrapper = shallow(<App />);
+        let wrapper = shallow(<SurveyPage />);
         let sumOpen = 0;
         let sumNumber = 0;
         let currentType = '';
