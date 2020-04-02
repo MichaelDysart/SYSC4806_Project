@@ -12,8 +12,6 @@ const qType = {
  * The frontend core which renders all subcomponents for surveys
  */
 const Summary = (props) => {
-    console.log(props);
-
     return (
         <div className="qq-summary">
             {props.questions.map((q, i) => {
