@@ -278,6 +278,8 @@ const App = () => {
             <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h4">Question Quail</Typography>
+                    <Button className = "qq-app m" variant="contained" color = "inherit">Home</Button>
+                    <Button className = "qq-app m" variant="contained" color = "inherit">Help</Button>
                 </Toolbar>
             </AppBar>
             <Card className="qq-app qq-app__container">
