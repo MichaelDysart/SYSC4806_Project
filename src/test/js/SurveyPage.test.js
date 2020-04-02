@@ -16,9 +16,9 @@ import TextField from '@material-ui/core/TextField';
 
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { enableFetchMocks } from 'jest-fetch-mock';
 configure({ adapter: new Adapter() });
 
-import { enableFetchMocks } from 'jest-fetch-mock';
 enableFetchMocks();
 
 describe('Test rendering', () => {
@@ -68,7 +68,7 @@ describe('Test adding questions', () => {
    });
 
    it('Add a single dropdown questions', () => {
-        let wrapper = shallow(<App />);
+        let wrapper = shallow(<SurveyPage />);
 
         wrapper.find(Select).find({ labelId: "qtype_select_label" }).at(0).simulate('change', { target: { value: "dropdown" } } );
         expect(wrapper.find({ label: "Open Question Input" }).length).toBe(0);
@@ -122,7 +122,6 @@ describe('Test adding questions', () => {
    it('Save survey', (done) => {
 
         let createRequest;
-        let nameRequest;
         let createPromise;
 
         // uses 'jest-fetch-mock'
@@ -148,7 +147,7 @@ describe('Test adding questions', () => {
             }
         });
 
-        let wrapper = shallow(<App />);
+        let wrapper = shallow(<SurveyPage />);
 
         wrapper.find(TextField).find({ label: "Survey Name" }).at(0).simulate('change', { target: { value: "Survey1" } } );
         wrapper.find(Select).find({ labelId: "qtype_select_label" }).at(0).simulate('change', { target: { value: "openEnded" } } );

@@ -31,7 +31,7 @@ const SurveyPage = () => {
     const [surveyName, setSurveyName] = useState('');
     const [questions, setQuestions] = useState([]);
     const [currentType, setCurrentType] = useState('');
-    const [userSurvey, setUserSurvey] = useState({ id : null, closed : false, questions : [] });
+    const [userSurvey, setUserSurvey] = useState({ id : null, closed : false, questions : [], answers : []  });
     const [summarySurvey, setSummarySurvey] = useState({ id : null, closed : false, questions : [] });
     const [userSurveyId, setUserSurveyId] = useState('');
     const [userSurveyList, setUserSurveyList] = useState({ nameList : [], idList : [] });
@@ -42,7 +42,7 @@ const SurveyPage = () => {
     // useEffect with no dependencies is equal to $(document).ready
     // for the component in context
     useEffect(() => {
-        setWebUrl(window.location.href);
+        setWebUrl(window.location.href.replace("/#", "")); // This accounts for the HashRouter
     }, []);
 
     // Display to the console
@@ -135,13 +135,12 @@ const SurveyPage = () => {
     * Store a new survey on the server
     */
     const createSurvey = () => {
-        console.log(questions);
         const survey = {
             name: surveyName,
             questions: questions,
         };
 
-        fetch(`${webUrl}createSurvey`, {
+        return fetch(`${webUrl}createSurvey`, {
             method: 'POST',
             body: JSON.stringify(survey),
             headers: {
@@ -150,7 +149,6 @@ const SurveyPage = () => {
         })
         .then(checkRequest)
         .then(data => {
-            console.log(data);
             if (data.message === "ok") {
                 setConsoleText(consoleText + "\nSurvey " + survey.name + " Created with ID: " + data.id);
 
@@ -164,13 +162,11 @@ const SurveyPage = () => {
     };
 
     const deleteSurvey = () => {
-        console.log(`${webUrl}survey/${userSurveyId}`);
-        fetch(`${webUrl}survey/${userSurveyId}`, {
+        return fetch(`${webUrl}survey/${userSurveyId}`, {
             method: 'DELETE'
         })
         .then(checkRequest)
         .then(data => {
-            console.log(data);
             if(data.message === "ok") {
                 setConsoleText(consoleText + "\nSurvey " + data.id + " deleted");
 
@@ -187,8 +183,7 @@ const SurveyPage = () => {
     };
 
     const retrieveSurvey = () => {
-        console.log(`${webUrl}retrieveSurvey?id=${userSurveyId}`);
-        fetch(`${webUrl}retrieveSurvey?id=${userSurveyId}`)
+        return fetch(`${webUrl}retrieveSurvey?id=${userSurveyId}`)
         .then(checkRequest)
         .then(data => {
             if (data.status !== "error") {
@@ -202,8 +197,7 @@ const SurveyPage = () => {
     };
 
     const summariseSurvey = () => {
-        console.log(`${webUrl}retrieveSurvey?id=${userSurveyId}`);
-        fetch(`${webUrl}retrieveSurvey?id=${userSurveyId}`)
+        return fetch(`${webUrl}retrieveSurvey?id=${userSurveyId}`)
         .then(checkRequest)
         .then(data => {
             if (data.status !== "error") {
@@ -217,11 +211,9 @@ const SurveyPage = () => {
     };
 
     const retrieveSurveyNames = () => {
-            fetch(`${webUrl}retrieveSurveyNames`)
+            return fetch(`${webUrl}retrieveSurveyNames`)
             .then(checkRequest)
             .then(data => {
-                console.log(data);
-
                 setUserSurveyList(data);
             })
             .catch(console.log);
@@ -246,8 +238,7 @@ const SurveyPage = () => {
             id : userSurvey.id,
             questions : userSurvey.questions,
         };
-        console.log(survey);
-        fetch(`${webUrl}addAnswers`, {
+        return fetch(`${webUrl}addAnswers`, {
             method: 'POST',
             body: JSON.stringify(survey),
             headers: {
@@ -256,7 +247,6 @@ const SurveyPage = () => {
         })
         .then(checkRequest)
         .then(data => {
-            console.log(data);
             if (data.message === "ok") {
                 setConsoleText(consoleText + "\nAnswers added to survey: " + userSurvey.name + "; ID: " + data.id);
             } else {
@@ -279,7 +269,6 @@ const SurveyPage = () => {
         })
         .then(checkRequest)
         .then(data => {
-            console.log(data);
             if (data.message === "ok") {
                 setConsoleText(consoleText + "\nSurvey was closed: " + userSurvey.name + "; ID: " + data.id);
 
@@ -310,7 +299,7 @@ const SurveyPage = () => {
                             size="small"
                             onChange={e => setSurveyName(e.target.value)}
                         />
-                        <Button className="qq-app m" variant="contained" color="primary" onClick={createSurvey}>Create</Button>
+                        <Button label="Create Survey" className="qq-app m" variant="contained" color="primary" onClick={createSurvey}>Create</Button>
                     </div>
                     <div>
                         <FormControl className="qq-app mv qq-app__qtype_select">
@@ -397,7 +386,7 @@ const SurveyPage = () => {
                                     );
                                 case qType.DROPDOWN:
                                     return (
-                                        <div className="qq-app mv" key={i}>
+                                        <div className="qq-app mv" key={i} label="Dropdown Question Input">
                                             <div>{`Question ${i + 1} - Dropdown`}</div>
                                             <TextField
                                                 className="qq-app m"
@@ -452,7 +441,7 @@ const SurveyPage = () => {
                                 {
                                     userSurveyList.idList.map((id, i) => {
                                         return(
-                                            <MenuItem value={id}>{`${userSurveyList.nameList[i]} : ${id}`}</MenuItem>
+                                            <MenuItem key={i} value={id}>{`${userSurveyList.nameList[i]} : ${id}`}</MenuItem>
                                         )
                                     })
                                 }
@@ -527,7 +516,7 @@ const SurveyPage = () => {
                                 case qType.DROPDOWN:
                                     return (
                                         <div className="qq-app mv" key={i}>
-                                            <div>{`Question ${i + 1} - Numerical`}</div>
+                                            <div>{`Question ${i + 1} - Dropdown`}</div>
                                             <TextField
                                                 className="qq-app mv"
                                                 value={userSurvey.questions[i].question}
@@ -573,7 +562,7 @@ const SurveyPage = () => {
                             defaultValue="Nothing in the console."
                             value = {consoleText}
                             variant="outlined"
-                            disabled="true"
+                            disabled={true}
                             fullWidth
                         />
                     }
