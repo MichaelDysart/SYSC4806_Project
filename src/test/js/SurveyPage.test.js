@@ -9,7 +9,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { shallow, render, mount } from 'enzyme';
-import SurveyPage from '../../main/js/SurveyPage';
+import CreatePage from '../../main/js/CreatePage';
 import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
@@ -23,16 +23,16 @@ enableFetchMocks();
 
 describe('Test rendering', () => {
    it('perform a shallow render without crashing', () => {
-        shallow(<SurveyPage />);
+        shallow(<CreatePage />);
    });
    it('perform a full render without crashing', () => {
-        mount(<SurveyPage />);
+        mount(<CreatePage />);
    });
 });
 
 describe('Test adding questions', () => {
    it('No question adding', () => {
-        let wrapper = shallow(<SurveyPage />);
+        let wrapper = shallow(<CreatePage />);
 
         wrapper.find(Button).find({ label: "Add Question" }).at(0).simulate('click');
         expect(wrapper.find({ label: "Open Question Input" }).length).toBe(0);
@@ -40,7 +40,7 @@ describe('Test adding questions', () => {
    });
 
    it('Add a single open question', () => {
-        let wrapper = shallow(<SurveyPage />);
+        let wrapper = shallow(<CreatePage />);
 
         wrapper.find(Select).find({ labelId: "qtype_select_label" }).at(0).simulate('change', { target: { value: "openEnded" } } );
         expect(wrapper.find({ label: "Open Question Input" }).length).toBe(0);
@@ -54,7 +54,7 @@ describe('Test adding questions', () => {
    });
 
    it('Add a single number questions', () => {
-        let wrapper = shallow(<SurveyPage />);
+        let wrapper = shallow(<CreatePage />);
 
         wrapper.find(Select).find({ labelId: "qtype_select_label" }).at(0).simulate('change', { target: { value: "numberQuestion" } } );
         expect(wrapper.find({ label: "Open Question Input" }).length).toBe(0);
@@ -68,7 +68,7 @@ describe('Test adding questions', () => {
    });
 
    it('Add a single dropdown questions', () => {
-        let wrapper = shallow(<SurveyPage />);
+        let wrapper = shallow(<CreatePage />);
 
         wrapper.find(Select).find({ labelId: "qtype_select_label" }).at(0).simulate('change', { target: { value: "dropdown" } } );
         expect(wrapper.find({ label: "Open Question Input" }).length).toBe(0);
@@ -83,7 +83,7 @@ describe('Test adding questions', () => {
 
    it('Add a question', () => {
 
-        let wrapper = shallow(<SurveyPage />);
+        let wrapper = shallow(<CreatePage />);
         let sumOpen = 0;
         let sumNumber = 0;
         let sumDrop = 0
@@ -147,7 +147,7 @@ describe('Test adding questions', () => {
             }
         });
 
-        let wrapper = shallow(<SurveyPage />);
+        let wrapper = shallow(<CreatePage />);
 
         wrapper.find(TextField).find({ label: "Survey Name" }).at(0).simulate('change', { target: { value: "Survey1" } } );
         wrapper.find(Select).find({ labelId: "qtype_select_label" }).at(0).simulate('change', { target: { value: "openEnded" } } );
