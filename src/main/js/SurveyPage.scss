@@ -6,6 +6,10 @@ body {
   margin: 0;
 }
 
+.margins {
+    margin-top:20px;
+}
+
 .console {
     width:60%;
     height:200px;
@@ -27,8 +31,21 @@ body {
     margin: 5px 0;
   }
 
+  .mv15 {
+    margin: 15px 0;
+  }
+
   .mh {
     margin: 0 5px;
+  }
+
+  &__buttons {
+    margin-left: 30px;
+  }
+
+  &__home {
+    margin: 30px;
+    padding: 30px;
   }
 
   &__container {

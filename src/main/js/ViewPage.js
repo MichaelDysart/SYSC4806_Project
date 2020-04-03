@@ -6,6 +6,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
+import { useParams } from 'react-router-dom';
 import Summary from './Summary';
 import './SurveyPage.scss';
 
@@ -26,14 +27,29 @@ const ViewPage = () => {
     const [userSurveyId, setUserSurveyId] = useState('');
     const [userSurveyList, setUserSurveyList] = useState({ nameList : [], idList : [] });
 
-    // TODO: Uncomment this code to obtain the UUID of the survey requested
-    // const { uuid } = useParams();
+    const { uuid } = useParams();
 
     // useEffect with no dependencies is equal to $(document).ready
     // for the component in context
     useEffect(() => {
         setBaseUrl(window.location.href.replace(/\/#.*/ ,"")); // This accounts for the HashRouter
     }, []);
+
+    useEffect(() => {
+        if (uuid) {
+            fetch(`${baseUrl}/retrieveSurvey?link=${uuid}`)
+            .then(checkRequest)
+            .then(data => {
+                if (data.status !== "error") {
+                    setConsoleText(consoleText => consoleText + "\nSurvey " + data.id + " retrieved");
+                    setUserSurvey(data);
+                } else {
+                    setConsoleText(consoleText => consoleText + "\nError: Could not find survey ");
+                }
+            })
+            .catch(console.log);
+        }
+    }, [baseUrl, uuid])
 
     const checkRequest = (res) => {
         if (res.status === 200) {
@@ -193,7 +209,6 @@ const ViewPage = () => {
                         <Button className="qq-app m" variant="contained" color="primary" onClick={closeSurvey}>Close Survey</Button>
                         <Button className="qq-app m" variant="contained" color="primary" onClick={submitAnswers}>Submit Answers</Button>
                     </div>
-                    <Summary questions={summarySurvey.questions}/>
                     <div>
                             {userSurvey.questions.map((q, i) => {
                             switch(q.type) {
@@ -290,9 +305,10 @@ const ViewPage = () => {
                         })}
                     </div>
                 </div>
-                <div>
-                    {process.env.NODE_ENV !== 'production' &&
-                        <TextField
+                <Summary questions={summarySurvey.questions}/>
+                <div className="margins">
+                    {baseUrl.includes('localhost') &&
+                    <TextField
                             className="console"
                             id="Console"
                             label="Console"
