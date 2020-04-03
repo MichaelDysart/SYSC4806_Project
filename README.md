@@ -27,6 +27,10 @@ A surveyor can create a survey with a list of Questions. Questions can be open-e
   7. Added client side tests.
   
   8. Added ability to summarise surveys.
+  
+  9. Separated multiple views of the system
+  
+  10. Added a help page with FAQ's
 
 # Usage Instructions
 
