@@ -36,17 +36,19 @@ const ViewPage = () => {
     }, []);
 
     useEffect(() => {
-        fetch(`${baseUrl}/retrieveSurvey?link=${uuid}`)
-        .then(checkRequest)
-        .then(data => {
-            if (data.status !== "error") {
-                setConsoleText(consoleText => consoleText + "\nSurvey " + data.id + " retrieved");
-                setUserSurvey(data);
-            } else {
-                setConsoleText(consoleText => consoleText + "\nError: Could not find survey ");
-            }
-        })
-        .catch(console.log);
+        if (uuid) {
+            fetch(`${baseUrl}/retrieveSurvey?link=${uuid}`)
+            .then(checkRequest)
+            .then(data => {
+                if (data.status !== "error") {
+                    setConsoleText(consoleText => consoleText + "\nSurvey " + data.id + " retrieved");
+                    setUserSurvey(data);
+                } else {
+                    setConsoleText(consoleText => consoleText + "\nError: Could not find survey ");
+                }
+            })
+            .catch(console.log);
+        }
     }, [baseUrl, uuid])
 
     const checkRequest = (res) => {
