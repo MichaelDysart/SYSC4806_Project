@@ -10,6 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 
+import java.util.UUID;
+
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -240,6 +242,27 @@ public class webControllerTest {
     }
 
     @Test
+    public void testRetrieveByLink() throws Exception {
+
+        String surveyString1 = "{ \"name\" : \"linksurvey\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"openEnded\", \"question\": \"q2\" }, " +
+                "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": -5, \"max\": 5 }," +
+                "{ \"type\": \"dropdown\", \"question\": \"q4\", \"options\": [\"o1\", \"o2\"] }" +
+                "]}";
+
+        MvcResult result = this.mockMvc.perform(post("/createSurvey").contentType("application/json")
+                .content(surveyString1)).andExpect(status().isOk())
+                .andExpect(content().string(containsString("ok")))
+                .andExpect(content().string(containsString("done")))
+                .andReturn();
+
+        UUID link1 = UUID.fromString(JsonPath.read(result.getResponse().getContentAsString(), "$.link"));
+
+        this.mockMvc.perform(get("/retrieveSurvey?link=" + link1))
+                .andExpect(status().isOk())
+                .andExpect(content().json(surveyString1));
+    }
+
+    @Test
     public void testAddManyAnswers() throws Exception {
 
         String surveyString1 = "{ \"name\" : \"survey1\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, " +
@@ -251,7 +274,7 @@ public class webControllerTest {
                 .andExpect(content().string(containsString("ok")))
                 .andExpect(content().string(containsString("done")))
                 .andReturn();
-
+        
         Integer id1 = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
 
         surveyString1 = "{ \"id\" : " + id1 + ", \"questions\" : [" +
@@ -398,7 +421,9 @@ public class webControllerTest {
         this.mockMvc.perform(post("/addAnswers").contentType("application/json")
                 .content("null")).andExpect(status().isBadRequest());
 
-        this.mockMvc.perform(get("/retrieveSurvey?id=")).andExpect(status().isBadRequest());
+        this.mockMvc.perform(get("/retrieveSurvey?id=")).andExpect(content().string(containsString("error")));
+        this.mockMvc.perform(get("/retrieveSurvey?link=")).andExpect(content().string(containsString("error")));
+        this.mockMvc.perform(get("/retrieveSurvey")).andExpect(content().string(containsString("error")));
     }
 
     @Test

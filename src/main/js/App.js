@@ -11,7 +11,8 @@ import {
 } from "react-router-dom";
 import ViewPage from './ViewPage';
 import CreatePage from './CreatePage';
-import HomePage from './HomePage'
+import HomePage from './HomePage';
+import './SurveyPage.scss';
 
 const App = () => {
     return (
@@ -44,14 +45,17 @@ const QQAppBar = () => {
     }
 
     return (
-        <AppBar position="static">
+        <AppBar className="qq-app" position="static">
             <Toolbar>
                 <Typography variant="h4">Question Quail</Typography>
-                <Button onClick={handleHome} color="inherit">Home</Button>
-                <Button onClick={handleCreate} color="inherit">Create</Button>
-                <Button onClick={handleView} color="inherit">View Surveys</Button>
+                <div className="qq-app__buttons">
+                    <Button className="mh" variant="contained" onClick={handleHome} color="secondary">Home</Button>
+                    <Button className="mh" variant="contained" onClick={handleCreate} color="secondary">Create</Button>
+                    <Button className="mh" variant="contained" onClick={handleView} color="secondary">View Surveys</Button>
+                </div>
             </Toolbar>
         </AppBar>
     );
-}
+};
+
 export default App;

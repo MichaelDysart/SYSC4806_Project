@@ -157,7 +157,7 @@ describe('Test adding questions', () => {
         wrapper.find(Select).find({ labelId: "qtype_select_label" }).at(0).simulate('change', { target: { value: "dropdown" } } );
         wrapper.find(Button).find({ label: "Add Question" }).at(0).simulate('click');
 
-        let prom = wrapper.find(Button).find({ label: "Create Survey" }).at(0).simulate('click');
+        wrapper.find(Button).find({ label: "Create Survey" }).at(0).simulate('click');
 
         expect(fetch).toHaveBeenCalledTimes(1);
         expect(createRequest.method).toBe('POST');
@@ -170,7 +170,7 @@ describe('Test adding questions', () => {
         new Promise((resolve) => {
                 setTimeout(resolve, 0);
             }).then().then().then().then(() => {
-            expect(wrapper.find({ className: "console" }).at(0).props().value).toBe("\nSurvey Survey1 Created with ID: 1");
+            expect(wrapper.find({ className: "mv15 link" }).at(0).props().value).toContain("/#/survey");
             done();
         });
    });
