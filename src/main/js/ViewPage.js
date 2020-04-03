@@ -193,7 +193,6 @@ const ViewPage = () => {
                         <Button className="qq-app m" variant="contained" color="primary" onClick={closeSurvey}>Close Survey</Button>
                         <Button className="qq-app m" variant="contained" color="primary" onClick={submitAnswers}>Submit Answers</Button>
                     </div>
-                    <Summary questions={summarySurvey.questions}/>
                     <div>
                             {userSurvey.questions.map((q, i) => {
                             switch(q.type) {
@@ -290,6 +289,7 @@ const ViewPage = () => {
                         })}
                     </div>
                 </div>
+                <Summary questions={summarySurvey.questions}/>
                 <div>
                     {process.env.NODE_ENV !== 'production' &&
                         <TextField

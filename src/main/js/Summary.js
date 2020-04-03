@@ -17,7 +17,8 @@ const qType = {
  */
 const Summary = (props) => {
     return (
-        <div className="qq-summary">
+        <div className="qq-summary content-group">
+            <div>Summary</div>
             {props.questions.map((q, i) => {
                 switch(q.type) {
                     case qType.OPEN_ENDED:
@@ -35,7 +36,7 @@ const Summary = (props) => {
                                     className="qq-app mv"
                                     value={props.questions[i].stringAnswerList}
                                     variant="outlined"
-                                    label="Question"
+                                    label="Answer List"
                                     size="small"
                                  />
                             </div>
