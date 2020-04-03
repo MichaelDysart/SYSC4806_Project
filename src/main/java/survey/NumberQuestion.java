@@ -1,7 +1,9 @@
 package survey;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Numerical type question
@@ -10,7 +12,8 @@ import java.util.ArrayList;
 @Entity
 public class NumberQuestion extends Question {
 
-    private ArrayList<Integer> answers = new ArrayList<>();
+    @ElementCollection
+    private Collection<Integer> answers = new ArrayList<>();
     protected int min;
     protected int max;
 
@@ -65,7 +68,7 @@ public class NumberQuestion extends Question {
      * Retrieves the answers
      * @return {ArrayList<Integer>}
      */
-    public ArrayList<Integer> getAnswers() {
+    public Collection<Integer> getAnswers() {
         return answers;
     }
 
@@ -73,7 +76,7 @@ public class NumberQuestion extends Question {
      * Sets the answers
      * @param answers {ArrayList<Integer>}
      */
-    public void setAnswers(ArrayList<Integer> answers) {
+    public void setAnswers(Collection<Integer> answers) {
         this.answers = answers;
     }
 

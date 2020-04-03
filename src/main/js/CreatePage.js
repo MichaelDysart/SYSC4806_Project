@@ -293,10 +293,10 @@ const CreatePage = () => {
                         fullWidth
                     />
                 )}
-                <div>
+                <div className="margins">
                     {baseUrl.includes('localhost') &&
-                        <TextField
-                            className="mv15 console"
+                    <TextField
+                            className="console"
                             id="Console"
                             label="Console"
                             multiline

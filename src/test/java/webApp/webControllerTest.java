@@ -263,6 +263,36 @@ public class webControllerTest {
     }
 
     @Test
+    public void testAddManyAnswers() throws Exception {
+
+        String surveyString1 = "{ \"name\" : \"survey1\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, " +
+                "{ \"type\": \"openEnded\", \"question\": \"q2\" }, { \"type\": \"numberQuestion\", \"question\": \"q3\", \"min\": -5, \"max\": 5 }," +
+                "{ \"type\": \"dropdown\", \"question\": \"q4\", \"options\": [\"o1\", \"o2\"] }]}";
+
+        MvcResult result = this.mockMvc.perform(post("/createSurvey").contentType("application/json")
+                .content(surveyString1)).andExpect(status().isOk())
+                .andExpect(content().string(containsString("ok")))
+                .andExpect(content().string(containsString("done")))
+                .andReturn();
+        
+        Integer id1 = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
+
+        surveyString1 = "{ \"id\" : " + id1 + ", \"questions\" : [" +
+                "{ \"type\": \"openEnded\", \"question\": \"q1\", \"stringAnswer\" : \"myAnswer\" }, " +
+                "{ \"type\": \"openEnded\", \"question\": \"q2\", \"stringAnswer\" : \"myAnswer\" }, " +
+                "{ \"type\": \"numberQuestion\", \"question\": \"q3\", \"numberAnswer\" : 1 }," +
+                "{ \"type\": \"dropdown\", \"question\": \"q4\", \"stringAnswer\" : \"o1\" }]}";
+
+        for (int i = 0; i < 100; i++ ){
+            this.mockMvc.perform(post("/addAnswers").contentType("application/json")
+                    .content(surveyString1)).andExpect(status().isOk())
+                    .andExpect(content().string(containsString("ok")))
+                    .andExpect(content().string(containsString("answers saved")));
+
+        }
+    }
+
+    @Test
     public void testAddAnswerErrors() throws Exception {
 
         String surveyString1 = "{ \"name\" : \"survey1\", \"questions\" : [{ \"type\": \"openEnded\", \"question\": \"q1\" }, { \"type\": \"openEnded\", \"question\": \"q2\" }, " +

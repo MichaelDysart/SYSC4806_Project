@@ -74,4 +74,4 @@ Schema:
 
 UML:
 
-![UML](Resources/uml-diagram-milestone02.png)
+![UML](Resources/uml-diagram-milestone03.png)
