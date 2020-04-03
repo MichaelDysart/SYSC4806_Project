@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import { Histogram, DensitySeries, BarSeries, withParentSize, XAxis, YAxis } from '@data-ui/histogram';
+import { Pie } from 'react-chartjs';
 
 const qType = {
     OPEN_ENDED: "openEnded",
@@ -78,6 +79,23 @@ const Summary = (props) => {
                                     variant="outlined"
                                     label="Question"
                                     size="small"
+                                />
+                                <Pie
+                                    width={300}
+                                    height={300}
+                                    data={ function() {
+                                              let myMap = new Map()
+                                              for(var j=0; j<props.questions[i].stringAnswerList.size; j++) {
+                                                let ans = props.questions[i].stringAnswerList[j];
+                                                if(myMap.has(ans)) {
+                                                    myMap.set(ans, myMap.get(ans)+1) ;
+                                                } else {
+                                                    myMap.set(ans, 0);
+                                                }
+                                              }
+                                              return myMap.values();
+                                    }
+                                    }
                                 />
                             </div>
                         );
