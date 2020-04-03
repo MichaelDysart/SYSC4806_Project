@@ -12,6 +12,7 @@ import {
 import ViewPage from './ViewPage';
 import CreatePage from './CreatePage';
 import HomePage from './HomePage'
+import HelpPage from './HelpPage'
 
 const App = () => {
     return (
@@ -21,6 +22,7 @@ const App = () => {
                 <Route exact path="/" component={HomePage} />
                 <Route exact path="/survey" component={ViewPage} />
                 <Route exact path="/create" component={CreatePage} />
+                <Route exact path="/help" component={HelpPage} />
                 <Route path="/survey/:uuid" component={ViewPage} />
             </Switch>
         </HashRouter>
@@ -43,6 +45,10 @@ const QQAppBar = () => {
         history.push("/survey");
     }
 
+    function handleHelp() {
+        history.push("/help");
+    }
+
     return (
         <AppBar position="static">
             <Toolbar>
@@ -50,6 +56,7 @@ const QQAppBar = () => {
                 <Button onClick={handleHome} color="inherit">Home</Button>
                 <Button onClick={handleCreate} color="inherit">Create</Button>
                 <Button onClick={handleView} color="inherit">View Surveys</Button>
+                <Button onClick={handleHelp} color="inherit">Help</Button>
             </Toolbar>
         </AppBar>
     );
