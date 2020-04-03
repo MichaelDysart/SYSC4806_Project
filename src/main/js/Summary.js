@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import { scaleOrdinal } from '@vx/scale';
+import { LegendOrdinal } from '@vx/legend';
 import { Histogram, DensitySeries, BarSeries, withParentSize, XAxis, YAxis } from '@data-ui/histogram';
 import { RadialChart, ArcSeries, ArcLabel } from '@data-ui/radial-chart';
 import { color as colors } from '@data-ui/theme';
@@ -96,7 +97,7 @@ const Summary = (props) => {
                                 />
 
                                 <RadialChart
-                                      ariaLabel="This is a radial-chart chart of..."
+                                      ariaLabel="My pie chart of..."
                                       width={300}
                                       height={300}
 
@@ -135,10 +136,15 @@ const Summary = (props) => {
                                             innerRadius={radius => 0.35 * radius}
                                             outerRadius={radius => 0.6 * radius}
                                             labelRadius={radius => 0.75 * radius}
-
                                       />
                                     </RadialChart>
-
+                                    <LegendOrdinal
+                                        direction="column"
+                                        scale={scaleOrdinal({ range: colors.categories })}
+                                        shape="rect"
+                                        fill={({ datum }) => scaleOrdinal({ range: colors.categories })(datum)}
+                                        labelFormat={label => label}
+                                    />
                             </div>
                         );
                     default:
