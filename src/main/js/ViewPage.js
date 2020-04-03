@@ -43,6 +43,7 @@ const ViewPage = () => {
                 if (data.status !== "error") {
                     setConsoleText(consoleText => consoleText + "\nSurvey " + data.id + " retrieved");
                     setUserSurvey(data);
+                    setUserSurveyId(data.id);
                 } else {
                     setConsoleText(consoleText => consoleText + "\nError: Could not find survey ");
                 }

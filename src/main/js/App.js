@@ -11,7 +11,8 @@ import {
 } from "react-router-dom";
 import ViewPage from './ViewPage';
 import CreatePage from './CreatePage';
-import HomePage from './HomePage';
+import HomePage from './HomePage'
+import HelpPage from './HelpPage'
 import './SurveyPage.scss';
 
 const App = () => {
@@ -22,6 +23,7 @@ const App = () => {
                 <Route exact path="/" component={HomePage} />
                 <Route exact path="/survey" component={ViewPage} />
                 <Route exact path="/create" component={CreatePage} />
+                <Route exact path="/help" component={HelpPage} />
                 <Route path="/survey/:uuid" component={ViewPage} />
             </Switch>
         </HashRouter>
@@ -44,6 +46,10 @@ const QQAppBar = () => {
         history.push("/survey");
     }
 
+    function handleHelp() {
+        history.push("/help");
+    }
+
     return (
         <AppBar className="qq-app" position="static">
             <Toolbar>
@@ -52,6 +58,7 @@ const QQAppBar = () => {
                     <Button className="mh" variant="contained" onClick={handleHome} color="secondary">Home</Button>
                     <Button className="mh" variant="contained" onClick={handleCreate} color="secondary">Create</Button>
                     <Button className="mh" variant="contained" onClick={handleView} color="secondary">View Surveys</Button>
+                    <Button className="mh" variant="contained" onClick={handleHelp} color="secondary">Help</Button>
                 </div>
             </Toolbar>
         </AppBar>
