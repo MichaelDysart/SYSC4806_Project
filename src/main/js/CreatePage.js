@@ -284,7 +284,7 @@ const CreatePage = () => {
                         })}
                     </div>
                 </div>
-                <div>
+                <div className="margins">
                     {process.env.NODE_ENV !== 'production' &&
                         <TextField
                             className="console"

@@ -290,7 +290,7 @@ const ViewPage = () => {
                     </div>
                 </div>
                 <Summary questions={summarySurvey.questions}/>
-                <div>
+                <div className="margins">
                     {process.env.NODE_ENV !== 'production' &&
                         <TextField
                             className="console"
