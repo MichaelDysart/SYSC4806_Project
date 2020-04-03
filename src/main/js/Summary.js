@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import { Histogram, DensitySeries, BarSeries, withParentSize, XAxis, YAxis } from '@data-ui/histogram';
-import { Pie } from 'react-chartjs';
+import { Pie } from 'react-chartjs-2';
 
 const qType = {
     OPEN_ENDED: "openEnded",
@@ -80,37 +80,40 @@ const Summary = (props) => {
                                     label="Question"
                                     size="small"
                                 />
+                            <div>
                                 <Pie
                                     data = {{
                                         datasets: [{
-                                            data: () => {
+                                            data: (() => {
                                                 let myMap = new Map()
-                                                for(var j=0; j<props.questions[i].stringAnswerList.size; j++) {
+                                                console.log("abc");
+                                                for(var j=0; j<props.questions[i].stringAnswerList.length; j++) {
                                                     let ans = props.questions[i].stringAnswerList[j];
                                                     if(myMap.has(ans)) {
                                                         myMap.set(ans, myMap.get(ans)+1) ;
                                                     } else {
-                                                        myMap.set(ans, 0);
+                                                        myMap.set(ans, 1);
                                                     }
                                                 }
-                                                return myMap.values();
-                                            }
+                                                return Array.from(myMap.values());
+                                            })()
                                         }],
 
-                                        labels: () => {
+                                        labels: (() => {
                                             let myMap = new Map()
-                                            for(var j=0; j<props.questions[i].stringAnswerList.size; j++) {
+                                            for(var j=0; j<props.questions[i].stringAnswerList.length; j++) {
                                                 let ans = props.questions[i].stringAnswerList[j];
                                                 if(myMap.has(ans)) {
                                                     myMap.set(ans, myMap.get(ans)+1) ;
                                                 } else {
-                                                    myMap.set(ans, 0);
+                                                    myMap.set(ans, 1);
                                                 }
                                             }
-                                            return myMap.keys();
-                                        }
+                                            return Array.from(myMap.keys());
+                                        })()
                                     }}
                                 />
+                            </div>
                             </div>
                         );
                     default:
