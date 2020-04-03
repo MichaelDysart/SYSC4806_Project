@@ -25,6 +25,8 @@ A surveyor can create a survey with a list of Questions. Questions can be open-e
   6. Added integration tests for controller.
   
   7. Added client side tests.
+  
+  8. Added ability to summarise surveys.
 
 # Usage Instructions
 
@@ -46,6 +48,8 @@ A surveyor can create a survey with a list of Questions. Questions can be open-e
   6. To submit your answers to the survey, click the _SUBMIT ANSWERS_ button.
   
   7. To delete a survey, click the _DELETE SURVEY_ button.
+  
+  8. To view a summary of a survey, choose the survey, and click the _SUMMARISE SURVEY_ button. If all is successful, a success message   will appear in the console.
 
 # Installation Instructions
   1. Create a folder for the project to be located in.
