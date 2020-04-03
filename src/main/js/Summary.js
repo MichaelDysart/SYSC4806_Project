@@ -131,7 +131,7 @@ const Summary = (props) => {
                                             fill={arc => scaleOrdinal({ range: colors.categories })(arc.data.label)}
                                             stroke="#fff"
                                             strokeWidth={1}
-                                            label={arc => `${(arc.data.value).toFixed(1)}%`}
+                                            label={arc => `${(arc.data.value).toFixed(1)}`}
                                             labelComponent={<ArcLabel />}
                                             innerRadius={radius => 0.35 * radius}
                                             outerRadius={radius => 0.6 * radius}
