@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
+import { scaleOrdinal } from '@vx/scale';
 import { Histogram, DensitySeries, BarSeries, withParentSize, XAxis, YAxis } from '@data-ui/histogram';
-import { Pie } from 'react-chartjs-2';
+import { RadialChart, ArcSeries, ArcLabel } from '@data-ui/radial-chart';
+import { color as colors } from '@data-ui/theme';
 
 const qType = {
     OPEN_ENDED: "openEnded",
@@ -80,40 +82,51 @@ const Summary = (props) => {
                                     label="Question"
                                     size="small"
                                 />
-                            <div>
-                                <Pie
-                                    data = {{
-                                        datasets: [{
-                                            data: (() => {
-                                                let myMap = new Map()
-                                                console.log("abc");
-                                                for(var j=0; j<props.questions[i].stringAnswerList.length; j++) {
-                                                    let ans = props.questions[i].stringAnswerList[j];
-                                                    if(myMap.has(ans)) {
-                                                        myMap.set(ans, myMap.get(ans)+1) ;
-                                                    } else {
-                                                        myMap.set(ans, 1);
-                                                    }
-                                                }
-                                                return Array.from(myMap.values());
-                                            })()
-                                        }],
 
-                                        labels: (() => {
-                                            let myMap = new Map()
-                                            for(var j=0; j<props.questions[i].stringAnswerList.length; j++) {
-                                                let ans = props.questions[i].stringAnswerList[j];
-                                                if(myMap.has(ans)) {
-                                                    myMap.set(ans, myMap.get(ans)+1) ;
+                                <RadialChart
+                                      ariaLabel="This is a radial-chart chart of..."
+                                      width={300}
+                                      height={300}
+
+                                      renderTooltip={({ event, datum, data, fraction }) => (
+                                        <div>
+                                          <strong>{datum.label}</strong>
+                                          {datum.value} ({(fraction * 100).toFixed(2)}%)
+                                        </div>
+                                      )}
+                                    >
+                                      <ArcSeries
+                                        data={(() => {
+                                            var dict = {};
+                                            var arr = [];
+                                            console.log(props.questions);
+                                            for (var j = 0; j < props.questions[i].stringAnswerList.length; j++) {
+                                                var name = props.questions[i].stringAnswerList[j];
+                                                if (dict.hasOwnProperty(name)) {
+                                                   dict[name] += 1;
                                                 } else {
-                                                    myMap.set(ans, 1);
+                                                   dict[name] = 1;
                                                 }
                                             }
-                                            return Array.from(myMap.keys());
-                                        })()
-                                    }}
-                                />
-                            </div>
+                                            for (var k in dict) {
+                                                arr.push({ label : k, value : dict[k] });
+                                            }
+                                            return arr;
+                                        })()}
+
+                                            pieValue={d => d.value}
+                                            fill={arc => scaleOrdinal({ range: colors.categories })(arc.data.label)}
+                                            stroke="#fff"
+                                            strokeWidth={1}
+                                            label={arc => `${(arc.data.value).toFixed(1)}%`}
+                                            labelComponent={<ArcLabel />}
+                                            innerRadius={radius => 0.35 * radius}
+                                            outerRadius={radius => 0.6 * radius}
+                                            labelRadius={radius => 0.75 * radius}
+
+                                      />
+                                    </RadialChart>
+
                             </div>
                         );
                     default:
