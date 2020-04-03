@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.UUID;
 
 /*
  * The controller that accepts web requests to update and retrieve surveys
@@ -78,11 +79,20 @@ public class webController {
 
     @GetMapping(value = "/retrieveSurvey", produces = "application/json")
     @ResponseBody
-    public SurveyMessage retrieveSurvey(@RequestParam (name="id") int id) {
+    public SurveyMessage retrieveSurvey(@RequestParam (name="id", required=false) Integer id, @RequestParam(name="link", required=false) UUID link) {
 
         Collection<QuestionMessage> questionMessages = new ArrayList<>();
 
-        Optional<Survey> survey = repo.findById(id);
+        Optional<Survey> survey = null;
+
+        if (id != null) {
+            survey = repo.findById(id);
+        } else if (link != null) {
+            survey = repo.findByLink(link);
+        } else {
+            return new SurveyMessage(null, "error", "", false, questionMessages);
+        }
+
         if (survey.isPresent()) {
 
             for (Question question : survey.get().getQuestions()) {

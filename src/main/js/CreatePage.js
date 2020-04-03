@@ -25,9 +25,7 @@ const CreatePage = () => {
     const [surveyName, setSurveyName] = useState('');
     const [questions, setQuestions] = useState([]);
     const [currentType, setCurrentType] = useState('');
-
-    // TODO: Uncomment this code to obtain the UUID of the survey requested
-    // const { uuid } = useParams();
+    const [link, setLink] = useState('');
 
     // useEffect with no dependencies is equal to $(document).ready
     // for the component in context
@@ -135,6 +133,7 @@ const CreatePage = () => {
       .then(data => {
           if (data.message === "ok") {
               setConsoleText(consoleText + "\nSurvey " + survey.name + " Created with ID: " + data.id);
+              setLink(`${baseUrl}/#/survey/${data.link}`)
           } else {
               setConsoleText(consoleText + "\nSurvey Creation Error: " + data.content);
           }
@@ -284,10 +283,20 @@ const CreatePage = () => {
                         })}
                     </div>
                 </div>
+                {link && (
+                    <TextField
+                        className="mv15 link"
+                        label="Link to your created survey"
+                        value = {link}
+                        variant="outlined"
+                        disabled={true}
+                        fullWidth
+                    />
+                )}
                 <div>
-                    {process.env.NODE_ENV !== 'production' &&
+                    {baseUrl.includes('localhost') &&
                         <TextField
-                            className="console"
+                            className="mv15 console"
                             id="Console"
                             label="Console"
                             multiline
