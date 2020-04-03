@@ -12,10 +12,10 @@ import java.util.Collection;
 @Entity
 public class NumberQuestion extends Question {
 
-    @ElementCollection
-    private Collection<Integer> answers = new ArrayList<>();
     protected int min;
     protected int max;
+    @ElementCollection
+    private Collection<Integer> answers = new ArrayList<>();
 
     /**
      * Default constructor

@@ -50,6 +50,14 @@ public class Survey {
     }
 
     /*
+     * Retrieve the id
+     * @returns {int}
+     */
+    public int getId() {
+        return this.id;
+    }
+
+    /*
      * Sets the id
      * @param id {int}
      */
@@ -58,11 +66,11 @@ public class Survey {
     }
 
     /*
-     * Retrieve the id
-     * @returns {int}
+     * Retrieve the link
+     * @returns {UUID}
      */
-    public int getId() {
-        return this.id;
+    public UUID getLink() {
+        return this.link;
     }
 
     /*
@@ -74,13 +82,12 @@ public class Survey {
     }
 
     /*
-     * Retrieve the link
-     * @returns {UUID}
+     * Retrieve the name
+     * @returns {String}
      */
-    public UUID getLink() {
-        return this.link;
+    public String getName() {
+        return this.name;
     }
-
 
     /*
      * Sets the name
@@ -91,11 +98,11 @@ public class Survey {
     }
 
     /*
-     * Retrieve the name
-     * @returns {String}
+     * Retrieve the list of questions
+     * @returns {Collection<Question>}
      */
-    public String getName() {
-        return this.name;
+    public Collection<Question> getQuestions() {
+        return questions;
     }
 
     /*
@@ -104,14 +111,6 @@ public class Survey {
      */
     public void setQuestions(Collection<Question> questions) {
         this.questions = questions;
-    }
-
-    /*
-     * Retrieve the list of questions
-     * @returns {Collection<Question>}
-     */
-    public Collection<Question> getQuestions() {
-        return questions;
     }
 
     /*
