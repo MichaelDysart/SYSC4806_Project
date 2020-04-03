@@ -559,7 +559,6 @@ const SurveyPage = () => {
                             id="Console"
                             label="Console"
                             multiline
-                            defaultValue="Nothing in the console."
                             value = {consoleText}
                             variant="outlined"
                             disabled={true}

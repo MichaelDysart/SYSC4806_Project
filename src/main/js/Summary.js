@@ -59,10 +59,22 @@ const Summary = (props) => {
                                           </div>
                                         )}
                                       >
-                                      <BarSeries
-                                          animated
-                                          rawData={ props.questions[i].numberAnswerList }
-                                      />
+                                      {(
+                                          () => {
+                                              if (props.questions[i].numberAnswerList.length > 0) {
+                                                  return (<BarSeries
+                                                      animated
+                                                      rawData={ props.questions[i].numberAnswerList }
+                                                  />);
+                                              } else {
+                                                  return (<BarSeries
+                                                      animated
+                                                      binnedData={ [{id : "", bin0 : 0, bin1 : 1, count : 0}] }
+                                                  />);
+                                              }
+                                          }
+                                       )()
+                                      }
                                       <XAxis />
                                       <YAxis />
                                 </Histogram>
