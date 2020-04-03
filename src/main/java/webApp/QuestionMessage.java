@@ -1,8 +1,6 @@
 package webApp;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /*
  * Message between client and server describing a question

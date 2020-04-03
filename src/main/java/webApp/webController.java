@@ -6,11 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import survey.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 
 /*
  * The controller that accepts web requests to update and retrieve surveys
