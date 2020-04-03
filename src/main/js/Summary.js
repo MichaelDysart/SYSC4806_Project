@@ -31,6 +31,13 @@ const Summary = (props) => {
                                     label="Question"
                                     size="small"
                                 />
+                                <TextField
+                                    className="qq-app mv"
+                                    value={props.questions[i].stringAnswerList}
+                                    variant="outlined"
+                                    label="Question"
+                                    size="small"
+                                 />
                             </div>
                         );
                     case qType.NUMERICAL:
