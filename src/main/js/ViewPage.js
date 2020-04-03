@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import Card from '@material-ui/core/Card';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Tooltip from '@material-ui/core/Tooltip';
-import HelpIcon from '@material-ui/icons/Help';
-import { useParams } from 'react-router-dom';
 import Summary from './Summary';
 import './SurveyPage.scss';
 
@@ -25,12 +18,9 @@ const qType = {
 /*
  * The frontend core which renders all subcomponents for surveys
  */
-const SurveyPage = () => {
-    const [webUrl, setWebUrl] = useState('');
+const ViewPage = () => {
+    const [baseUrl, setBaseUrl] = useState('');
     const [consoleText, setConsoleText] = useState('');
-    const [surveyName, setSurveyName] = useState('');
-    const [questions, setQuestions] = useState([]);
-    const [currentType, setCurrentType] = useState('');
     const [userSurvey, setUserSurvey] = useState({ id : null, closed : false, questions : [] });
     const [summarySurvey, setSummarySurvey] = useState({ id : null, closed : false, questions : [] });
     const [userSurveyId, setUserSurveyId] = useState('');
@@ -42,21 +32,8 @@ const SurveyPage = () => {
     // useEffect with no dependencies is equal to $(document).ready
     // for the component in context
     useEffect(() => {
-        setWebUrl(window.location.href.replace("/#", "")); // This accounts for the HashRouter
+        setBaseUrl(window.location.href.replace(/\/#.*/ ,"")); // This accounts for the HashRouter
     }, []);
-
-    // Display to the console
-    const display = (data) => {
-        setConsoleText(consoleText + "\n" + data);
-        console.log(data);
-    };
-
-    /*
-    * Add a new question to the end of the survey question list
-    */
-    const addQuestion = () => {
-        addQuestionAtIndex(questions.length);
-    };
 
     const checkRequest = (res) => {
         if (res.status === 200) {
@@ -66,103 +43,8 @@ const SurveyPage = () => {
         }
     };
 
-    const addQuestionAtIndex = (i) => {
-        switch(currentType) {
-            case qType.OPEN_ENDED:
-                setQuestions([
-                    ...questions.slice(0, i),
-                    {
-                        type: currentType,
-                        question: '',
-                    },
-                    ...questions.slice(i, questions.length)
-                ]);
-                break;
-            case qType.NUMERICAL:
-                setQuestions([
-                    ...questions.slice(0, i),
-                    {
-                        type: currentType,
-                        min: 0,
-                        max: 0,
-                        question: '',
-                    },
-                    ...questions.slice(i, questions.length)
-                ]);
-                break;
-            case qType.DROPDOWN:
-                setQuestions([
-                    ...questions.slice(0, i),
-                    {
-                        type: currentType,
-                        options: [],
-                        question: '',
-                    },
-                    ...questions.slice(i, questions.length)
-                ]);
-                break;
-            default:
-                console.log(`[WARNING] Unknown question type "${currentType}"`);
-        }
-    };
-
-    /*
-    * A helper function to update the array of
-    * current questions when a change is made
-    */
-    const updateQuestion = (i, newObjVal) => {
-        setQuestions(questions.map((q, current) => {
-            if (current === i) {
-                return newObjVal;
-            }
-            return q;
-        }));
-    };
-
-    /*
-    * Delete a question at index i
-    */
-    const deleteQuestion = (i) => {
-        setQuestions(questions.filter((q, current) => {
-            if (current === i) {
-                return false;
-            }
-            return true;
-        }));
-    };
-
-    /*
-    * Store a new survey on the server
-    */
-    const createSurvey = () => {
-        const survey = {
-            name: surveyName,
-            questions: questions,
-        };
-
-        return fetch(`${webUrl}createSurvey`, {
-            method: 'POST',
-            body: JSON.stringify(survey),
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-        .then(checkRequest)
-        .then(data => {
-            if (data.message === "ok") {
-                setConsoleText(consoleText + "\nSurvey " + survey.name + " Created with ID: " + data.id);
-
-                // Retrieve survey names after creating a new survey
-                retrieveSurveyNames();
-            } else {
-                setConsoleText(consoleText + "\nSurvey Creation Error: " + data.content);
-            }
-        })
-        .catch(console.log);
-    };
-
     const deleteSurvey = () => {
-        return fetch(`${webUrl}survey/${userSurveyId}`, {
+        return fetch(`${baseUrl}/survey/${userSurveyId}`, {
             method: 'DELETE'
         })
         .then(checkRequest)
@@ -183,7 +65,7 @@ const SurveyPage = () => {
     };
 
     const retrieveSurvey = () => {
-        return fetch(`${webUrl}retrieveSurvey?id=${userSurveyId}`)
+        return fetch(`${baseUrl}/retrieveSurvey?id=${userSurveyId}`)
         .then(checkRequest)
         .then(data => {
             if (data.status !== "error") {
@@ -197,7 +79,7 @@ const SurveyPage = () => {
     };
 
     const summariseSurvey = () => {
-        return fetch(`${webUrl}retrieveSurvey?id=${userSurveyId}`)
+        return fetch(`${baseUrl}/retrieveSurvey?id=${userSurveyId}`)
         .then(checkRequest)
         .then(data => {
             if (data.status !== "error") {
@@ -211,7 +93,7 @@ const SurveyPage = () => {
     };
 
     const retrieveSurveyNames = () => {
-            return fetch(`${webUrl}retrieveSurveyNames`)
+            return fetch(`${baseUrl}/retrieveSurveyNames`)
             .then(checkRequest)
             .then(data => {
                 setUserSurveyList(data);
@@ -238,7 +120,7 @@ const SurveyPage = () => {
             id : userSurvey.id,
             questions : userSurvey.questions,
         };
-        return fetch(`${webUrl}addAnswers`, {
+        return fetch(`${baseUrl}/addAnswers`, {
             method: 'POST',
             body: JSON.stringify(survey),
             headers: {
@@ -260,7 +142,7 @@ const SurveyPage = () => {
         const survey = {
             id : userSurvey.id,
         };
-        return fetch(`${webUrl}closeSurvey`, {
+        return fetch(`${baseUrl}/closeSurvey`, {
             method: 'POST',
             body: JSON.stringify(survey),
             headers: {
@@ -284,151 +166,7 @@ const SurveyPage = () => {
 
     return (
         <div className="qq-app">
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography variant="h4">Question Quail</Typography>
-                </Toolbar>
-            </AppBar>
             <Card className="qq-app qq-app__container">
-                <div className="content-group">
-                    <div>
-                        <TextField
-                            className="qq-app mv"
-                            variant="outlined"
-                            label="Survey Name"
-                            size="small"
-                            onChange={e => setSurveyName(e.target.value)}
-                        />
-                        <Button label="Create Survey" className="qq-app m" variant="contained" color="primary" onClick={createSurvey}>Create</Button>
-                    </div>
-                    <div>
-                        <FormControl className="qq-app mv qq-app__qtype_select">
-                            <InputLabel id="qtype_select_label">Question Type</InputLabel>
-                            <Select labelId="qtype_select_label" value={currentType} onChange={e => setCurrentType(e.target.value)}>
-                                <MenuItem value={qType.OPEN_ENDED}>Open-Ended</MenuItem>
-                                <MenuItem value={qType.NUMERICAL}>Numerical</MenuItem>
-                                <MenuItem value={qType.DROPDOWN}>Dropdown</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <Button className="qq-app m"
-                            label="Add Question" variant="contained" color="primary" disabled={!currentType} onClick={addQuestion}>+</Button>
-                    </div>
-                    <div>
-                        {questions.map((q, i) => {
-                            switch(q.type) {
-                                case qType.OPEN_ENDED:
-                                    return (
-                                        <div className="qq-app mv" key={i} label="Open Question Input">
-                                            <div>{`Question ${i + 1} - Open Ended`}</div>
-                                            <TextField
-                                                className="qq-app mv"
-                                                value={questions[i].question}
-                                                variant="outlined"
-                                                label="Title"
-                                                size="small"
-                                                onChange={e => updateQuestion(i, { ...q, question: e.target.value })}
-                                            />
-                                            <Button
-                                                className="qq-app m"
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={() => addQuestionAtIndex(i)}
-                                            >+</Button>
-                                            <Button
-                                                className="qq-app m"
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={() => deleteQuestion(i)}
-                                            ><DeleteIcon /></Button>
-                                        </div>
-                                    );
-                                case qType.NUMERICAL:
-                                    return (
-                                        <div className="qq-app mv" key={i} label="Number Question Input">
-                                            <div>{`Question ${i + 1} - Numerical`}</div>
-                                            <TextField
-                                                className="qq-app mv"
-                                                value={questions[i].question}
-                                                variant="outlined"
-                                                label="Title"
-                                                size="small"
-                                                onChange={e => updateQuestion(i, { ...q, question: e.target.value })}
-                                            />
-                                            <TextField
-                                                className="qq-app m qq-app__number_input"
-                                                value={questions[i].min}
-                                                variant="outlined"
-                                                label="Minimum"
-                                                size="small"
-                                                onChange={e => updateQuestion(i, { ...q, min: parseInt(e.target.value) || 0 })}
-                                            />
-                                            <TextField
-                                                className="qq-app m qq-app__number_input"
-                                                value={questions[i].max}
-                                                variant="outlined"
-                                                label="Maximum"
-                                                size="small"
-                                                onChange={e => updateQuestion(i, { ...q, max: parseInt(e.target.value) || 0 })}
-                                            />
-                                            <Button
-                                                className="qq-app m"
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={() => addQuestionAtIndex(i)}
-                                            >+</Button>
-                                            <Button
-                                                className="qq-app m"
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={() => deleteQuestion(i)}
-                                            ><DeleteIcon /></Button>
-                                        </div>
-                                    );
-                                case qType.DROPDOWN:
-                                    return (
-                                        <div className="qq-app mv" key={i} label="Dropdown Question Input">
-                                            <div>{`Question ${i + 1} - Dropdown`}</div>
-                                            <TextField
-                                                className="qq-app m"
-                                                value={questions[i].question}
-                                                variant="outlined"
-                                                label="Title"
-                                                size="small"
-                                                onChange={e => updateQuestion(i, { ...q, question: e.target.value })}
-                                            />
-                                            <TextField
-                                                className="qq-app m"
-                                                value={questions[i].options}
-                                                variant="outlined"
-                                                label="Options"
-                                                size="small"
-                                                // For dropdowns, split the input before sending it
-                                                onChange={e => updateQuestion(i, { ...q, options: e.target.value.split(',') })}
-                                            />
-                                            <Button
-                                                className="qq-app m"
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={() => addQuestionAtIndex(i)}
-                                            >+</Button>
-                                            <Button
-                                                className="qq-app m"
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={() => deleteQuestion(i)}
-                                            ><DeleteIcon /></Button>
-                                            <Tooltip title="Separate dropdown options using commas">
-                                                <HelpIcon />
-                                            </Tooltip>
-                                        </div>
-                                    );
-                                default:
-                                    console.log(`[WARNING] Unknown question type "${q.question}"`)
-                                    return (<div />);
-                            };
-                        })}
-                    </div>
-                </div>
                 <div className="content-group">
                     <div>
                          <FormControl className="qq-app mv qq-app__survey-ids_select">
@@ -571,4 +309,4 @@ const SurveyPage = () => {
     );
 };
 
-export default SurveyPage;
+export default ViewPage;
