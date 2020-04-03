@@ -1,7 +1,9 @@
 package survey;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /*
  * A class to store open ended questions
@@ -9,7 +11,8 @@ import java.util.ArrayList;
 @Entity
 public class OpenEndedQuestion extends Question {
 
-    private ArrayList<String> answers = new ArrayList<>();
+    @ElementCollection
+    private Collection<String> answers = new ArrayList<>();
 
     /*
      * A default constructor
@@ -30,7 +33,7 @@ public class OpenEndedQuestion extends Question {
      * Retrieves the answers
      * @return {ArrayList<String>}
      */
-    public ArrayList<String> getAnswers() {
+    public Collection<String> getAnswers() {
         return answers;
     }
 
@@ -38,7 +41,7 @@ public class OpenEndedQuestion extends Question {
      * Sets the answers
      * @param answers {ArrayList<String>}
      */
-    public void setAnswers(ArrayList<String> answers) {
+    public void setAnswers(Collection<String> answers) {
         this.answers = answers;
     }
 

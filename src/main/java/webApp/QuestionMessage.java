@@ -11,7 +11,7 @@ public class QuestionMessage {
 
     private final String type;
     private final String question;
-    private final ArrayList<String> options;
+    private final Collection<String> options;
     private final int min;
     private final int max;
     private final String stringAnswer;
@@ -29,7 +29,7 @@ public class QuestionMessage {
      * @param stringAnswer   the answer if the type is string
      * @param numberAnswer   the answer if the type is numerical
      */
-    public QuestionMessage(String type, String question, ArrayList<String> options, int min, int max, String stringAnswer, int numberAnswer, Collection<String> stringAnswerList, Collection<Integer> numberAnswerList) {
+    public QuestionMessage(String type, String question, Collection<String> options, int min, int max, String stringAnswer, int numberAnswer, Collection<String> stringAnswerList, Collection<Integer> numberAnswerList) {
         this.type = type;
         this.question = question;
         this.options = options;
@@ -61,7 +61,7 @@ public class QuestionMessage {
      * Retrieve the question options
      * @returns {ArrayList<String>}
      */
-    public ArrayList<String> getOptions() { return options; }
+    public Collection<String> getOptions() { return options; }
 
     /*
      * Retrieve the minimum value
