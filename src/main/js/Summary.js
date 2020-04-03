@@ -81,21 +81,35 @@ const Summary = (props) => {
                                     size="small"
                                 />
                                 <Pie
-                                    width={300}
-                                    height={300}
-                                    data={ function() {
-                                              let myMap = new Map()
-                                              for(var j=0; j<props.questions[i].stringAnswerList.size; j++) {
+                                    data = {{
+                                        datasets: [{
+                                            data: () => {
+                                                let myMap = new Map()
+                                                for(var j=0; j<props.questions[i].stringAnswerList.size; j++) {
+                                                    let ans = props.questions[i].stringAnswerList[j];
+                                                    if(myMap.has(ans)) {
+                                                        myMap.set(ans, myMap.get(ans)+1) ;
+                                                    } else {
+                                                        myMap.set(ans, 0);
+                                                    }
+                                                }
+                                                return myMap.values();
+                                            }
+                                        }],
+
+                                        labels: () => {
+                                            let myMap = new Map()
+                                            for(var j=0; j<props.questions[i].stringAnswerList.size; j++) {
                                                 let ans = props.questions[i].stringAnswerList[j];
                                                 if(myMap.has(ans)) {
                                                     myMap.set(ans, myMap.get(ans)+1) ;
                                                 } else {
                                                     myMap.set(ans, 0);
                                                 }
-                                              }
-                                              return myMap.values();
-                                    }
-                                    }
+                                            }
+                                            return myMap.keys();
+                                        }
+                                    }}
                                 />
                             </div>
                         );
